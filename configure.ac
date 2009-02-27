@@ -36,12 +36,20 @@ AC_SUBST(LIBINDICATE_AGE)
 
 GTK_REQUIRED_VERSION=2.13
 PANEL_REQUIRED_VERSION=2.0.0
+AWN_REQUIRED_VERSION=0.3.1
 DBUS_REQUIRED_VERSION=0.76
 
 PKG_CHECK_MODULES(APPLET, gtk+-2.0 >= $GTK_REQUIRED_VERSION
                           libpanelapplet-2.0 >= $PANEL_REQUIRED_VERSION)
 AC_SUBST(APPLET_CFLAGS)
 AC_SUBST(APPLET_LIBS)
+
+PKG_CHECK_MODULES(AWN_APPLET, [gtk+-2.0 >= $GTK_REQUIRED_VERSION
+                               awn >= $AWN_REQUIRED_VERSION])
+AC_SUBST(AWN_APPLET_CFLAGS)
+AC_SUBST(AWN_APPLET_LIBS)
+AWNAPPLETDIR="`$PKG_CONFIG --variable=prefix awn`/lib/awn/applets/indicator"
+AC_SUBST(AWNAPPLETDIR)
 
 AC_PATH_PROG(GCONFTOOL, gconftool-2)
 AM_GCONF_SOURCE_2
@@ -102,6 +110,7 @@ libindicate/Makefile
 libindicate/indicate.pc
 tests/Makefile
 data/Makefile
+data/awn-indicator-applet.desktop.in
 po/Makefile.in
 docs/Makefile
 docs/reference/Makefile

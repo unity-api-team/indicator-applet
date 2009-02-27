@@ -1,0 +1,7 @@
+[Desktop Entry]
+_Name=Indicator Applet
+_Comment=Port of the Indicator applet for the GNOME Panel.
+Type=Application
+X-AWN-AppletType=C
+Exec=@AWNAPPLETDIR@/awn-indicator-applet.so
+Icon=indicator-applet

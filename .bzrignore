@@ -28,6 +28,8 @@ stamp-h1
 xmldocs.make
 data/GNOME_IndicatorApplet.server
 data/GNOME_IndicatorApplet.server.in
+data/awn-indicator-applet.desktop
+data/awn-indicator-applet.desktop.in
 data/indicator-applet.schemas
 docs/reference/version.xml
 libindicate/Indicate-0.1.gir

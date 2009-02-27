@@ -33,6 +33,21 @@ schema_DATA =					\
 @INTLTOOL_SCHEMAS_RULE@
 
 ##############################
+# Awn applet .desktop
+##############################
+
+awnappletdir =					\
+	$(datarootdir)/avant-window-navigator/applets
+
+awnapplet_in_files =				\
+	awn-indicator-applet.desktop.in
+
+awnapplet_DATA =					\
+	$(awnapplet_in_files:.desktop.in=.desktop)
+
+@INTLTOOL_DESKTOP_RULE@
+
+##############################
 # Icons
 ##############################
 
@@ -62,12 +77,15 @@ CLEANFILES =					\
 	$(server_in_files)			\
 	$(server_DATA)				\
 	$(schema_DATA)				\
+	$(awnapplet_in_files)		\
+	$(awnapplet_DATA)			\
 	*.bak
 
 EXTRA_DIST =					\
 	$(icons_DATA) \
 	GNOME_IndicatorApplet.server.in.in	\
-	$(schema_in_files)
+	$(schema_in_files)			\
+	awn-indicator-applet.desktop.in.in
 
 MAINTAINERCLEANFILES =				\
 	Makefile.in
