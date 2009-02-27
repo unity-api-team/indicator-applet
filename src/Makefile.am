@@ -2,6 +2,7 @@ INCLUDES = \
 	-DDATADIR=\""$(datadir)"\" \
 	-DINDICATOR_DIR=\""$(libdir)/indicators/1"\"
 
+if BUILD_PANEL_APPLET
 libexec_PROGRAMS = \
 	indicator-applet
 
@@ -14,7 +15,9 @@ indicator_applet_SOURCES = 			\
 
 indicator_applet_LDADD = \
 	$(APPLET_LIBS)
+endif
 
+if BUILD_AWN_APPLET
 awndir = $(AWNAPPLETDIR)
 awn_LTLIBRARIES = \
 	awn-indicator-applet.la
@@ -30,3 +33,4 @@ awn_indicator_applet_la_LIBADD = \
 	$(AWN_APPLET_LIBS)
 
 awn_indicator_applet_la_LDFLAGS = -module -avoid-version
+endif

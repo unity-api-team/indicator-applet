@@ -4,6 +4,7 @@
 # Bonobo .server
 ##############################
 
+if BUILD_PANEL_APPLET
 serverdir =					\
 	$(libdir)/bonobo/servers
 server_in_files =				\
@@ -15,7 +16,7 @@ $(server_in_files): $(server_in_files:.server.in=.server.in.in)
 	sed -e "s|\@LIBEXECDIR\@|$(libexecdir)|" -e "s|\@VERSION\@|$(VERSION)|" $< > $@
 
 @INTLTOOL_SERVER_RULE@
-
+endif
 
 ##############################
 # GConf Schema
@@ -36,6 +37,7 @@ schema_DATA =					\
 # Awn applet .desktop
 ##############################
 
+if BUILD_AWN_APPLET
 awnappletdir =					\
 	$(datarootdir)/avant-window-navigator/applets
 
@@ -46,6 +48,7 @@ awnapplet_DATA =					\
 	$(awnapplet_in_files:.desktop.in=.desktop)
 
 @INTLTOOL_DESKTOP_RULE@
+endif
 
 ##############################
 # Icons

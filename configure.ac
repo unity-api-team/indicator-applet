@@ -39,17 +39,33 @@ PANEL_REQUIRED_VERSION=2.0.0
 AWN_REQUIRED_VERSION=0.3.1
 DBUS_REQUIRED_VERSION=0.76
 
-PKG_CHECK_MODULES(APPLET, gtk+-2.0 >= $GTK_REQUIRED_VERSION
-                          libpanelapplet-2.0 >= $PANEL_REQUIRED_VERSION)
-AC_SUBST(APPLET_CFLAGS)
-AC_SUBST(APPLET_LIBS)
+PKG_PROG_PKG_CONFIG
 
-PKG_CHECK_MODULES(AWN_APPLET, [gtk+-2.0 >= $GTK_REQUIRED_VERSION
-                               awn >= $AWN_REQUIRED_VERSION])
-AC_SUBST(AWN_APPLET_CFLAGS)
-AC_SUBST(AWN_APPLET_LIBS)
-AWNAPPLETDIR="`$PKG_CONFIG --variable=prefix awn`/lib/awn/applets/indicator"
-AC_SUBST(AWNAPPLETDIR)
+AC_ARG_ENABLE([panel-applet], [
+    AS_HELP_STRING([--disable-panel-applet], [Do not build the GNOME Panel applet.])
+], enable_panel_applet=$enableval, enable_panel_applet=yes)
+
+if test "$enable_panel_applet" = "yes"; then
+    PKG_CHECK_MODULES(APPLET, gtk+-2.0 >= $GTK_REQUIRED_VERSION
+                              libpanelapplet-2.0 >= $PANEL_REQUIRED_VERSION)
+    AC_SUBST(APPLET_CFLAGS)
+    AC_SUBST(APPLET_LIBS)
+fi
+AM_CONDITIONAL(BUILD_PANEL_APPLET, test "$enable_panel_applet" = "yes")
+
+AC_ARG_ENABLE([awn-applet], [
+    AS_HELP_STRING([--enable-awn-applet], [Build the Awn applet.])
+], enable_awn_applet=$enableval, enable_awn_applet=no)
+
+if test "$enable_awn_applet" = "yes"; then
+    PKG_CHECK_MODULES(AWN_APPLET, [gtk+-2.0 >= $GTK_REQUIRED_VERSION
+                                   awn >= $AWN_REQUIRED_VERSION])
+    AC_SUBST(AWN_APPLET_CFLAGS)
+    AC_SUBST(AWN_APPLET_LIBS)
+    AWNAPPLETDIR="`$PKG_CONFIG --variable=prefix awn`/lib/awn/applets/indicator"
+    AC_SUBST(AWNAPPLETDIR)
+fi
+AM_CONDITIONAL(BUILD_AWN_APPLET, test "$enable_awn_applet" = "yes")
 
 AC_PATH_PROG(GCONFTOOL, gconftool-2)
 AM_GCONF_SOURCE_2
@@ -125,5 +141,7 @@ AC_MSG_NOTICE([
 
 Indicator Applet Configuration:
 
-	Prefix:        $prefix
+	Prefix:             $prefix
+	GNOME Panel Applet: $enable_panel_applet
+	Awn Applet:         $enable_awn_applet
 ])
