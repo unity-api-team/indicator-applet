@@ -4,6 +4,7 @@
 # Bonobo .server
 ##############################
 
+if BUILD_PANEL_APPLET
 serverdir =					\
 	$(libdir)/bonobo/servers
 server_in_files =				\
@@ -15,7 +16,7 @@ $(server_in_files): $(server_in_files:.server.in=.server.in.in)
 	sed -e "s|\@LIBEXECDIR\@|$(libexecdir)|" -e "s|\@VERSION\@|$(VERSION)|" $< > $@
 
 @INTLTOOL_SERVER_RULE@
-
+endif
 
 ##############################
 # GConf Schema
@@ -31,6 +32,23 @@ schema_DATA =					\
 	$(schema_in_files:.schemas.in=.schemas)
 
 @INTLTOOL_SCHEMAS_RULE@
+
+##############################
+# Awn applet .desktop
+##############################
+
+if BUILD_AWN_APPLET
+awnappletdir =					\
+	$(datarootdir)/avant-window-navigator/applets
+
+awnapplet_in_files =				\
+	awn-indicator-applet.desktop.in
+
+awnapplet_DATA =					\
+	$(awnapplet_in_files:.desktop.in=.desktop)
+
+@INTLTOOL_DESKTOP_RULE@
+endif
 
 ##############################
 # Icons
@@ -62,12 +80,15 @@ CLEANFILES =					\
 	$(server_in_files)			\
 	$(server_DATA)				\
 	$(schema_DATA)				\
+	$(awnapplet_in_files)		\
+	$(awnapplet_DATA)			\
 	*.bak
 
 EXTRA_DIST =					\
 	$(icons_DATA) \
 	GNOME_IndicatorApplet.server.in.in	\
-	$(schema_in_files)
+	$(schema_in_files)			\
+	awn-indicator-applet.desktop.in.in
 
 MAINTAINERCLEANFILES =				\
 	Makefile.in
