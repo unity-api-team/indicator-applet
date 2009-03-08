@@ -1,3 +1,14 @@
+indicator-applet (0.1.1-0ubuntu3~ppa3~malept1) jaunty; urgency=low
+
+  * Non-maintainer upload.
+  * Add Avant Window Navigator (Awn) applet support.
+  * Put the shared icons/schema into its own package.
+  * Update the package descriptions.
+  * Add a missed GObject Introspection related build dependency.
+  * Fix version dependency for GTK+.
+
+ -- Mark Lee <launchpad-net@lazymalevolence.com>  Wed, 04 Mar 2009 00:12:17 -0800
+
 indicator-applet (0.1.1-0ubuntu3~ppa2) jaunty; urgency=low
 
   * Putting GIR into the install files.
