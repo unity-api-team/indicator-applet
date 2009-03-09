@@ -1,0 +1,254 @@
+%%
+headers
+#include <Python.h>
+#include <libindicate/indicator.h>
+#include <libindicate/indicator-message.h>
+#include <libindicate/listener.h>
+#include <libindicate/server.h>
+#include <glib.h>
+#include "pygobject.h"
+
+typedef struct
+{
+		PyGObject *listener;
+		PyObject *callback;
+		PyObject *user_data;
+} ListenerPropertyCbData;
+
+static void
+_listener_property_cb_data_destroy(ListenerPropertyCbData *data)
+{
+	Py_DECREF(data->callback);
+	g_free(data);
+}
+
+static void
+_listener_get_property_cb(IndicateListener * listener, 
+						  IndicateListenerServer * server, 
+						  IndicateListenerIndicator * indicator, 
+						  gchar * property, gchar * propertydata, 
+						  ListenerPropertyCbData *data)
+{
+	PyGILState_STATE state;
+	PyObject *args;
+
+	state = pyg_gil_state_ensure();
+
+	if (data->user_data == Py_None)
+	{
+			args = Py_BuildValue("Osiss", data->listener, 
+								 (gchar *) server, 
+								 (guint) *indicator,
+								 property,
+								 propertydata);
+	}
+	else
+	{
+			args = Py_BuildValue("OsissO", data->listener, 
+								 (gchar *) server, 
+								 (guint) *indicator,
+								 property,
+								 propertydata,
+								 data->user_data);
+	}
+
+	PyEval_CallObject(data->callback, args);
+	Py_DECREF(args);
+	pyg_gil_state_release(state);
+}
+
+_listener_get_property_time_cb(IndicateListener * listener, 
+							   IndicateListenerServer * server, 
+							   IndicateListenerIndicator * indicator, 
+							   gchar * property, GTimeVal * propertydata, 
+							   ListenerPropertyCbData *data)
+{
+	PyGILState_STATE state;
+	PyObject *args;
+	PyObject *time = pyglib_float_from_timeval(*propertydata);
+
+	state = pyg_gil_state_ensure();
+
+	if (data->user_data == Py_None)
+	{
+			args = Py_BuildValue("OsisO", data->listener, 
+								 (gchar *) server, 
+								 (guint) *indicator,
+								 property,
+								 time);
+	}
+	else
+	{
+			args = Py_BuildValue("OsisO|O", data->listener, 
+								 (gchar *) server, 
+								 (guint) *indicator,
+								 property,
+								 time,
+								 data->user_data);
+	}
+
+	PyEval_CallObject(data->callback, args);
+	Py_DECREF(args);
+	pyg_gil_state_release(state);
+}
+
+%%
+modulename indicate
+%%
+import gobject.GObject as PyGObject_Type
+import gtk.gdk.Pixbuf as PyGdkPixbuf_Type
+%%
+ignore-glob
+  *_get_type                            
+%%
+override indicate_indicator_set_property_time args
+static PyObject *
+_wrap_indicate_indicator_set_property_time(PyGObject *self, PyObject *args)
+{
+  double time;
+  gchar *key;
+  GTimeVal g_time, *g_timep;
+
+  if (!PyArg_ParseTuple(args, "sd:Indicator.set_property_time", 
+						&key, &time))
+	{
+		return NULL;
+	}
+
+  if (time > 0.0) {
+	g_time.tv_sec = (glong) time;
+	g_time.tv_usec = (glong)((time - g_time.tv_sec)
+								  * G_USEC_PER_SEC);
+	g_timep = &g_time;
+  } else if (time == 0.0) {
+	g_timep = NULL;
+  } else {
+	PyErr_SetString(PyExc_ValueError, "time must be >= 0.0");
+	return NULL;
+  }
+
+  indicate_indicator_set_property_time(INDICATE_INDICATOR(self->obj), 
+									   key, g_timep);
+
+  return Py_None;
+}
+%%
+override indicate_listener_get_property kwargs
+static PyObject *
+_wrap_indicate_listener_get_property(PyGObject *self, 
+									 PyObject *args,
+									 PyObject *kwargs)
+{
+	static char *kwlist[] = { "server", "indicator", "property", "callback",
+							  "user_data", NULL };
+	ListenerPropertyCbData *listener_property_cb_data;
+	gchar *server, *property;
+	guint indicator;
+	PyGILState_STATE state;
+	PyObject *callback, *user_data = Py_None;
+	size_t len;
+
+	state = pyg_gil_state_ensure();
+
+	len = PyTuple_Size(args);
+
+	if (len < 4)
+	{
+		PyErr_SetString(PyExc_TypeError,
+						"IndicateListener.get_property requires at least "
+						"3 arguments");
+		return NULL;
+	}
+
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs,
+									 "sisO|O:IndicateListener.get_property",
+									 kwlist,
+									 &server, &indicator, &property, &callback, &user_data))
+	{
+		return NULL;
+	}
+
+	if (!PyCallable_Check(callback))
+	{
+		PyErr_SetString(PyExc_TypeError, "fourth argument must be callable");
+		return NULL;
+	}
+
+	listener_property_cb_data = g_new0(ListenerPropertyCbData, 1);
+	listener_property_cb_data->callback = callback;
+	listener_property_cb_data->user_data = user_data;
+	listener_property_cb_data->listener = self;
+
+	Py_INCREF(callback);
+
+	indicate_listener_get_property(INDICATE_LISTENER(self->obj),
+								   (IndicateListenerServer *)server, 
+								   (IndicateListenerIndicator *)indicator,
+								   property,
+								   (indicate_listener_get_property_cb)_listener_get_property_cb,
+								   listener_property_cb_data);
+
+	Py_INCREF(Py_None);
+	pyg_gil_state_release(state);
+	return Py_None;
+}
+%%
+override indicate_listener_get_property_time kwargs
+static PyObject *
+_wrap_indicate_listener_get_property_time(PyGObject *self, 
+									 PyObject *args,
+									 PyObject *kwargs)
+{
+		static char *kwlist[] = { "server", "indicator", "property", "callback",
+								  "user_data", NULL };
+		ListenerPropertyCbData *listener_property_cb_data;
+		gchar *server, *property;
+		guint indicator;
+		PyGILState_STATE state;
+		PyObject *callback, *user_data = Py_None;
+		size_t len;
+		
+		state = pyg_gil_state_ensure();
+		
+		len = PyTuple_Size(args);
+		
+		if (len < 4)
+		{
+				PyErr_SetString(PyExc_TypeError,
+								"IndicateListener.get_property requires at least "
+								"3 arguments");
+				return NULL;
+		}
+		
+		if (!PyArg_ParseTupleAndKeywords(args, kwargs,
+										 "sisO|O:IndicateListener.get_property_time",
+										 kwlist,
+										 &server, &indicator, &property, &callback, &user_data))
+		{
+				return NULL;
+		}
+		
+		if (!PyCallable_Check(callback))
+		{
+				PyErr_SetString(PyExc_TypeError, "fourth argument must be callable");
+				return NULL;
+		}
+		
+		listener_property_cb_data = g_new0(ListenerPropertyCbData, 1);
+		listener_property_cb_data->callback = callback;
+		listener_property_cb_data->user_data = user_data;
+		listener_property_cb_data->listener = self;
+		
+		Py_INCREF(callback);
+		
+		indicate_listener_get_property(INDICATE_LISTENER(self->obj),
+									   (IndicateListenerServer *)server, 
+									   (IndicateListenerIndicator *)indicator,
+									   property,
+									   (indicate_listener_get_property_time_cb)_listener_get_property_time_cb,
+									   listener_property_cb_data);
+		
+		Py_INCREF(Py_None);
+		pyg_gil_state_release(state);
+		return Py_None;
+}

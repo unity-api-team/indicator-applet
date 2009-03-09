@@ -1,0 +1,445 @@
+;; -*- scheme -*-
+; object definitions ...
+(define-object Indicator
+  (in-module "Indicate")
+  (parent "GObject")
+  (c-name "IndicateIndicator")
+  (gtype-id "INDICATE_TYPE_INDICATOR")
+)
+
+(define-object IndicatorMessage
+  (in-module "Indicate")
+  (parent "IndicateIndicator")
+  (c-name "IndicateIndicatorMessage")
+  (gtype-id "INDICATE_TYPE_INDICATOR_MESSAGE")
+)
+
+(define-object Listener
+  (in-module "Indicate")
+  (parent "GObject")
+  (c-name "IndicateListener")
+  (gtype-id "INDICATE_TYPE_LISTENER")
+)
+
+(define-object Server
+  (in-module "Indicate")
+  (parent "GObject")
+  (c-name "IndicateServer")
+  (gtype-id "INDICATE_TYPE_SERVER")
+)
+
+;; Enumerations and flags ...
+
+
+;; From indicator.h
+
+(define-function indicate_indicator_get_type
+  (c-name "indicate_indicator_get_type")
+  (return-type "GType")
+)
+
+(define-function indicate_indicator_new
+  (c-name "indicate_indicator_new")
+  (is-constructor-of "IndicateIndicator")
+  (return-type "IndicateIndicator*")
+)
+
+(define-method show
+  (of-object "IndicateIndicator")
+  (c-name "indicate_indicator_show")
+  (return-type "none")
+)
+
+(define-method hide
+  (of-object "IndicateIndicator")
+  (c-name "indicate_indicator_hide")
+  (return-type "none")
+)
+
+(define-method is_visible
+  (of-object "IndicateIndicator")
+  (c-name "indicate_indicator_is_visible")
+  (return-type "gboolean")
+)
+
+(define-method get_id
+  (of-object "IndicateIndicator")
+  (c-name "indicate_indicator_get_id")
+  (return-type "guint")
+)
+
+(define-method get_indicator_type
+  (of-object "IndicateIndicator")
+  (c-name "indicate_indicator_get_indicator_type")
+  (return-type "const-gchar*")
+)
+
+(define-method user_display
+  (of-object "IndicateIndicator")
+  (c-name "indicate_indicator_user_display")
+  (return-type "none")
+)
+
+(define-method set_property
+  (of-object "IndicateIndicator")
+  (c-name "indicate_indicator_set_property")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "key")
+    '("const-gchar*" "data")
+  )
+)
+
+(define-method set_property_icon
+  (of-object "IndicateIndicator")
+  (c-name "indicate_indicator_set_property_icon")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "key")
+    '("const-GdkPixbuf*" "data")
+  )
+)
+
+(define-method set_property_time
+  (of-object "IndicateIndicator")
+  (c-name "indicate_indicator_set_property_time")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "key")
+    '("GTimeVal*" "time")
+  )
+)
+
+(define-method get_property
+  (of-object "IndicateIndicator")
+  (c-name "indicate_indicator_get_property")
+  (return-type "const-gchar*")
+  (parameters
+    '("const-gchar*" "key")
+  )
+)
+
+(define-method list_properties
+  (of-object "IndicateIndicator")
+  (c-name "indicate_indicator_list_properties")
+  (return-type "GPtrArray*")
+)
+
+
+
+;; From indicator-message.h
+
+(define-function indicate_indicator_message_get_type
+  (c-name "indicate_indicator_message_get_type")
+  (return-type "GType")
+)
+
+(define-function indicate_indicator_message_new
+  (c-name "indicate_indicator_message_new")
+  (is-constructor-of "IndicateIndicatorMessage")
+  (return-type "IndicateIndicatorMessage*")
+)
+
+
+
+;; From listener.h
+
+(define-function indicate_listener_get_type
+  (c-name "indicate_listener_get_type")
+  (return-type "GType")
+)
+
+(define-function indicate_listener_new
+  (c-name "indicate_listener_new")
+  (is-constructor-of "IndicateListener")
+  (return-type "IndicateListener*")
+)
+
+(define-function indicate_listener_ref_default
+  (c-name "indicate_listener_ref_default")
+  (return-type "IndicateListener*")
+)
+
+(define-method get_property
+  (of-object "IndicateListener")
+  (c-name "indicate_listener_get_property")
+  (return-type "none")
+  (parameters
+    '("IndicateListenerServer*" "server")
+    '("IndicateListenerIndicator*" "indicator")
+    '("gchar*" "property")
+    '("indicate_listener_get_property_cb" "callback")
+    '("gpointer" "data")
+  )
+)
+
+(define-method get_property_time
+  (of-object "IndicateListener")
+  (c-name "indicate_listener_get_property_time")
+  (return-type "none")
+  (parameters
+    '("IndicateListenerServer*" "server")
+    '("IndicateListenerIndicator*" "indicator")
+    '("gchar*" "property")
+    '("indicate_listener_get_property_time_cb" "callback")
+    '("gpointer" "data")
+  )
+)
+
+(define-method get_property_icon
+  (of-object "IndicateListener")
+  (c-name "indicate_listener_get_property_icon")
+  (return-type "none")
+  (parameters
+    '("IndicateListenerServer*" "server")
+    '("IndicateListenerIndicator*" "indicator")
+    '("gchar*" "property")
+    '("indicate_listener_get_property_icon_cb" "callback")
+    '("gpointer" "data")
+  )
+)
+
+(define-method display
+  (of-object "IndicateListener")
+  (c-name "indicate_listener_display")
+  (return-type "none")
+  (parameters
+    '("IndicateListenerServer*" "server")
+    '("IndicateListenerIndicator*" "indicator")
+  )
+)
+
+(define-method server_get_type
+  (of-object "IndicateListener")
+  (c-name "indicate_listener_server_get_type")
+  (return-type "none")
+  (parameters
+    '("IndicateListenerServer*" "server")
+    '("indicate_listener_get_server_property_cb" "callback")
+    '("gpointer" "data")
+  )
+)
+
+(define-method server_get_desktop
+  (of-object "IndicateListener")
+  (c-name "indicate_listener_server_get_desktop")
+  (return-type "none")
+  (parameters
+    '("IndicateListenerServer*" "server")
+    '("indicate_listener_get_server_property_cb" "callback")
+    '("gpointer" "data")
+  )
+)
+
+
+
+;; From server.h
+
+(define-function indicate_server_get_type
+  (c-name "indicate_server_get_type")
+  (return-type "GType")
+)
+
+(define-function indicate_server_new
+  (c-name "indicate_server_new")
+  (is-constructor-of "IndicateServer")
+  (return-type "IndicateServer*")
+)
+
+(define-function indicate_server_set_dbus_object
+  (c-name "indicate_server_set_dbus_object")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "obj")
+  )
+)
+
+(define-method set_desktop_file
+  (of-object "IndicateServer")
+  (c-name "indicate_server_set_desktop_file")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "path")
+  )
+)
+
+(define-method set_type
+  (of-object "IndicateServer")
+  (c-name "indicate_server_set_type")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "type")
+  )
+)
+
+(define-method show
+  (of-object "IndicateServer")
+  (c-name "indicate_server_show")
+  (return-type "none")
+)
+
+(define-method hide
+  (of-object "IndicateServer")
+  (c-name "indicate_server_hide")
+  (return-type "none")
+)
+
+(define-method get_next_id
+  (of-object "IndicateServer")
+  (c-name "indicate_server_get_next_id")
+  (return-type "guint")
+)
+
+(define-method add_indicator
+  (of-object "IndicateServer")
+  (c-name "indicate_server_add_indicator")
+  (return-type "none")
+  (parameters
+    '("IndicateIndicator*" "indicator")
+  )
+)
+
+(define-method remove_indicator
+  (of-object "IndicateServer")
+  (c-name "indicate_server_remove_indicator")
+  (return-type "none")
+  (parameters
+    '("IndicateIndicator*" "indicator")
+  )
+)
+
+(define-function indicate_server_ref_default
+  (c-name "indicate_server_ref_default")
+  (return-type "IndicateServer*")
+)
+
+(define-method set_default
+  (of-object "IndicateServer")
+  (c-name "indicate_server_set_default")
+  (return-type "none")
+)
+
+(define-method get_indicator_count
+  (of-object "IndicateServer")
+  (c-name "indicate_server_get_indicator_count")
+  (return-type "gboolean")
+  (parameters
+    '("guint*" "count")
+    '("GError**" "error")
+  )
+)
+
+(define-method get_indicator_count_by_type
+  (of-object "IndicateServer")
+  (c-name "indicate_server_get_indicator_count_by_type")
+  (return-type "gboolean")
+  (parameters
+    '("gchar*" "type")
+    '("guint*" "count")
+    '("GError**" "error")
+  )
+)
+
+(define-method get_indicator_list
+  (of-object "IndicateServer")
+  (c-name "indicate_server_get_indicator_list")
+  (return-type "gboolean")
+  (parameters
+    '("GArray**" "indicators")
+    '("GError**" "error")
+  )
+)
+
+(define-method get_indicator_list_by_type
+  (of-object "IndicateServer")
+  (c-name "indicate_server_get_indicator_list_by_type")
+  (return-type "gboolean")
+  (parameters
+    '("gchar*" "type")
+    '("guint**" "indicators")
+    '("GError**" "error")
+  )
+)
+
+(define-method get_indicator_property
+  (of-object "IndicateServer")
+  (c-name "indicate_server_get_indicator_property")
+  (return-type "gboolean")
+  (parameters
+    '("guint" "id")
+    '("gchar*" "property")
+    '("gchar**" "value")
+    '("GError**" "error")
+  )
+)
+
+(define-method get_indicator_property_group
+  (of-object "IndicateServer")
+  (c-name "indicate_server_get_indicator_property_group")
+  (return-type "gboolean")
+  (parameters
+    '("guint" "id")
+    '("GPtrArray*" "properties")
+    '("gchar***" "value")
+    '("GError**" "error")
+  )
+)
+
+(define-method get_indicator_properties
+  (of-object "IndicateServer")
+  (c-name "indicate_server_get_indicator_properties")
+  (return-type "gboolean")
+  (parameters
+    '("guint" "id")
+    '("gchar***" "properties")
+    '("GError**" "error")
+  )
+)
+
+(define-method show_indicator_to_user
+  (of-object "IndicateServer")
+  (c-name "indicate_server_show_indicator_to_user")
+  (return-type "gboolean")
+  (parameters
+    '("guint" "id")
+    '("GError**" "error")
+  )
+)
+
+(define-method emit_indicator_added
+  (of-object "IndicateServer")
+  (c-name "indicate_server_emit_indicator_added")
+  (return-type "none")
+  (parameters
+    '("guint" "id")
+    '("const-gchar*" "type")
+  )
+)
+
+(define-method emit_indicator_removed
+  (of-object "IndicateServer")
+  (c-name "indicate_server_emit_indicator_removed")
+  (return-type "none")
+  (parameters
+    '("guint" "id")
+    '("const-gchar*" "type")
+  )
+)
+
+(define-method emit_indicator_modified
+  (of-object "IndicateServer")
+  (c-name "indicate_server_emit_indicator_modified")
+  (return-type "none")
+  (parameters
+    '("guint" "id")
+    '("const-gchar*" "property")
+  )
+)
+
+(define-method emit_server_display
+  (of-object "IndicateServer")
+  (c-name "indicate_server_emit_server_display")
+  (return-type "none")
+)
+
+
