@@ -23,7 +23,7 @@ _indicate_la_SOURCES = indicatemodule.c indicate.c
 #nodist_indicate_la_SOURCES = indicate.c
 
 CLEANFILES = indicate.c
-EXTRA_DIST = indicate.override $(defs_DATA)
+EXTRA_DIST = indicate.override indicate-arg-types.py $(defs_DATA)
 indicate.c: $(defs_DATA) indicate.override
 
 %.c: %.defs
@@ -31,6 +31,7 @@ indicate.c: $(defs_DATA) indicate.override
 	 && $(PYGTK_CODEGEN) \
 		--register $(PYGTK_DEFSDIR)/gtk-types.defs \
 		--register $(PYGTK_DEFSDIR)/gdk-types.defs \
+		--load-types indicate-arg-types.py \
 	    --override $*.override \
 	    --prefix py$* $*.defs) > gen-$*.c \
 	 && cp gen-$*.c $*.c \

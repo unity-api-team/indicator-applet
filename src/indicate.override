@@ -252,3 +252,15 @@ _wrap_indicate_listener_get_property_time(PyGObject *self,
 		pyg_gil_state_release(state);
 		return Py_None;
 }
+%%
+override indicate_server_get_indicator_count
+static PyObject *
+_wrap_indicate_server_get_indicator_count(PyGObject *self)
+{
+        guint count;
+        GError * error = NULL;
+        indicate_server_get_indicator_count(
+                INDICATE_SERVER(self->obj), &count, &error);
+        
+        return PyLong_FromUnsignedLong(count);
+}

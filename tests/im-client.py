@@ -45,6 +45,6 @@ if __name__ == "__main__":
 
     indicator.connect("user-display", display)
 
-    gobject.timeout_add_seconds(180, timeout_cb, indicator)
+    gobject.timeout_add_seconds(5, timeout_cb, indicator)
 
     gtk.main()
