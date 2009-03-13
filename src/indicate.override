@@ -264,3 +264,70 @@ _wrap_indicate_server_get_indicator_count(PyGObject *self)
         
         return PyLong_FromUnsignedLong(count);
 }
+%%
+override indicate_server_get_indicator_count_by_type args
+static PyObject *
+_wrap_indicate_server_get_indicator_count_by_type(PyGObject *self, 
+                                                  PyObject *args)
+{
+        guint count;
+        GError * error = NULL;
+        gchar *type;
+
+        if (!PyArg_ParseTuple(args, 
+                              "s:IndicateServer.get_indicator_count_by_type", 
+                              &type))
+        {
+                return NULL;
+        }
+
+        indicate_server_get_indicator_count_by_type(
+                INDICATE_SERVER(self->obj), type, &count, &error);
+        
+        return PyInt_FromLong(count);
+}
+%%
+override indicate_indicator_list_properties
+static PyObject *
+_wrap_indicate_indicator_list_properties(PyGObject *self)
+{		
+		GPtrArray *property_list;
+		PyObject *pyprop_list;
+		guint i;
+
+		property_list = \
+				indicate_indicator_list_properties(
+						INDICATE_INDICATOR(self->obj));
+
+		pyprop_list = PyList_New (property_list->len);
+
+		for (i=0; i < property_list->len; i++)
+				PyList_SET_ITEM(
+						pyprop_list, i, 
+						PyString_FromString(
+								g_ptr_array_index(property_list, i)));
+		return pyprop_list;
+}
+%%
+override indicate_server_get_indicator_list
+static PyObject *
+_wrap_indicate_server_get_indicator_list(PyGObject *self)
+{
+        GArray *indicators;
+        GError * error = NULL;
+		PyObject *pyindicators;
+        guint i;
+
+        indicate_server_get_indicator_list(
+                INDICATE_SERVER(self->obj), &indicators, &error);
+        
+		pyindicators = PyList_New (indicators->len);
+
+		for (i=0; i < indicators->len; i++)
+				PyList_SET_ITEM(
+						pyindicators, i,
+						PyInt_FromLong(
+								g_array_index(indicators, guint, i)));
+
+		return pyindicators;
+}
