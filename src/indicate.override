@@ -331,3 +331,34 @@ _wrap_indicate_server_get_indicator_list(PyGObject *self)
 
 		return pyindicators;
 }
+%%
+override indicate_server_get_indicator_list_by_type args
+static PyObject *
+_wrap_indicate_server_get_indicator_list_by_type(PyGObject *self, 
+												 PyObject *args)
+{
+        guint i;
+        GError * error = NULL;
+        gchar *type;
+        GArray *indicators;
+		PyObject *pyindicators;
+
+        if (!PyArg_ParseTuple(args, 
+                              "s:IndicateServer.get_indicator_count_by_type", 
+                              &type))
+        {
+                return NULL;
+        }
+
+        indicate_server_get_indicator_list_by_type(
+                INDICATE_SERVER(self->obj), type, &indicators, &error);
+        
+		pyindicators = PyList_New (indicators->len);
+        
+		for (i=0; i < indicators->len; i++) {
+				PyList_SET_ITEM(
+						pyindicators, i,
+						PyInt_FromLong(g_array_index(indicators, guint, i)));
+        }
+		return pyindicators;
+}
