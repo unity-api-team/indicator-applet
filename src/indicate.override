@@ -50,6 +50,8 @@ _listener_get_property_cb(IndicateListener * listener,
 								 data->user_data);
 	}
 
+    Py_DECREF(data->user_data);
+
 	rv = PyEval_CallObject(data->callback, args);
 
     if (rv == NULL)
@@ -58,6 +60,9 @@ _listener_get_property_cb(IndicateListener * listener,
             Py_DECREF(rv);
 
 	Py_DECREF(args);
+    Py_DECREF(data->callback);
+    g_free(data);
+
 	pyg_gil_state_release(state);
 }
 
@@ -86,6 +91,8 @@ _listener_get_server_property_cb(IndicateListener * listener,
                                  data->user_data);
 	}
 
+    Py_DECREF(data->user_data);
+
 	rv = PyEval_CallObject(data->callback, args);
 
     if (rv == NULL)
@@ -94,6 +101,9 @@ _listener_get_server_property_cb(IndicateListener * listener,
             Py_DECREF(rv);
 
 	Py_DECREF(args);
+    Py_DECREF(data->callback);
+    g_free(data);
+
 	pyg_gil_state_release(state);
 }
 %%
@@ -140,6 +150,7 @@ _wrap_indicate_indicator_set_property_time(PyGObject *self, PyObject *args)
   indicate_indicator_set_property_time(INDICATE_INDICATOR(self->obj), 
 									   key, g_timep);
 
+  Py_INCREF(Py_None);
   return Py_None;
 }
 %%
@@ -198,6 +209,7 @@ _wrap_indicate_listener_get_indicator_property(PyGObject *self,
 	listener_property_cb_data->pyobject_convert = _convert_string_to_pyobject;
 
 	Py_INCREF(callback);
+    Py_INCREF(user_data);
 
 	indicate_listener_get_property(INDICATE_LISTENER(self->obj),
 								   (IndicateListenerServer *)server, 
@@ -266,6 +278,7 @@ _wrap_indicate_listener_get_indicator_property_icon(PyGObject *self,
 	listener_property_cb_data->pyobject_convert = _convert_pixbuf_to_pyobject;
 
 	Py_INCREF(callback);
+    Py_INCREF(user_data);
 
 	indicate_listener_get_property_icon(
             INDICATE_LISTENER(self->obj),
@@ -335,6 +348,7 @@ _wrap_indicate_listener_get_indicator_property_time(PyGObject *self,
 	listener_property_cb_data->pyobject_convert = _convert_time_to_pyobject;
 
 	Py_INCREF(callback);
+    Py_INCREF(user_data);
 
 	indicate_listener_get_property_time(INDICATE_LISTENER(self->obj),
                                         (IndicateListenerServer *)server, 
@@ -407,6 +421,7 @@ _wrap_indicate_listener_server_get_desktop(PyGObject *self,
 	listener_property_cb_data->listener = self;
 
 	Py_INCREF(callback);
+    Py_INCREF(user_data);
 
 	indicate_listener_server_get_desktop(INDICATE_LISTENER(self->obj),
                                          (IndicateListenerServer *)server, 
@@ -464,6 +479,7 @@ _wrap_indicate_listener_server_get_type(PyGObject *self,
 	listener_property_cb_data->listener = self;
 
 	Py_INCREF(callback);
+    Py_INCREF(user_data);
 
 	indicate_listener_server_get_type(INDICATE_LISTENER(self->obj),
                                       (IndicateListenerServer *)server, 
@@ -482,7 +498,7 @@ _wrap_indicate_server_get_indicator_count_by_type(PyGObject *self,
 {
         guint count;
         GError * error = NULL;
-        gchar *type;
+        const gchar *type;
 
         if (!PyArg_ParseTuple(args, 
                               "s:IndicateServer.get_indicator_count_by_type", 
@@ -511,11 +527,16 @@ _wrap_indicate_indicator_list_properties(PyGObject *self)
 
 		pyprop_list = PyList_New (property_list->len);
 
-		for (i=0; i < property_list->len; i++)
+		for (i=0; i < property_list->len; i++) {
 				PyList_SET_ITEM(
 						pyprop_list, i, 
 						PyString_FromString(
 								g_ptr_array_index(property_list, i)));
+                g_free(g_ptr_array_index(property_list, i));
+        }
+
+        g_ptr_array_free (property_list, TRUE);
+
 		return pyprop_list;
 }
 %%
@@ -539,6 +560,8 @@ _wrap_indicate_server_get_indicator_list(PyGObject *self)
 						PyInt_FromLong(
 								g_array_index(indicators, guint, i)));
 
+        g_array_free (indicators, TRUE);
+
 		return pyindicators;
 }
 %%
@@ -549,7 +572,7 @@ _wrap_indicate_server_get_indicator_list_by_type(PyGObject *self,
 {
         guint i;
         GError * error = NULL;
-        gchar *type;
+        const gchar *type;
         GArray *indicators;
 		PyObject *pyindicators;
 
@@ -570,6 +593,9 @@ _wrap_indicate_server_get_indicator_list_by_type(PyGObject *self,
 						pyindicators, i,
 						PyInt_FromLong(g_array_index(indicators, guint, i)));
         }
+
+        g_array_free (indicators, TRUE);
+
 		return pyindicators;
 }
 %%
@@ -581,9 +607,10 @@ _wrap_indicate_server_get_indicator_property(PyGObject *self,
         guint indicator;
         gchar *property, *value;
         GError * error = NULL;
+        PyObject *rv;
 
         if (!PyArg_ParseTuple(args, 
-                              "is:IndicateServer.get_indicator_count_by_type", 
+                              "is:IndicateServer.get_indicator_property", 
                               &indicator, &property))
         {
                 return NULL;
@@ -592,7 +619,11 @@ _wrap_indicate_server_get_indicator_property(PyGObject *self,
         indicate_server_get_indicator_property (INDICATE_SERVER(self->obj),
                                                 indicator, property, &value,
                                                 error);
-        return PyString_FromString(value);
+        rv = PyString_FromString(value);
+
+        g_free(value);
+        
+        return rv;
 }
 %%
 override indicate_server_get_indicator_property_group args
@@ -605,6 +636,7 @@ _wrap_indicate_server_get_indicator_property_group(PyGObject *self,
 		PyObject *pyproperties, *pyvalue;
         gchar *property, **value;
         GError * error = NULL;
+        gboolean success;
 
         if (!PyArg_ParseTuple(
 					args, 
@@ -626,17 +658,24 @@ _wrap_indicate_server_get_indicator_property_group(PyGObject *self,
 				g_ptr_array_add(properties, PyString_AsString(item));
 		}
 
-        indicate_server_get_indicator_property_group (
+        success = indicate_server_get_indicator_property_group (
 				INDICATE_SERVER(self->obj), indicator, properties, &value, 
 				error);
+
+        g_ptr_array_free(properties, TRUE);
 
         pyvalue = PyList_New (0);
         
         i = 0;
 
-		while (value[i] != NULL)
+		while (value[i] != NULL && success) {
                 PyList_Append(
-						pyvalue, PyString_FromString(value[i++]));
+						pyvalue, PyString_FromString(value[i]));
+                g_free(value[i]);
+                i++;
+        }
+
+        g_free(value);
 
 		return pyvalue;
 }
@@ -650,6 +689,7 @@ _wrap_indicate_server_get_indicator_properties(PyGObject *self,
         gchar **properties;
 		PyObject *pyproperties;
         GError * error = NULL;
+        gboolean success;
 
         if (!PyArg_ParseTuple(args, 
                               "i:IndicateServer.get_indicator_properties", 
@@ -657,16 +697,23 @@ _wrap_indicate_server_get_indicator_properties(PyGObject *self,
         {
                 return NULL;
         }
-        indicate_server_get_indicator_properties(INDICATE_SERVER(self->obj),
-                                                 indicator,
-                                                 &properties,
-                                                 &error);
+
+        success = indicate_server_get_indicator_properties(
+                INDICATE_SERVER(self->obj),
+                indicator,
+                &properties,
+                &error);
 
         pyproperties = PyList_New (0);
 
-		while (properties[i] != NULL) 
+		while (properties[i] != NULL && success) {
                 PyList_Append(
-						pyproperties, PyString_FromString(properties[i++]));
+						pyproperties, PyString_FromString(properties[i]));
+                g_free(properties[i]);
+                i++;
+        }
+
+        g_free(properties);
 
         return pyproperties;
 }
