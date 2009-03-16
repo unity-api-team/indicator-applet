@@ -26,7 +26,7 @@ _listener_get_property_cb(IndicateListener * listener,
 						  ListenerPropertyCbData *data)
 {
 	PyGILState_STATE state;
-	PyObject *args, *pypropertydata = NULL;
+	PyObject *args, *rv, *pypropertydata = NULL;
 
 	state = pyg_gil_state_ensure();
 
@@ -50,7 +50,13 @@ _listener_get_property_cb(IndicateListener * listener,
 								 data->user_data);
 	}
 
-	PyEval_CallObject(data->callback, args);
+	rv = PyEval_CallObject(data->callback, args);
+
+    if (rv == NULL)
+            PyErr_Print();
+    else
+            Py_DECREF(rv);
+
 	Py_DECREF(args);
 	pyg_gil_state_release(state);
 }
@@ -62,7 +68,7 @@ _listener_get_server_property_cb(IndicateListener * listener,
                                  ListenerPropertyCbData *data)
 {
 	PyGILState_STATE state;
-	PyObject *args, *pypropertydata = NULL;
+	PyObject *args, *rv, *pypropertydata = NULL;
 
 	state = pyg_gil_state_ensure();
 
@@ -80,7 +86,13 @@ _listener_get_server_property_cb(IndicateListener * listener,
                                  data->user_data);
 	}
 
-	PyEval_CallObject(data->callback, args);
+	rv = PyEval_CallObject(data->callback, args);
+
+    if (rv == NULL)
+            PyErr_Print();
+    else
+            Py_DECREF(rv);
+
 	Py_DECREF(args);
 	pyg_gil_state_release(state);
 }
