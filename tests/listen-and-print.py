@@ -3,25 +3,23 @@
 import indicate
 import gobject
 import gtk
-from time import time, ctime
+from time import time, ctime, strftime, localtime
 
 def show_property_cb(listener, server, indicator, prop, propertydata):
     print "Indicator Property:       %s %d %s %s" % \
-        (indicate.server_dbus_name(server), indicate.indicator_id(indicator),
-         prop, propertydata)
+        (server, indicator, prop, propertydata)
 
 def show_property_time_cb(listener, server, indicator, prop, propertydata):
     print "Indicator Property:       %s %d %s %s" % \
-        (indicate.server_dbus_name(server), indicate.indicator_id(indicator),
-         prop, time.strftime("%I:%M", time.localtime(propertydata)))
+        (server, indicator, prop, 
+         strftime("%I:%M", localtime(propertydata)))
 
 def show_property_icon_cb(listener, server, indicator, prop, propertydata):
     print "Indicator Property:       %s %d %s %dx%d" % \
-        (indicate.server_dbus_name(server), indicate.indicator_id(indicator),
-         prop, propertydata.get_width, propertydata.get_height)
+        (server, indicator, prop, 
+         propertydata.get_width(), propertydata.get_height())
 
 def show_property(listener, server, indicator, prop):
-    print 'SHOW'
     if prop == "icon":
         listener.get_indicator_property_icon(server, indicator, 
                                              prop, show_property_icon_cb)
@@ -55,11 +53,11 @@ def indicator_modified(listener, server, indicator, typ, prop):
 
 def type_cb(listener, server, value):
     print "Indicator Server Type:    %s %s" % \
-        (indicate.server_dbus_name(server), value)
+        (server, value)
 
 def desktop_cb(listener, server, value):
     print "Indicator Server Desktop: %s %s" % \
-        (indicate.server_dbus_name(server), value)
+        (server, value)
 
 def server_added(listener, server, typ):
     print "Indicator Server Added:   %s %s" % \
