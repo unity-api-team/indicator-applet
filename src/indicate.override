@@ -7,6 +7,7 @@ headers
 #include <libindicate/server.h>
 #include <glib.h>
 #include "pygobject.h"
+#include "pyglib.h"
 
 typedef PyObject* (*to_pyobject_func) (gpointer data);
 
@@ -73,7 +74,7 @@ _listener_get_server_property_cb(IndicateListener * listener,
                                  ListenerPropertyCbData *data)
 {
 		PyGILState_STATE state;
-		PyObject *args, *rv, *pypropertydata = NULL;
+		PyObject *args, *rv;
 
 		state = pyg_gil_state_ensure();
 
@@ -381,8 +382,7 @@ _wrap_indicate_listener_server_get_desktop(PyGObject *self,
 {
 		static char *kwlist[] = { "server", "callback", "user_data", NULL };
 		ListenerPropertyCbData *listener_property_cb_data;
-		gchar *server, *property;
-		guint indicator;
+		gchar *server;
 		PyGILState_STATE state;
 		PyObject *callback, *user_data = Py_None;
 		size_t len;
@@ -423,7 +423,7 @@ _wrap_indicate_listener_server_get_desktop(PyGObject *self,
 
 		indicate_listener_server_get_desktop(INDICATE_LISTENER(self->obj),
 											 (IndicateListenerServer *)server, 
-											 _listener_get_server_property_cb,
+											 (indicate_listener_get_server_property_cb)_listener_get_server_property_cb,
 											 listener_property_cb_data);
 
 		Py_INCREF(Py_None);
@@ -439,8 +439,7 @@ _wrap_indicate_listener_server_get_type(PyGObject *self,
 {
 		static char *kwlist[] = { "server", "callback", "user_data", NULL };
 		ListenerPropertyCbData *listener_property_cb_data;
-		gchar *server, *property;
-		guint indicator;
+		gchar *server;
 		PyGILState_STATE state;
 		PyObject *callback, *user_data = Py_None;
 		size_t len;
@@ -481,7 +480,7 @@ _wrap_indicate_listener_server_get_type(PyGObject *self,
 
 		indicate_listener_server_get_type(INDICATE_LISTENER(self->obj),
 										  (IndicateListenerServer *)server, 
-										  _listener_get_server_property_cb,
+										  (indicate_listener_get_server_property_cb)_listener_get_server_property_cb,
 										  listener_property_cb_data);
 
 		Py_INCREF(Py_None);
@@ -496,7 +495,7 @@ _wrap_indicate_server_get_indicator_count_by_type(PyGObject *self,
 {
         guint count;
         GError * error = NULL;
-        const gchar *type;
+        gchar *type;
 
         if (!PyArg_ParseTuple(args, 
                               "s:IndicateServer.get_indicator_count_by_type", 
@@ -568,20 +567,20 @@ static PyObject *
 _wrap_indicate_server_get_indicator_list_by_type(PyGObject *self, 
 												 PyObject *args)
 {
-        guint i;
-        GError * error = NULL;
-        const gchar *type;
-        GArray *indicators;
+        guint     i;
+        GError   *error = NULL;
+        gchar    *type;
+        GArray   *indicators = NULL;
 		PyObject *pyindicators;
 
         if (!PyArg_ParseTuple(args, 
-                              "s:IndicateServer.get_indicator_count_by_type", 
+                              "s:IndicateServer.get_indicator_list_by_type", 
                               &type))
         {
                 return NULL;
         }
 
-        indicate_server_get_indicator_list_by_type(
+        indicate_server_get_indicator_list_by_type (
                 INDICATE_SERVER(self->obj), type, &indicators, &error);
         
 		pyindicators = PyList_New (indicators->len);
@@ -616,7 +615,7 @@ _wrap_indicate_server_get_indicator_property(PyGObject *self,
         
         indicate_server_get_indicator_property (INDICATE_SERVER(self->obj),
                                                 indicator, property, &value,
-                                                error);
+                                                &error);
         rv = PyString_FromString(value);
 
         g_free(value);
@@ -632,7 +631,7 @@ _wrap_indicate_server_get_indicator_property_group(PyGObject *self,
         guint indicator, i;
 		GPtrArray *properties;
 		PyObject *pyproperties, *pyvalue;
-        gchar *property, **value;
+        gchar **value;
         GError * error = NULL;
         gboolean success;
 
@@ -658,7 +657,7 @@ _wrap_indicate_server_get_indicator_property_group(PyGObject *self,
 
         success = indicate_server_get_indicator_property_group (
 				INDICATE_SERVER(self->obj), indicator, properties, &value, 
-				error);
+				&error);
 
         g_ptr_array_free(properties, TRUE);
 
