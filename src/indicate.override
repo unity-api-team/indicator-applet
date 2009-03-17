@@ -677,3 +677,22 @@ _wrap_indicate_server_get_indicator_property_group(PyGObject *self,
 		return pyvalue;
 }
 %%
+override indicate_listener_display args
+static PyObject *
+_wrap_indicate_listener_display(PyGObject *self, PyObject *args, PyObject *kwarg)
+{
+        char *server;
+        guint indicator = 0;
+
+        if (!PyArg_ParseTuple(args, "si:IndicateListener.display",
+                              &server, &indicator))
+                return NULL;
+
+        indicate_listener_display(
+                INDICATE_LISTENER(self->obj), server, 
+                (IndicateListenerIndicator *)indicator);
+    
+        Py_INCREF(Py_None);
+        return Py_None;
+}
+%%
