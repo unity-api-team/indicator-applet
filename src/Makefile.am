@@ -1,6 +1,7 @@
 defsdir = $(datadir)/pygtk/2.0/defs
 defs_DATA = indicate.defs
 
+CFLAGS = -Wall -Werror
 INCLUDES = \
         -DG_LOG_DOMAIN=\"indicate-python\" \
         -DDATADIR=\"$(datadir)\" \
