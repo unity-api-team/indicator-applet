@@ -1,7 +1,7 @@
 defsdir = $(datadir)/pygtk/2.0/defs
 defs_DATA = indicate.defs
 
-CFLAGS = -Wall -Werror
+#CFLAGS = -Wall -Werror
 INCLUDES = \
         -DG_LOG_DOMAIN=\"indicate-python\" \
         -DDATADIR=\"$(datadir)\" \
@@ -20,8 +20,8 @@ indicate_LTLIBRARIES = _indicate.la
 
 _indicate_la_LDFLAGS = -module -avoid-version -export-symbols-regex init_indicate -lpyglib-2.0-python2.6
 _indicate_la_LIBADD = $(INDICATE_PYTHON_LIBS) 
-_indicate_la_SOURCES = indicatemodule.c indicate.c
-#nodist_indicate_la_SOURCES = indicate.c
+_indicate_la_SOURCES = indicatemodule.c
+nodist__indicate_la_SOURCES = indicate.c
 
 CLEANFILES = indicate.c
 EXTRA_DIST = indicate.override indicate-arg-types.py $(defs_DATA)
