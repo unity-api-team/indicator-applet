@@ -18,3 +18,5 @@ xmldocs.make
 *.la
 .deps
 .libs
+indicate-python-0.0.1.tar.gz
+indicate-python-0.1.1.tar.gz
