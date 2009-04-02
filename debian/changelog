@@ -1,0 +1,5 @@
+indicate-python (0.0.2-1) jaunty; urgency=low
+
+  * Initial release (LP: #344936)
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Tue, 24 Mar 2009 08:37:34 -0400

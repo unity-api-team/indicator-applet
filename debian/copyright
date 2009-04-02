@@ -1,0 +1,20 @@
+This package was debianized by Ken VanDine <ken.vandine@canonical.com> on
+Mon, 23 Mar 2009 08:38:58 -0400.
+
+It was downloaded from https://launchpad.net/indicator-applet/+download
+
+Upstream Author:
+
+    Eitan Isaacson <eitan@ascender.com>
+
+Copyright:
+
+    Copyright 2009 Canonical Ltd.
+
+
+License:
+
+    LGPL-3
+
+The Debian packaging is copyright 2009, Ken VanDine <ken.vandine@canonical.com> and
+is licensed under the GPL-3, see `/usr/share/common-licenses/GPL-3'.

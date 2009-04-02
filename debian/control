@@ -1,0 +1,15 @@
+Source: indicate-python
+Section: libs
+Priority: optional
+Maintainer: Ken VanDine <ken.vandine@canonical.com>
+Build-Depends: cdbs, debhelper (>= 7), autotools-dev, python-dev, python-gtk2-dev, libindicate-dev
+Standards-Version: 3.8.0
+Homepage: https://launchpad.net/indicator-applet
+Vcs-Bzr: http://bazaar.launchpad.net/~ubuntu-dev/indicate-python/ubuntu
+
+Package: indicate-python
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Python bindings for the message indicator applet
+ The message  indicator is small applet to display information
+ from various applications consistently in the panel.
