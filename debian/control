@@ -2,7 +2,7 @@ Source: indicate-python
 Section: python
 Priority: optional
 Maintainer: Ubuntu MOTU Developers <ubuntu-motu@lists.ubuntu.com>
-XS-Python-Version: any
+XS-Python-Version: all
 Build-Depends: cdbs, debhelper (>= 7), python-central (>= 0.6), autotools-dev, python-all-dev, python-gtk2-dev, libindicate-dev
 Standards-Version: 3.8.0
 Homepage: https://launchpad.net/indicator-applet

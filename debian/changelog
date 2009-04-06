@@ -1,4 +1,4 @@
-indicate-python (0.0.2-1) jaunty; urgency=low
+indicate-python (0.0.2-0ubuntu1) jaunty; urgency=low
 
   * Initial release (LP: #344936)
 
