@@ -14,22 +14,24 @@ Copyright:
 
 License:
 
-    This package is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 3 of the License, or (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify it 
+    under the terms of either or both of the following licenses:
 
-    This package is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
+    1) the GNU Lesser General Public License version 3, as published by the 
+    Free Software Foundation; and/or
+    2) the GNU Lesser General Public License version 2.1, as published by 
+    the Free Software Foundation.
 
-    You should have received a copy of the GNU Lesser General Public
-    License along with this package; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+    This program is distributed in the hope that it will be useful, but 
+    WITHOUT ANY WARRANTY; without even the implied warranties of 
+    MERCHANTABILITY, SATISFACTORY QUALITY or FITNESS FOR A PARTICULAR 
+    PURPOSE.  See the applicable version of the GNU Lesser General Public 
+    License for more details.
 
-On Debian systems, the complete text of the GNU Lesser General
-Public License can be found in '/usr/share/common-licenses/LGPL-3'
+    You should have received a copy of both the GNU Lesser General Public 
+    License version 3 and version 2.1 along with this program.  If not, see 
+    <http://www.gnu.org/licenses/>
+
 
 The Debian packaging is copyright 2009, Ken VanDine <ken.vandine@canonical.com> and
-is licensed under the GPL-3, see '/usr/share/common-licenses/GPL-3'.
+is licensed under the LGPL versions 2.1 and 3, see '/usr/share/common-licenses/LGPL-2.1' and '/usr/share/common-licenses/LGPL-3'.
