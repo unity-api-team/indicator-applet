@@ -6,7 +6,7 @@ XS-Python-Version: all
 Build-Depends: cdbs, debhelper (>= 7), python-central (>= 0.6), autotools-dev, python-all-dev, python-gtk2-dev, libindicate-dev
 Standards-Version: 3.8.0
 Homepage: https://launchpad.net/indicator-applet
-Vcs-Bzr: http://bazaar.launchpad.net/~ubuntu-dev/indicate-python/ubuntu
+Vcs-Bzr: http://bazaar.launchpad.net/~indicator-applet-developers/indicator-applet/indicate-python-packaging/
 
 Package: python-indicate
 Architecture: any
@@ -14,4 +14,4 @@ XB-Python-Version: ${python:Versions}
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, python-gobject
 Provides: ${python:Provides}
 Description: Python bindings for the message indicator, used to
- allow python applications to interact with the indicator applet.
+ allow Python applications to interact with the indicator applet.
