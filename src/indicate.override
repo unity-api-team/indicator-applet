@@ -31,6 +31,7 @@ headers
 #include <libindicate/indicator-message.h>
 #include <libindicate/listener.h>
 #include <libindicate/server.h>
+#include <libindicate/interests.h>
 #include <glib.h>
 #include "pygobject.h"
 #include "pyglib.h"
@@ -71,7 +72,7 @@ _listener_get_property_cb(IndicateListener * listener,
         {
                 args = Py_BuildValue("OsisOO", data->listener, 
                                      (gchar *) server, 
-                                     (guint) *indicator,
+                                     (guint) indicator,
                                      property,
                                      pypropertydata,
                                      data->user_data);
@@ -649,56 +650,37 @@ _wrap_indicate_server_get_indicator_property(PyGObject *self,
         return rv;
 }
 %%
-override indicate_server_get_indicator_property_group args
+override indicate_server_get_indicator_properties args
 static PyObject *
-_wrap_indicate_server_get_indicator_property_group(PyGObject *self, 
-												   PyObject *args)
+_wrap_indicate_server_get_indicator_properties(PyGObject *self, 
+											   PyObject *args)
 {
-        guint indicator, i;
-		GPtrArray *properties;
-		PyObject *pyproperties, *pyvalue;
+        guint indicator, i=0;
+		PyObject *pyvalue;
         gchar **value;
         GError * error = NULL;
         gboolean success;
 
         if (!PyArg_ParseTuple(
 					args, 
-					"iO!:IndicateServer.get_indicator_property_group", 
-					&indicator, &PyList_Type, &pyproperties))
+					"i:IndicateServer.get_indicator_properties", 
+					&indicator))
         {
                 return NULL;
         }
-        
-		properties = g_ptr_array_sized_new(PyList_Size(pyproperties));
 		
-		for (i=0;i<PyList_Size(pyproperties);i++) {
-				PyObject *item = PyList_GetItem(pyproperties,i);
-				if(!PyString_Check(item)) {
-						PyErr_SetString(PyExc_TypeError,
-										"list item not a string");
-						return NULL;
-				}
-				g_ptr_array_add(properties, PyString_AsString(item));
-		}
-
-        success = indicate_server_get_indicator_property_group (
-				INDICATE_SERVER(self->obj), indicator, properties, &value, 
-				&error);
-
-        g_ptr_array_free(properties, TRUE);
+        success = indicate_server_get_indicator_properties (
+				INDICATE_SERVER(self->obj), indicator, &value, &error);
 
         pyvalue = PyList_New (0);
         
         i = 0;
 
-		while (value[i] != NULL && success) {
+		while (value[i] != NULL && success)
                 PyList_Append(
-						pyvalue, PyString_FromString(value[i]));
-                g_free(value[i]);
-                i++;
-        }
+						pyvalue, PyString_FromString(value[i++]));
 
-        g_free(value);
+		g_strfreev (value);
 
 		return pyvalue;
 }

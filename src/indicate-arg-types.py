@@ -31,4 +31,5 @@ argtypes.matcher.register('IndicateListenerServer*', argtypes.StringArg())
  
 argtypes.matcher.register('IndicateListenerIndicator', argtypes.UIntArg())
 
+argtypes.matcher.register('IndicateInterests', argtypes.UIntArg())
 
