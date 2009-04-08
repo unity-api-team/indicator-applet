@@ -55,24 +55,27 @@ _listener_get_property_cb(IndicateListener * listener,
 						  ListenerPropertyCbData *data)
 {
         PyGILState_STATE state;
-        PyObject *args, *rv, *pypropertydata = NULL;
+        PyObject *args, *rv, *pyserver, *pypropertydata = NULL;
 
         state = pyg_gil_state_ensure();
 
         pypropertydata = data->pyobject_convert(propertydata);
 
+        pyserver = pyg_boxed_new (INDICATE_TYPE_LISTENER_SERVER, 
+                                  server, TRUE, TRUE);
+
         if (data->user_data == Py_None)
         {
-                args = Py_BuildValue("OsisO", data->listener, 
-                                     (gchar *) server, 
+                args = Py_BuildValue("OOisO", data->listener, 
+                                     pyserver, 
                                      (guint) indicator,
                                      property,
                                      pypropertydata);
         }
         else
         {
-                args = Py_BuildValue("OsisOO", data->listener, 
-                                     (gchar *) server, 
+                args = Py_BuildValue("OOisOO", data->listener, 
+                                     pyserver, 
                                      (guint) indicator,
                                      property,
                                      pypropertydata,
@@ -102,20 +105,23 @@ _listener_get_server_property_cb(IndicateListener * listener,
                                  ListenerPropertyCbData *data)
 {
 		PyGILState_STATE state;
-		PyObject *args, *rv;
+		PyObject *args, *rv, *pyserver;
+
+        pyserver = pyg_boxed_new (INDICATE_TYPE_LISTENER_SERVER, 
+                                  server, TRUE, TRUE);
 
 		state = pyg_gil_state_ensure();
 
 		if (data->user_data == Py_None)
 		{
-				args = Py_BuildValue("Oss", data->listener, 
-									 (gchar *) server, 
+				args = Py_BuildValue("OOs", data->listener, 
+									 pyserver, 
 									 value);
 		}
 		else
 		{
-				args = Py_BuildValue("OssO", data->listener, 
-									 (gchar *) server, 
+				args = Py_BuildValue("OOsO", data->listener, 
+									 pyserver, 
 									 value,
 									 data->user_data);
 		}
@@ -212,7 +218,8 @@ _wrap_indicate_listener_get_indicator_property(PyGObject *self,
 		static char *kwlist[] = { "server", "indicator", "property", "callback",
 								  "user_data", NULL };
 		ListenerPropertyCbData *listener_property_cb_data;
-		gchar *server, *property;
+		gchar *property;
+        PyGObject *server;
 		guint indicator;
 		PyGILState_STATE state;
 		PyObject *callback, *user_data = Py_None;
@@ -231,7 +238,7 @@ _wrap_indicate_listener_get_indicator_property(PyGObject *self,
 		}
 
 		if (!PyArg_ParseTupleAndKeywords(args, kwargs,
-										 "sisO|O:IndicateListener.get_property",
+										 "OisO|O:IndicateListener.get_property",
 										 kwlist,
 										 &server, &indicator, &property, &callback, &user_data))
 		{
@@ -254,7 +261,7 @@ _wrap_indicate_listener_get_indicator_property(PyGObject *self,
 		Py_INCREF(user_data);
 
 		indicate_listener_get_property(INDICATE_LISTENER(self->obj),
-									   (IndicateListenerServer *)server, 
+									   (IndicateListenerServer *)server->obj, 
 									   (IndicateListenerIndicator *)indicator,
 									   property,
 									   (indicate_listener_get_property_cb)_listener_get_property_cb,
@@ -280,7 +287,8 @@ _wrap_indicate_listener_get_indicator_property_icon(PyGObject *self,
 		static char *kwlist[] = { "server", "indicator", "property", "callback",
 								  "user_data", NULL };
 		ListenerPropertyCbData *listener_property_cb_data;
-		gchar *server, *property;
+		gchar *property;
+        PyGObject *server;
 		guint indicator;
 		PyGILState_STATE state;
 		PyObject *callback, *user_data = Py_None;
@@ -299,7 +307,7 @@ _wrap_indicate_listener_get_indicator_property_icon(PyGObject *self,
 		}
 
 		if (!PyArg_ParseTupleAndKeywords(args, kwargs,
-										 "sisO|O:IndicateListener.get_property",
+										 "OisO|O:IndicateListener.get_property",
 										 kwlist,
 										 &server, &indicator, &property, &callback, &user_data))
 		{
@@ -323,7 +331,7 @@ _wrap_indicate_listener_get_indicator_property_icon(PyGObject *self,
 
 		indicate_listener_get_property_icon(
 				INDICATE_LISTENER(self->obj),
-				(IndicateListenerServer *)server, 
+				(IndicateListenerServer *)server->obj, 
 				(IndicateListenerIndicator *)indicator,
 				property,
 				(indicate_listener_get_property_icon_cb)_listener_get_property_cb,
@@ -350,7 +358,8 @@ _wrap_indicate_listener_get_indicator_property_time(PyGObject *self,
 		static char *kwlist[] = { "server", "indicator", "property", "callback",
 								  "user_data", NULL };
 		ListenerPropertyCbData *listener_property_cb_data;
-		gchar *server, *property;
+		gchar *property;
+        PyGObject *server;
 		guint indicator;
 		PyGILState_STATE state;
 		PyObject *callback, *user_data = Py_None;
@@ -369,7 +378,7 @@ _wrap_indicate_listener_get_indicator_property_time(PyGObject *self,
 		}
 
 		if (!PyArg_ParseTupleAndKeywords(args, kwargs,
-										 "sisO|O:IndicateListener.get_property",
+										 "OisO|O:IndicateListener.get_property",
 										 kwlist,
 										 &server, &indicator, &property, &callback, &user_data))
 		{
@@ -392,7 +401,7 @@ _wrap_indicate_listener_get_indicator_property_time(PyGObject *self,
 		Py_INCREF(user_data);
 
 		indicate_listener_get_property_time(INDICATE_LISTENER(self->obj),
-											(IndicateListenerServer *)server, 
+											(IndicateListenerServer *)server->obj, 
 											(IndicateListenerIndicator *)indicator,
 											property,
 											(indicate_listener_get_property_time_cb)_listener_get_property_cb,
@@ -411,7 +420,7 @@ _wrap_indicate_listener_server_get_desktop(PyGObject *self,
 {
 		static char *kwlist[] = { "server", "callback", "user_data", NULL };
 		ListenerPropertyCbData *listener_property_cb_data;
-		gchar *server;
+		PyGObject *server;
 		PyGILState_STATE state;
 		PyObject *callback, *user_data = Py_None;
 		size_t len;
@@ -429,7 +438,7 @@ _wrap_indicate_listener_server_get_desktop(PyGObject *self,
 		}
 
 		if (!PyArg_ParseTupleAndKeywords(args, kwargs,
-										 "sO|O:IndicateListener.get_property",
+										 "OO|O:IndicateListener.get_property",
 										 kwlist,
 										 &server, &callback, &user_data))
 		{
@@ -450,10 +459,11 @@ _wrap_indicate_listener_server_get_desktop(PyGObject *self,
 		Py_INCREF(callback);
 		Py_INCREF(user_data);
 
-		indicate_listener_server_get_desktop(INDICATE_LISTENER(self->obj),
-											 (IndicateListenerServer *)server, 
-											 (indicate_listener_get_server_property_cb)_listener_get_server_property_cb,
-											 listener_property_cb_data);
+		indicate_listener_server_get_desktop(
+                INDICATE_LISTENER(self->obj),
+                (IndicateListenerServer *)server->obj, 
+                (indicate_listener_get_server_property_cb)_listener_get_server_property_cb,
+                listener_property_cb_data);
 
 		Py_INCREF(Py_None);
 		pyg_gil_state_release(state);
@@ -468,7 +478,7 @@ _wrap_indicate_listener_server_get_type(PyGObject *self,
 {
 		static char *kwlist[] = { "server", "callback", "user_data", NULL };
 		ListenerPropertyCbData *listener_property_cb_data;
-		gchar *server;
+		PyGObject *server;
 		PyGILState_STATE state;
 		PyObject *callback, *user_data = Py_None;
 		size_t len;
@@ -486,7 +496,7 @@ _wrap_indicate_listener_server_get_type(PyGObject *self,
 		}
 
 		if (!PyArg_ParseTupleAndKeywords(args, kwargs,
-										 "sO|O:IndicateListener.server_get_type",
+										 "OO|O:IndicateListener.server_get_type",
 										 kwlist,
 										 &server, &callback, &user_data))
 		{
@@ -508,7 +518,7 @@ _wrap_indicate_listener_server_get_type(PyGObject *self,
 		Py_INCREF(user_data);
 
 		indicate_listener_server_get_type(INDICATE_LISTENER(self->obj),
-										  (IndicateListenerServer *)server, 
+										  (IndicateListenerServer *)server->obj, 
 										  (indicate_listener_get_server_property_cb)_listener_get_server_property_cb,
 										  listener_property_cb_data);
 

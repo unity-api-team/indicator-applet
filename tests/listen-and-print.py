@@ -36,19 +36,16 @@ def get_properties(listener, server, indicator):
 
 def indicator_added(listener, server, indicator, typ):
     print "Indicator Added:          %s %d %s" % \
-        (indicate.server_dbus_name(server), 
-         indicate.indicator_id(indicator), typ)
+        (server, indicate.indicator_id(indicator), typ)
 
 def indicator_removed(listener, server, indicator, typ):
     print "Indicator Removed:        %s %d %s" % \
-        (indicate.server_dbus_name(server), 
-         indicate.indicator_id(indicator), typ)
+        (server, indicate.indicator_id(indicator), typ)
 
 def indicator_modified(listener, server, indicator, typ, prop):
     print "Indicator Modified:       %s %d %s %s" % \
-        (indicate.server_dbus_name(server), 
-         indicate.indicator_id(indicator), typ, prop)
-    show_property(listener, indicate.server_dbus_name(server), 
+        (server, indicate.indicator_id(indicator), typ, prop)
+    show_property(listener, server, 
                   indicate.indicator_id(indicator), prop)
 
 def type_cb(listener, server, value):
@@ -61,13 +58,13 @@ def desktop_cb(listener, server, value):
 
 def server_added(listener, server, typ):
     print "Indicator Server Added:   %s %s" % \
-        (indicate.server_dbus_name(server), typ)
-    listener.server_get_type(indicate.server_dbus_name(server), type_cb)
-    listener.server_get_desktop(indicate.server_dbus_name(server), desktop_cb)
+        (server.get_dbusname(), typ)
+    listener.server_get_type(server, type_cb)
+    listener.server_get_desktop(server, desktop_cb)
 
 def server_removed(listener, server, typ):
     print "Indicator Server Removed: %s %s" % \
-        (indicate.server_dbus_name(server), typ)
+        (server, typ)
 
 if __name__ == "__main__":
     listener = indicate.indicate_listener_ref_default()
