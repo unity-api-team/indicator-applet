@@ -365,15 +365,6 @@
   (return-type "none")
 )
 
-(define-method check_interest
-  (of-object "IndicateServer")
-  (c-name "indicate_server_check_interest")
-  (return-type "gboolean")
-  (parameters
-    '("IndicateInterests" "interest")
-  )
-)
-
 (define-method emit_indicator_added
   (of-object "IndicateServer")
   (c-name "indicate_server_emit_indicator_added")
