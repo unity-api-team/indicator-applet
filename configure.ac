@@ -1,10 +1,10 @@
-AC_INIT(indicate-python, 0.0.1, eitan@ascender.com)
+AC_INIT(indicate-python, 0.0.2, eitan@ascender.com)
 AC_PREREQ(2.50)
 AC_CONFIG_SRCDIR(config.h.in)
-AC_COPYRIGHT([Copyright 2009 Eitan Isaacson])
+AC_COPYRIGHT([Copyright 2009 Canonical])
 
 PACKAGE=indicate-python
-VERSION=0.0.1
+VERSION=0.0.2
 
 AM_INIT_AUTOMAKE($PACKAGE, $VERSION)
 AM_CONFIG_HEADER(config.h)
