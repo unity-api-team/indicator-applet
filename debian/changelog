@@ -1,5 +1,7 @@
 indicate-python (0.0.2-0ubuntu1) jaunty; urgency=low
 
   * Initial release (LP: #344936)
+  * debian/patches/01_libindicate_0_1_5.patch:
+    - Patch from Ted Gould's branch to build against libindicate 0.1.5 
 
- -- Ken VanDine <ken.vandine@canonical.com>  Tue, 24 Mar 2009 08:37:34 -0400
+ -- Ken VanDine <ken.vandine@canonical.com>  Wed, 08 Apr 2009 16:05:58 -0400

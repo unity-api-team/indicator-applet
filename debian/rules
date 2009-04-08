@@ -5,6 +5,7 @@ DEB_PYTHON_SYSTEM=pycentral
 PY_VERSIONS = $(shell pyversions --requested debian/control)
 
 include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/rules/simple-patchsys.mk
 
 configure-stamp-%:
 	mkdir build-$*
