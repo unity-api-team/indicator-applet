@@ -13,5 +13,6 @@ Architecture: any
 XB-Python-Version: ${python:Versions}
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, python-gobject
 Provides: ${python:Provides}
-Description: Python bindings for the message indicator, used to
- allow Python applications to interact with the indicator applet.
+Description: Python bindings for libindicate
+ This package provides python bindings so that you can use libindicate from 
+ a python program
