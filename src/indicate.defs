@@ -30,6 +30,21 @@
 
 ;; Enumerations and flags ...
 
+(define-enum Interests
+  (in-module "Indicate")
+  (c-name "IndicateInterests")
+  (gtype-id "INDICATE_TYPE_INTERESTS")
+  (values
+    '("none" "INDICATE_INTEREST_NONE")
+    '("server-display" "INDICATE_INTEREST_SERVER_DISPLAY")
+    '("server-signal" "INDICATE_INTEREST_SERVER_SIGNAL")
+    '("indicator-display" "INDICATE_INTEREST_INDICATOR_DISPLAY")
+    '("indicator-signal" "INDICATE_INTEREST_INDICATOR_SIGNAL")
+    '("indicator-count" "INDICATE_INTEREST_INDICATOR_COUNT")
+    '("last" "INDICATE_INTEREST_LAST")
+  )
+)
+
 
 ;; From indicator.h
 
@@ -143,6 +158,11 @@
 
 
 ;; From listener.h
+
+(define-function indicate_listener_server_get_gtype
+  (c-name "indicate_listener_server_get_gtype")
+  (return-type "GType")
+)
 
 (define-function indicate_listener_get_type
   (c-name "indicate_listener_get_type")
@@ -404,5 +424,14 @@
 
 
 ;; From interests.h
+
+
+
+;; From indicate-enum-types.h
+
+(define-function indicate_interests_get_type
+  (c-name "indicate_interests_get_type")
+  (return-type "GType")
+)
 
 

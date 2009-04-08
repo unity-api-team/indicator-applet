@@ -40,7 +40,8 @@ init_indicate(void)
 		d = PyModule_GetDict (m);
 		
 		pyindicate_register_classes (d);
-		
+
+		_indicate_add_constants (m, "INDICATE_");
 		if (PyErr_Occurred ()) {
 				Py_FatalError ("can't initialise module indicate");
 		}
