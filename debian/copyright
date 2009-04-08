@@ -33,5 +33,6 @@ License:
     <http://www.gnu.org/licenses/>
 
 
-The Debian packaging is copyright 2009, Ken VanDine <ken.vandine@canonical.com> and
-is licensed under the LGPL versions 2.1 and 3, see '/usr/share/common-licenses/LGPL-2.1' and '/usr/share/common-licenses/LGPL-3'.
+The Debian packaging is copyright 2009, Ken VanDine <ken.vandine@canonical.com>
+ and is licensed under the LGPL versions 2.1 and 3, see 
+'/usr/share/common-licenses/LGPL-2.1' and '/usr/share/common-licenses/LGPL-3'.
