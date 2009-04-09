@@ -1,4 +1,4 @@
-indicate-python (0.0.3-0ubuntu1) jaunty; urgency=low
+indicate-python (0.0.3+1-0ubuntu1) jaunty; urgency=low
 
   * New upstream release (LP: #358483)
     - Updated COPYING files to include both LGPL-2.1 and LGPL-3 versions
