@@ -4,7 +4,7 @@ AC_CONFIG_SRCDIR(config.h.in)
 AC_COPYRIGHT([Copyright 2009 Canonical])
 
 PACKAGE=indicate-python
-VERSION=0.0.2
+VERSION=0.0.3
 
 AM_INIT_AUTOMAKE($PACKAGE, $VERSION)
 AM_CONFIG_HEADER(config.h)
