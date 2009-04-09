@@ -1,3 +1,12 @@
+indicate-python (0.0.3-0ubuntu1) jaunty; urgency=low
+
+  * New upstream release (LP: #358483)
+    - Updated COPYING files to include both LGPL-2.1 and LGPL-3 versions
+  * debian/patches/01_libindicate_0_1_5.patch:
+    - Removed, it is merged upstream now
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Thu, 09 Apr 2009 10:25:55 -0400
+
 indicate-python (0.0.2-0ubuntu1) jaunty; urgency=low
 
   * Initial release (LP: #344936)
