@@ -231,6 +231,48 @@
   )
 )
 
+(define-method get_dbusname
+  (of-object "IndicateListenerServer")
+  (c-name "indicate_listener_server_get_dbusname")
+  (return-type "const-gchar*")
+)
+
+(define-method get_id
+  (of-object "IndicateListenerIndicator")
+  (c-name "indicate_listener_indicator_get_id")
+  (return-type "guint")
+)
+
+(define-method server_show_interest
+  (of-object "IndicateListener")
+  (c-name "indicate_listener_server_show_interest")
+  (return-type "none")
+  (parameters
+    '("IndicateListenerServer*" "server")
+    '("IndicateInterests" "interest")
+  )
+)
+
+(define-method server_remove_interest
+  (of-object "IndicateListener")
+  (c-name "indicate_listener_server_remove_interest")
+  (return-type "none")
+  (parameters
+    '("IndicateListenerServer*" "server")
+    '("IndicateInterests" "interest")
+  )
+)
+
+(define-method server_check_interest
+  (of-object "IndicateListener")
+  (c-name "indicate_listener_server_check_interest")
+  (return-type "gboolean")
+  (parameters
+    '("IndicateListenerServer*" "server")
+    '("IndicateInterests" "interest")
+  )
+)
+
 
 
 ;; From listener-marshal.h
@@ -323,93 +365,6 @@
   (return-type "none")
 )
 
-(define-method get_indicator_count
-  (of-object "IndicateServer")
-  (c-name "indicate_server_get_indicator_count")
-  (return-type "gboolean")
-  (parameters
-    '("guint*" "count")
-    '("GError**" "error")
-  )
-)
-
-(define-method get_indicator_count_by_type
-  (of-object "IndicateServer")
-  (c-name "indicate_server_get_indicator_count_by_type")
-  (return-type "gboolean")
-  (parameters
-    '("gchar*" "type")
-    '("guint*" "count")
-    '("GError**" "error")
-  )
-)
-
-(define-method get_indicator_list
-  (of-object "IndicateServer")
-  (c-name "indicate_server_get_indicator_list")
-  (return-type "gboolean")
-  (parameters
-    '("GArray**" "indicators")
-    '("GError**" "error")
-  )
-)
-
-(define-method get_indicator_list_by_type
-  (of-object "IndicateServer")
-  (c-name "indicate_server_get_indicator_list_by_type")
-  (return-type "gboolean")
-  (parameters
-    '("gchar*" "type")
-    '("guint**" "indicators")
-    '("GError**" "error")
-  )
-)
-
-(define-method get_indicator_property
-  (of-object "IndicateServer")
-  (c-name "indicate_server_get_indicator_property")
-  (return-type "gboolean")
-  (parameters
-    '("guint" "id")
-    '("gchar*" "property")
-    '("gchar**" "value")
-    '("GError**" "error")
-  )
-)
-
-(define-method get_indicator_property_group
-  (of-object "IndicateServer")
-  (c-name "indicate_server_get_indicator_property_group")
-  (return-type "gboolean")
-  (parameters
-    '("guint" "id")
-    '("GPtrArray*" "properties")
-    '("gchar***" "value")
-    '("GError**" "error")
-  )
-)
-
-(define-method get_indicator_properties
-  (of-object "IndicateServer")
-  (c-name "indicate_server_get_indicator_properties")
-  (return-type "gboolean")
-  (parameters
-    '("guint" "id")
-    '("gchar***" "properties")
-    '("GError**" "error")
-  )
-)
-
-(define-method show_indicator_to_user
-  (of-object "IndicateServer")
-  (c-name "indicate_server_show_indicator_to_user")
-  (return-type "gboolean")
-  (parameters
-    '("guint" "id")
-    '("GError**" "error")
-  )
-)
-
 (define-method emit_indicator_added
   (of-object "IndicateServer")
   (c-name "indicate_server_emit_indicator_added")
@@ -445,5 +400,9 @@
   (c-name "indicate_server_emit_server_display")
   (return-type "none")
 )
+
+
+
+;; From interests.h
 
 

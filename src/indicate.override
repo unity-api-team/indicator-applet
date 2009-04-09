@@ -31,6 +31,7 @@ headers
 #include <libindicate/indicator-message.h>
 #include <libindicate/listener.h>
 #include <libindicate/server.h>
+#include <libindicate/interests.h>
 #include <glib.h>
 #include "pygobject.h"
 #include "pyglib.h"
@@ -71,7 +72,7 @@ _listener_get_property_cb(IndicateListener * listener,
         {
                 args = Py_BuildValue("OsisOO", data->listener, 
                                      (gchar *) server, 
-                                     (guint) *indicator,
+                                     (guint) indicator,
                                      property,
                                      pypropertydata,
                                      data->user_data);
@@ -386,19 +387,6 @@ _wrap_indicate_listener_get_indicator_property_time(PyGObject *self,
 		pyg_gil_state_release(state);
 		return Py_None;
 }
-
-%%
-override indicate_server_get_indicator_count
-static PyObject *
-_wrap_indicate_server_get_indicator_count(PyGObject *self)
-{
-        guint count;
-        GError * error = NULL;
-        indicate_server_get_indicator_count(
-                INDICATE_SERVER(self->obj), &count, &error);
-        
-        return PyLong_FromUnsignedLong(count);
-}
 %%
 override indicate_listener_server_get_desktop kwargs
 static PyObject *
@@ -514,28 +502,6 @@ _wrap_indicate_listener_server_get_type(PyGObject *self,
 		return Py_None;
 }
 %%
-override indicate_server_get_indicator_count_by_type args
-static PyObject *
-_wrap_indicate_server_get_indicator_count_by_type(PyGObject *self, 
-                                                  PyObject *args)
-{
-        guint count;
-        GError * error = NULL;
-        gchar *type;
-
-        if (!PyArg_ParseTuple(args, 
-                              "s:IndicateServer.get_indicator_count_by_type", 
-                              &type))
-        {
-                return NULL;
-        }
-
-        indicate_server_get_indicator_count_by_type(
-                INDICATE_SERVER(self->obj), type, &count, &error);
-        
-        return PyInt_FromLong(count);
-}
-%%
 override indicate_indicator_list_properties
 static PyObject *
 _wrap_indicate_indicator_list_properties(PyGObject *self)
@@ -561,146 +527,6 @@ _wrap_indicate_indicator_list_properties(PyGObject *self)
         g_ptr_array_free (property_list, TRUE);
 
 		return pyprop_list;
-}
-%%
-override indicate_server_get_indicator_list
-static PyObject *
-_wrap_indicate_server_get_indicator_list(PyGObject *self)
-{
-        GArray *indicators;
-        GError * error = NULL;
-		PyObject *pyindicators;
-        guint i;
-
-        indicate_server_get_indicator_list(
-                INDICATE_SERVER(self->obj), &indicators, &error);
-        
-		pyindicators = PyList_New (indicators->len);
-
-		for (i=0; i < indicators->len; i++)
-				PyList_SET_ITEM(
-						pyindicators, i,
-						PyInt_FromLong(
-								g_array_index(indicators, guint, i)));
-
-        g_array_free (indicators, TRUE);
-
-		return pyindicators;
-}
-%%
-override indicate_server_get_indicator_list_by_type args
-static PyObject *
-_wrap_indicate_server_get_indicator_list_by_type(PyGObject *self, 
-												 PyObject *args)
-{
-        guint     i;
-        GError   *error = NULL;
-        gchar    *type;
-        GArray   *indicators = NULL;
-		PyObject *pyindicators;
-
-        if (!PyArg_ParseTuple(args, 
-                              "s:IndicateServer.get_indicator_list_by_type", 
-                              &type))
-        {
-                return NULL;
-        }
-
-        indicate_server_get_indicator_list_by_type (
-                INDICATE_SERVER(self->obj), type, &indicators, &error);
-        
-		pyindicators = PyList_New (indicators->len);
-        
-		for (i=0; i < indicators->len; i++) {
-				PyList_SET_ITEM(
-						pyindicators, i,
-						PyInt_FromLong(g_array_index(indicators, guint, i)));
-        }
-
-        g_array_free (indicators, TRUE);
-
-		return pyindicators;
-}
-%%
-override indicate_server_get_indicator_property args
-static PyObject *
-_wrap_indicate_server_get_indicator_property(PyGObject *self, 
-                                             PyObject *args)
-{
-        guint indicator;
-        gchar *property, *value;
-        GError * error = NULL;
-        PyObject *rv;
-
-        if (!PyArg_ParseTuple(args, 
-                              "is:IndicateServer.get_indicator_property", 
-                              &indicator, &property))
-        {
-                return NULL;
-        }
-        
-        indicate_server_get_indicator_property (INDICATE_SERVER(self->obj),
-                                                indicator, property, &value,
-                                                &error);
-        rv = PyString_FromString(value);
-
-        g_free(value);
-        
-        return rv;
-}
-%%
-override indicate_server_get_indicator_property_group args
-static PyObject *
-_wrap_indicate_server_get_indicator_property_group(PyGObject *self, 
-												   PyObject *args)
-{
-        guint indicator, i;
-		GPtrArray *properties;
-		PyObject *pyproperties, *pyvalue;
-        gchar **value;
-        GError * error = NULL;
-        gboolean success;
-
-        if (!PyArg_ParseTuple(
-					args, 
-					"iO!:IndicateServer.get_indicator_property_group", 
-					&indicator, &PyList_Type, &pyproperties))
-        {
-                return NULL;
-        }
-        
-		properties = g_ptr_array_sized_new(PyList_Size(pyproperties));
-		
-		for (i=0;i<PyList_Size(pyproperties);i++) {
-				PyObject *item = PyList_GetItem(pyproperties,i);
-				if(!PyString_Check(item)) {
-						PyErr_SetString(PyExc_TypeError,
-										"list item not a string");
-						return NULL;
-				}
-				g_ptr_array_add(properties, PyString_AsString(item));
-		}
-
-        success = indicate_server_get_indicator_property_group (
-				INDICATE_SERVER(self->obj), indicator, properties, &value, 
-				&error);
-
-        g_ptr_array_free(properties, TRUE);
-
-        pyvalue = PyList_New (0);
-        
-        i = 0;
-
-		while (value[i] != NULL && success) {
-                PyList_Append(
-						pyvalue, PyString_FromString(value[i]));
-                g_free(value[i]);
-                i++;
-        }
-
-        g_free(value);
-
-		return pyvalue;
 }
 %%
 override indicate_listener_display args
