@@ -40,6 +40,7 @@ AC_MSG_RESULT($PYGTK_CODEGEN)
 AC_CONFIG_FILES([
 Makefile
 src/Makefile
+tests/Makefile
 ])
 
 AC_OUTPUT
