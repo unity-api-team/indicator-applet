@@ -30,6 +30,7 @@ install/python-indicate:: $(addprefix install-stamp-, $(PY_VERSIONS))
 
 binary-install/python-indicate::
 	dh_pycentral
+	mv tests $(CURDIR)/debian/python-indicate/usr/share/doc/python-indicate/examples
 
 clean::
 	-rm -rf $(addprefix build-, $(PY_VERSIONS))
