@@ -25,5 +25,3 @@
 
 import argtypes
 
-argtypes.matcher.register('IndicateListenerIndicator', argtypes.UIntArg())
-
