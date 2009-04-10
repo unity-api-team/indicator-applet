@@ -164,12 +164,10 @@
   (return-type "GType")
 )
 
-(define-boxed ListenerServer
+(define-pointer ListenerServer
   (in-module "Indicate")
   (c-name "IndicateListenerServer")
-  (gtype-id "INDICATE_TYPE_LISTENER_SERVER")
-  (copy-func "indicate_listener_server_copy")
-  (release-func "indicate_listener_server_free")
+  (gtype-id "INDICATE_TYPE_LISTENER_SERVER")    
 )
 
 (define-function indicate_listener_get_type
