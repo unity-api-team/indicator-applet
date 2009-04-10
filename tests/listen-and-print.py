@@ -30,16 +30,16 @@ import gtk
 from time import time, ctime, strftime, localtime
 
 def show_property_cb(listener, server, indicator, prop, propertydata):
-    print "Indicator Property:       %s %d %s %s" % \
+    print "Indicator Property:       %s %s %s %s" % \
         (server, indicator, prop, propertydata)
 
 def show_property_time_cb(listener, server, indicator, prop, propertydata):
-    print "Indicator Property:       %s %d %s %s" % \
+    print "Indicator Property:       %s %s %s %s" % \
         (server, indicator, prop, 
          strftime("%I:%M", localtime(propertydata)))
 
 def show_property_icon_cb(listener, server, indicator, prop, propertydata):
-    print "Indicator Property:       %s %d %s %dx%d" % \
+    print "Indicator Property:       %s %s %s %dx%d" % \
         (server, indicator, prop, 
          propertydata.get_width(), propertydata.get_height())
 
@@ -59,18 +59,18 @@ def get_properties(listener, server, indicator):
     return
 
 def indicator_added(listener, server, indicator, typ):
-    print "Indicator Added:          %s %d %s" % \
-        (server, indicate.indicator_id(indicator), typ)
+    print "Indicator Added:          %s %s %s" % \
+        (server, indicator, typ)
 
 def indicator_removed(listener, server, indicator, typ):
-    print "Indicator Removed:        %s %d %s" % \
-        (server, indicate.indicator_id(indicator), typ)
+    print "Indicator Removed:        %s %s %s" % \
+        (server, indicator, typ)
 
 def indicator_modified(listener, server, indicator, typ, prop):
-    print "Indicator Modified:       %s %d %s %s" % \
-        (server, indicate.indicator_id(indicator), typ, prop)
+    print "Indicator Modified:       %s %s %s %s" % \
+        (server, indicator, typ, prop)
     show_property(listener, server, 
-                  indicate.indicator_id(indicator), prop)
+                  indicator, prop)
 
 def type_cb(listener, server, value):
     print "Indicator Server Type:    %s %s" % \

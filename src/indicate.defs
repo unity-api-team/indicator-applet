@@ -170,6 +170,12 @@
   (gtype-id "INDICATE_TYPE_LISTENER_SERVER")    
 )
 
+(define-pointer ListenerIndicator
+  (in-module "Indicate")
+  (c-name "IndicateListenerIndicator")
+  (gtype-id "INDICATE_TYPE_LISTENER_INDICATOR")    
+)
+
 (define-function indicate_listener_get_type
   (c-name "indicate_listener_get_type")
   (return-type "GType")
