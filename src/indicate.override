@@ -61,8 +61,7 @@ _listener_get_property_cb(IndicateListener * listener,
 
         pypropertydata = data->pyobject_convert(propertydata);
 
-        pyserver = pyg_boxed_new (INDICATE_TYPE_LISTENER_SERVER, 
-                                  server, TRUE, TRUE);
+        pyserver = pyg_pointer_new (INDICATE_TYPE_LISTENER_SERVER, server);
 
         if (data->user_data == Py_None)
         {
@@ -107,8 +106,7 @@ _listener_get_server_property_cb(IndicateListener * listener,
 		PyGILState_STATE state;
 		PyObject *args, *rv, *pyserver;
 
-        pyserver = pyg_boxed_new (INDICATE_TYPE_LISTENER_SERVER, 
-                                  server, TRUE, TRUE);
+        pyserver = pyg_pointer_new (INDICATE_TYPE_LISTENER_SERVER, server);
 
 		state = pyg_gil_state_ensure();
 
