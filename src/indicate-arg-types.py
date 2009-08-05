@@ -25,5 +25,3 @@
 
 import argtypes
 
-argtypes.matcher.register('IndicateInterests', argtypes.UIntArg())
-
