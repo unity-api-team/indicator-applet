@@ -1,3 +1,9 @@
+indicate-python (0.0.3+1-0ubuntu2) UNRELEASED; urgency=low
+
+  * Incrementing to build with new libindicate
+
+ -- Ted Gould <ted@ubuntu.com>  Wed, 05 Aug 2009 01:32:12 +0100
+
 indicate-python (0.0.3+1-0ubuntu1) jaunty; urgency=low
 
   * New upstream release (LP: #358483)
