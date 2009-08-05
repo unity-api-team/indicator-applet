@@ -33,6 +33,8 @@ headers
 #include <libindicate/server.h>
 #include <libindicate/interests.h>
 #include <libindicate/indicate-enum-types.h>
+#include <libindicate-gtk/indicator.h>
+#include <libindicate-gtk/listener.h>
 #include <glib.h>
 #include "pygobject.h"
 #include "pyglib.h"
