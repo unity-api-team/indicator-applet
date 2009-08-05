@@ -2,6 +2,7 @@ indicate-python (0.2.0~bzr29-0ubuntu1~ppa1) UNRELEASED; urgency=low
 
   * Incrementing to build with new libindicate
   * Mergin' in the 0.2 branch
+  * debian/control: Build dep on indicate-gtk-dev
 
  -- Ted Gould <ted@ubuntu.com>  Wed, 05 Aug 2009 11:27:57 +0100
 
