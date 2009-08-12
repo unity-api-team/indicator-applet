@@ -944,12 +944,11 @@ get_indicator_list (IndicateServer * server, GArray ** indicators, GError ** err
 	*indicators = g_array_sized_new(FALSE, FALSE, sizeof(guint), g_slist_length(priv->indicators) - priv->num_hidden);
 
 	GSList * iter;
-	int i;
-	for (iter = priv->indicators, i = 0; iter != NULL; iter = iter->next, i++) {
+	for (iter = priv->indicators; iter != NULL; iter = iter->next) {
 		IndicateIndicator * indicator = INDICATE_INDICATOR(iter->data);
 		if (indicate_indicator_is_visible(indicator)) {
 			guint id = indicate_indicator_get_id(indicator);
-			g_array_insert_val(*indicators, i, id);
+			g_array_append_val(*indicators, id);
 		}
 	}
 
