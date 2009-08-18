@@ -1,6 +1,16 @@
 indicator-applet (0.2.0~bzr325-0ubuntu1~ppa1) UNRELEASED; urgency=low
 
   * Merging in trunk which is no indicator-applet only.
+  * Removed the file listings for these binary packages:
+     debian/libindicate-dev.install
+     debian/libindicate-doc.install
+     debian/libindicate-gtk-dev.install
+     debian/libindicate-gtk0.install
+     debian/libindicate2.install
+     debian/libindicator-dev.install
+  * debian/control:
+    * Removed all lib* packages
+    * Added a build dependency on libindicator-dev
 
  -- Ted Gould <ted@ubuntu.com>  Tue, 18 Aug 2009 14:04:33 -0500
 
