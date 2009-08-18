@@ -2,14 +2,8 @@
 SUBDIRS = \
 	src \
 	src-sus \
-	libindicate \
-	libindicate-gtk \
-	libindicator \
-	examples \
-	tests \
 	data \
-	po \
-	docs
+	po
 
 EXTRA_DIST = \
 	COPYING.LIB.LGPL.2.1 \
