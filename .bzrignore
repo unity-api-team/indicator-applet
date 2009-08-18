@@ -103,3 +103,4 @@ src-session/indicator-applet-sus
 data/GNOME_IndicatorAppletSUS.server
 data/GNOME_IndicatorAppletSUS.server.in
 src-session/indicator-applet-no-sus
+src-session/indicator-applet-session
