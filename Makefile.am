@@ -1,7 +1,7 @@
 
 SUBDIRS = \
 	src \
-	src-sus \
+	src-session \
 	data \
 	po
 

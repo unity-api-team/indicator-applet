@@ -101,7 +101,7 @@ AC_DEFINE_PATH(LIBDIR, "${libdir}", [system configuration dir])
 AC_OUTPUT([
 Makefile
 src/Makefile
-src-sus/Makefile
+src-session/Makefile
 data/Makefile
 po/Makefile.in
 ])
