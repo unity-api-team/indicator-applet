@@ -17,6 +17,8 @@ indicator-applet (0.2.0~bzr325-0ubuntu1~ppa1) UNRELEASED; urgency=low
   * debian/rules: Removing build switches for library docs.
   * debian/indicator-applet-sus.install => debian/indicator-applet-session.install
     Renaming pacage from SUS to Session
+  * debian/indicator-applet.install: Removing listen-and-print as
+    it's no longer in this package.
 
  -- Ted Gould <ted@ubuntu.com>  Tue, 18 Aug 2009 14:04:33 -0500
 
