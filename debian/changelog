@@ -11,6 +11,9 @@ indicator-applet (0.2.0~bzr325-0ubuntu1~ppa1) UNRELEASED; urgency=low
   * debian/control:
     * Removed all lib* packages
     * Added a build dependency on libindicator-dev
+  * debian/copyright: Removing license information for the libraries
+    that have been removed.
+  * debian/rules: Removing build switches for library docs.
 
  -- Ted Gould <ted@ubuntu.com>  Tue, 18 Aug 2009 14:04:33 -0500
 
