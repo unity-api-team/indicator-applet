@@ -37,6 +37,8 @@ Depends: ${shlibs:Depends},
          ${misc:Depends},
          gnome-panel,
          indicator-applet (= ${binary:Version})
+Conflicts: indicator-applet-sus
+Replaces: indicator-applet-sus
 Description: A clone of the GNOME panel indicator applet.
  Indicator-applet is an applet to display information from
  various applications consistently in the GNOME panel. 
