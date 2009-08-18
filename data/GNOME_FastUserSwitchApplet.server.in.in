@@ -1,6 +1,6 @@
 <oaf_info>
   <oaf_server iid="OAFIID:GNOME_FastUserSwitchApplet_Factory" type="exe"
-              location="@LIBEXECDIR@/indicator-applet-sus">
+              location="@LIBEXECDIR@/indicator-applet-session">
 
     <oaf_attribute name="repo_ids" type="stringv">
       <item value="IDL:Bonobo/GenericFactory:1.0"/>
@@ -21,7 +21,7 @@
       <item value="IDL:Bonobo/Control:1.0"/>
       <item value="IDL:Bonobo/Unknown:1.0"/>
     </oaf_attribute>
-    <oaf_attribute name="name" type="string" _value="Indicator Applet SUS"/>
+    <oaf_attribute name="name" type="string" _value="Indicator Applet Session"/>
     <oaf_attribute name="description" type="string" _value="A place to adjust your status, change users or exit your session."/>
     <oaf_attribute name="panel:icon" type="string" value="indicator-applet"/>
   </oaf_server>
