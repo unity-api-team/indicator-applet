@@ -1,4 +1,4 @@
-indicator-applet (0.2.0~bzr325-0ubuntu1~ppa1) UNRELEASED; urgency=low
+indicator-applet (0.2.0~bzr325-0ubuntu1~ppa1) karmic; urgency=low
 
   * Merging in trunk which is no indicator-applet only.
   * Removed the file listings for these binary packages:
@@ -20,7 +20,7 @@ indicator-applet (0.2.0~bzr325-0ubuntu1~ppa1) UNRELEASED; urgency=low
   * debian/indicator-applet.install: Removing listen-and-print as
     it's no longer in this package.
 
- -- Ted Gould <ted@ubuntu.com>  Tue, 18 Aug 2009 14:04:33 -0500
+ -- Ted Gould <ted@ubuntu.com>  Tue, 18 Aug 2009 14:16:06 -0500
 
 indicator-applet (0.2.0~bzr319-0ubuntu5~ppa5) karmic; urgency=low
 
