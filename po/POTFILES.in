@@ -3,3 +3,4 @@ data/GNOME_IndicatorApplet.server.in.in
 data/GNOME_FastUserSwitchApplet.server.in.in
 data/indicator-applet.schemas.in
 src/applet-main.c
+src-session/applet-main.c
