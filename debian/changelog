@@ -1,3 +1,9 @@
+indicator-applet (0.2.0~bzr325-0ubuntu1~ppa1) UNRELEASED; urgency=low
+
+  * Merging in trunk which is no indicator-applet only.
+
+ -- Ted Gould <ted@ubuntu.com>  Tue, 18 Aug 2009 14:04:33 -0500
+
 indicator-applet (0.2.0~bzr319-0ubuntu5~ppa5) karmic; urgency=low
 
   * Setting the icon path in the .pc file.

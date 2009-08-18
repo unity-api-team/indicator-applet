@@ -1,24 +1,9 @@
 
 SUBDIRS = \
 	src \
-	src-sus \
-	libindicate \
-	libindicate-gtk \
-	libindicator \
-	examples \
-	tests \
+	src-session \
 	data \
-	po \
-	docs
-
-EXTRA_DIST = \
-	COPYING.LIB.LGPL.2.1 \
-	COPYING.LIB.LGPL.3 \
-	gtk-doc.make \
-	omf.make \
-	xmldocs.make
-
-DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc --disable-scrollkeeper
+	po
 
 DISTCLEANFILES = \
 	indicator-applet-*.tar.gz \
