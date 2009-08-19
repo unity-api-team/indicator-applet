@@ -1,3 +1,9 @@
+indicator-applet (0.2.0~bzr326-0ubuntu1~ppa1) UNRELEASED; urgency=low
+
+  * Upstream merge to match indicate-session instead of indicate-sus
+
+ -- Ted Gould <ted@ubuntu.com>  Tue, 18 Aug 2009 20:32:05 -0500
+
 indicator-applet (0.2.0~bzr325-0ubuntu1~ppa2) karmic; urgency=low
 
   * debian/control: Added conflicts and replaces for
