@@ -1,4 +1,4 @@
-indicator-applet (0.2.0~bzr326-0ubuntu1) UNRELEASED; urgency=low
+indicator-applet (0.2.0~bzr326-0ubuntu1) karmic; urgency=low
 
   * Upstream merge to match indicate-session instead of indicate-sus
   * debian/control: 
