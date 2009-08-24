@@ -40,6 +40,28 @@ AC_SUBST(APPLET_LIBS)
 AC_PATH_PROG(GCONFTOOL, gconftool-2)
 AM_GCONF_SOURCE_2
 
+###########################
+# Check to see if we're local
+###########################
+
+with_localinstall="no"
+AC_ARG_ENABLE(localinstall, AS_HELP_STRING([--enable-localinstall], [install all of the files localy instead of system directories (for distcheck)]), with_localinstall=$enableval, with_localinstall=no)
+
+###########################
+# Indicator Info
+###########################
+
+if test "x$with_localinstall" = "xyes"; then
+	INDICATORDIR="${libdir}/indicators/2/"
+	INDICATORICONSDIR="${datadir}/indicator-applet/icons/"
+else
+	INDICATORDIR=`$PKG_CONFIG --variable=indicatordir indicator`
+	INDICATORICONSDIR=`$PKG_CONFIG --variable=iconsdir indicator`
+fi
+
+AC_SUBST(INDICATORDIR)
+AC_SUBST(INDICATORICONSDIR)
+
 ##############################
 # Custom Junk
 ##############################

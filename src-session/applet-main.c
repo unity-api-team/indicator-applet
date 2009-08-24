@@ -26,8 +26,6 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "libindicator/indicator.h"
 
-#define ICONS_DIR  (DATADIR G_DIR_SEPARATOR_S "indicator-applet" G_DIR_SEPARATOR_S "icons")
-
 static gboolean     applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data);
 
 
@@ -237,8 +235,8 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
   
 	/* Init some theme/icon stuff */
 	gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(),
-	                                  ICONS_DIR);
-	/* g_debug("Icons directory: %s", ICONS_DIR); */
+	                                  INDICATOR_ICONS_DIR);
+	/* g_debug("Icons directory: %s", INDICATOR_ICONS_DIR); */
 	gtk_rc_parse_string (
 	    "style \"indicator-applet-style\"\n"
         "{\n"
