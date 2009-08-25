@@ -1,3 +1,11 @@
+indicator-applet (0.2.0~bzr326-0ubuntu2) UNRELEASED; urgency=low
+
+  * debian/control:
+    - Make session applet replace/conflict with gdm << 2.27.90-0ubuntu1
+    - Added Depends on indicator-session
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Tue, 25 Aug 2009 08:59:56 -0400
+
 indicator-applet (0.2.0~bzr326-0ubuntu1) karmic; urgency=low
 
   [ Ken VanDine ]
