@@ -9,7 +9,7 @@ indicator-applet (0.2.0~bzr326-0ubuntu1) UNRELEASED; urgency=low
     - Added a build dependency on libindicator-dev
     - Changing additional applet from SUS to session
     - Fixed Vcs-Bzr and added Vcs-Bzr-Browser
-  * Merging in trunk which is no indicator-applet only.
+  * Merging in trunk which is now indicator-applet only.
   * Removed the file listings for these binary packages:
      debian/libindicate-dev.install
      debian/libindicate-doc.install
