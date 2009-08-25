@@ -1,5 +1,6 @@
 indicator-applet (0.2.0~bzr326-0ubuntu1) UNRELEASED; urgency=low
 
+  [ Ken VanDine ]
   * Upstream merge to match indicate-session instead of indicate-sus
   * debian/control: 
     - Added conflicts and replaces for indicator-applet-session with 
@@ -30,6 +31,9 @@ indicator-applet (0.2.0~bzr326-0ubuntu1) UNRELEASED; urgency=low
   * Upstream merge for better naming of the applet.
   * Updating from upstream with two (count them) two applets
     installed in the source.
+
+  [ Martin Pitt ]
+  * debian/control: Bump libindicator-dev build dependency.
 
  -- Ken VanDine <ken.vandine@canonical.com>  Fri, 21 Aug 2009 12:00:23 -0400
 

@@ -13,7 +13,7 @@ Build-Depends: debhelper (>= 5.0),
                intltool,
                libxml2-dev,
                gtk-doc-tools,
-               libindicator-dev
+               libindicator-dev (>= 0.2.0~bzr325)
 Standards-Version: 3.8.0
 Homepage: https://launchpad.net/indicator-applet
 Vcs-Bzr: http://bazaar.launchpad.net/~ubuntu-desktop/indicator-applet/ubuntu
