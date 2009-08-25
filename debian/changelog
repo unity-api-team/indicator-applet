@@ -1,4 +1,4 @@
-indicator-applet (0.2.0~bzr326-0ubuntu1) UNRELEASED; urgency=low
+indicator-applet (0.2.0~bzr326-0ubuntu1) karmic; urgency=low
 
   [ Ken VanDine ]
   * Upstream merge to match indicate-session instead of indicate-sus
@@ -36,7 +36,7 @@ indicator-applet (0.2.0~bzr326-0ubuntu1) UNRELEASED; urgency=low
   * debian/control: Bump libindicator-dev build dependency.
   * debian/control: Fix Vcs-* fields.
 
- -- Ken VanDine <ken.vandine@canonical.com>  Fri, 21 Aug 2009 12:00:23 -0400
+ -- Ken VanDine <ken.vandine@canonical.com>  Tue, 25 Aug 2009 08:57:03 +0200
 
 indicator-applet (0.2.0~bzr319-0ubuntu5) UNRELEASED; urgency=low
 
