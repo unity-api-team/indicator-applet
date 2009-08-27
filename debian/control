@@ -13,10 +13,11 @@ Build-Depends: debhelper (>= 5.0),
                intltool,
                libxml2-dev,
                gtk-doc-tools,
-               libindicator-dev
+               libindicator-dev (>= 0.2.0~bzr325)
 Standards-Version: 3.8.0
 Homepage: https://launchpad.net/indicator-applet
 Vcs-Bzr: http://bazaar.launchpad.net/~ubuntu-desktop/indicator-applet/ubuntu
+Vcs-Browser: https://code.launchpad.net/~ubuntu-desktop/indicator-applet/ubuntu
 
 Package: indicator-applet
 Architecture: any
@@ -36,9 +37,10 @@ Architecture: any
 Depends: ${shlibs:Depends},
          ${misc:Depends},
          gnome-panel,
-         indicator-applet (= ${binary:Version})
-Conflicts: indicator-applet-sus
-Replaces: indicator-applet-sus
+         indicator-applet (= ${binary:Version}),
+         indicator-session
+Conflicts: indicator-applet-sus, gdm (<< 2.27.90-0ubuntu1)
+Replaces: indicator-applet-sus, gdm (<< 2.27.90-0ubuntu1)
 Description: A clone of the GNOME panel indicator applet.
  Indicator-applet is an applet to display information from
  various applications consistently in the GNOME panel. 
