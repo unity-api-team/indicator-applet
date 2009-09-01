@@ -26,8 +26,6 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "libindicator/indicator.h"
 
-#define ICONS_DIR  (DATADIR G_DIR_SEPARATOR_S "indicator-applet" G_DIR_SEPARATOR_S "icons")
-
 static gboolean     applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data);
 
 
@@ -50,7 +48,7 @@ static GnomeProgram *program = NULL;
 
 PANEL_APPLET_BONOBO_FACTORY ("OAFIID:GNOME_FastUserSwitchApplet_Factory",
                PANEL_TYPE_APPLET,
-               "indicator-applet-sus", "0",
+               "indicator-applet-session", "0",
                applet_fill_cb, NULL);
 
 /*************
@@ -219,10 +217,10 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 	if (!first_time)
 	{
         gint argc = 1;
-        gchar *argv[2] = { "indicator-applet-sus", NULL};
+        gchar *argv[2] = { "indicator-applet-session", NULL};
 	    
 		first_time = TRUE;
-		program = gnome_program_init ("indicator-applet-sus", "0.1",
+		program = gnome_program_init ("indicator-applet-session", "0.1",
 				    LIBGNOMEUI_MODULE, argc, argv,
 				    GNOME_PROGRAM_STANDARD_PROPERTIES,
 				    NULL);
@@ -233,12 +231,12 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 	panel_applet_set_flags(applet, PANEL_APPLET_EXPAND_MINOR);
 	panel_applet_setup_menu(applet, menu_xml, menu_verbs, NULL);
     atk_object_set_name (gtk_widget_get_accessible (GTK_WIDGET (applet)),
-                         "indicator-applet-sus");
+                         "indicator-applet-session");
   
 	/* Init some theme/icon stuff */
 	gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(),
-	                                  ICONS_DIR);
-	/* g_debug("Icons directory: %s", ICONS_DIR); */
+	                                  INDICATOR_ICONS_DIR);
+	/* g_debug("Icons directory: %s", INDICATOR_ICONS_DIR); */
 	gtk_rc_parse_string (
 	    "style \"indicator-applet-style\"\n"
         "{\n"

@@ -1,3 +1,9 @@
+indicator-applet (0.2.0-0ubuntu1) karmic; urgency=low
+
+  * New upstream version
+
+ -- Sebastien Bacher <seb128@ubuntu.com>  Tue, 01 Sep 2009 16:18:35 +0200
+
 indicator-applet (0.2.0~bzr326-0ubuntu2) karmic; urgency=low
 
   * debian/control:
