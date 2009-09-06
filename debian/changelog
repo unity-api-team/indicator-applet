@@ -1,3 +1,10 @@
+indicate-python (0.2.0~bzr29-0ubuntu1~ppa2) karmic; urgency=low
+
+  * debian/control:
+    - Require libindicate-dev >= 0.2.0 
+
+ -- Ken VanDine <ken@gordo>  Sun, 06 Sep 2009 16:36:39 -0400
+
 indicate-python (0.2.0~bzr29-0ubuntu1~ppa1) karmic; urgency=low
 
   * Incrementing to build with new libindicate
