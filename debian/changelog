@@ -1,3 +1,17 @@
+indicator-applet (0.2.0-0ubuntu1) karmic; urgency=low
+
+  * New upstream version
+
+ -- Sebastien Bacher <seb128@ubuntu.com>  Tue, 01 Sep 2009 16:18:35 +0200
+
+indicator-applet (0.2.0~bzr326-0ubuntu2) karmic; urgency=low
+
+  * debian/control:
+    - Make session applet replace/conflict with gdm << 2.27.90-0ubuntu1
+    - Added Depends on indicator-session
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Tue, 25 Aug 2009 15:07:35 +0200
+
 indicator-applet (0.2.0~bzr326-0ubuntu1) karmic; urgency=low
 
   * Upstream merge to match indicate-session instead of indicate-sus
@@ -8,7 +22,7 @@ indicator-applet (0.2.0~bzr326-0ubuntu1) karmic; urgency=low
     - Added a build dependency on libindicator-dev
     - Changing additional applet from SUS to session
     - Fixed Vcs-Bzr and added Vcs-Bzr-Browser
-  * Merging in trunk which is no indicator-applet only.
+  * Merging in trunk which is now indicator-applet only.
   * Removed the file listings for these binary packages:
      debian/libindicate-dev.install
      debian/libindicate-doc.install
@@ -31,7 +45,18 @@ indicator-applet (0.2.0~bzr326-0ubuntu1) karmic; urgency=low
   * Updating from upstream with two (count them) two applets
     installed in the source.
 
- -- Ken VanDine <ken.vandine@canonical.com>  Fri, 21 Aug 2009 12:00:23 -0400
+  [ Martin Pitt ]
+  * debian/control: Bump libindicator-dev build dependency.
+  * debian/control: Fix Vcs-* fields.
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Tue, 25 Aug 2009 08:57:03 +0200
+
+indicator-applet (0.2.0~bzr319-0ubuntu5) UNRELEASED; urgency=low
+
+  * debian/control: Update Vcs-Bzr:, owner of the branch changed to
+    ubuntu-desktop.
+
+ -- Martin Pitt <martin.pitt@ubuntu.com>  Mon, 24 Aug 2009 15:17:13 +0200
 
 indicator-applet (0.2.0~bzr319-0ubuntu4) karmic; urgency=low
 

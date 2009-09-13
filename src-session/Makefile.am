@@ -5,7 +5,8 @@ libexec_PROGRAMS = \
 indicator_applet_session_CFLAGS = \
 	-DG_LOG_DOMAIN=\""Indicator-Applet"\" \
 	-DDATADIR=\""$(datadir)"\" \
-	-DINDICATOR_DIR=\""$(libdir)/indicators/2"\" \
+	-DINDICATOR_DIR=\""$(INDICATORDIR)"\" \
+	-DINDICATOR_ICONS_DIR=\""$(INDICATORICONSDIR)"\" \
 	-I$(srcdir)/.. \
 	$(APPLET_CFLAGS)
 
