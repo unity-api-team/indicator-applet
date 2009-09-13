@@ -1,9 +1,88 @@
+indicator-session (0.1.3-0ubuntu1) karmic; urgency=low
+
+  * Upstream release 0.1.3
+    * GConf Key change listening
+    * Pidgin and Empathy (2.26) startup detection
+    * Label fixes
+    * Icon fixes for logout windows (LP: #426355)
+
+ -- Ted Gould <ted@ubuntu.com>  Thu, 10 Sep 2009 20:38:44 -0500
+
+indicator-session (0.1.2-0ubuntu1) karmic; urgency=low
+
+  * debian/control:
+    - build-depends on libgconf2-dev
+
+  [ Ted Gould ]
+  * Upstream version 0.1.2
+    * Adds translation setup.  (fixes LP: #425598)
+    * Packaging fix to use upstream tarball.  (fixes LP: #418769)
+    * Shows elipsis when dialogs are enabled (fixes LP: #421693)
+    * Adds GConf key for configure whether dialogs on shutdown and
+      logout are shown.  (fixes LP: #422025)
+
+ -- Sebastien Bacher <seb128@ubuntu.com>  Tue, 08 Sep 2009 18:15:03 +0200
+
+indicator-session (0.1.2-0ubuntu1~ppa1) karmic; urgency=low
+
+  * Upstream version 0.1.2 fixes LP: #425598, LP: #418769, LP: #421693
+    and LP: #422025.
+
+ -- Ted Gould <ted@ubuntu.com>  Tue, 08 Sep 2009 10:51:59 -0500
+
+indicator-session (0.1.1-0ubuntu2~ppa2) karmic; urgency=low
+
+  * Merging in c_korn's branch.
+
+ -- Ted Gould <ted@ubuntu.com>  Tue, 08 Sep 2009 10:18:56 -0500
+
+indicator-session (0.1.1-0ubuntu2~ppa1) karmic; urgency=low
+
+  * Removing printing DBus error message as it sometimes isn't
+    valid.  (LP: #420238)
+
+ -- Ted Gould <ted@ubuntu.com>  Fri, 04 Sep 2009 13:44:45 -0500
+
+indicator-session (0.1.1-0ubuntu1) karmic; urgency=low
+
+  * set bzr-builddeb merge mode to true for easy tarball build
+
+  [ Ted Gould ]
+  * Upstream update 0.1.1 for dbusmenu 0.1.2 (LP: #423975)
+  * debian/control: Increasing dbusmenu dep to 0.1.2
+
+ -- Sebastien Bacher <seb128@ubuntu.com>  Fri, 04 Sep 2009 11:46:25 +0200
+
+indicator-session (0.1-0ubuntu1) karmic; urgency=low
+
+  [ Ted Gould ]
+  * Upstream version 0.1 (LP: #420108)
+  * debian/control: Looking for libdbusmenu* >= 0.1.0
+  * debian/control: Shortening the short description and lengthening
+    the long one.  Fixes a bug (LP: #412024)
+  * debian/watch:
+    - fixed url
+
+  [ Martin Pitt ]
+  * Re-add dropped debian/compat.
+
+  Re-add fixes which got lost in branch renaming:
+  * debian/control: Fix Vcs-* links.
+  * debian/rules: debian/rules: Update *.a/*.la cleanup for -sus → -session
+    renaming.
+
+ -- Ted Gould <ted@ubuntu.com>  Thu, 27 Aug 2009 21:30:27 +0200
+
 indicator-session (0.1~bzr17-0ubuntu1) karmic; urgency=low
 
+  * New snapshot (LP: #417035)
   * Package rename from 'indicator-sus' to 'indicator-session'
   * Merging in the branch that adds in the status icons to
     the panel.
-  * debian/control: Switching to indicator-session and conflicting
+  * debian/control:
+    - Switching to indicator-session and conflicting
+    - Changed Vcs-Bzr to point to ~ubuntu-desktop
+    - Changed the project homepage
     and replacing indicator-sus
   * debian/watch: Switching to indicator-session*
 

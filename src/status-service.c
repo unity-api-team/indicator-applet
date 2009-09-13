@@ -30,6 +30,7 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-bindings.h>
 
+#include <libdbusmenu-glib/client.h>
 #include <libdbusmenu-glib/server.h>
 #include <libdbusmenu-glib/menuitem.h>
 
@@ -39,11 +40,13 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "status-provider.h"
 #include "status-provider-pidgin.h"
+#include "status-provider-telepathy.h"
 
 typedef StatusProvider * (*newfunc) (void);
-#define STATUS_PROVIDER_CNT   1
+#define STATUS_PROVIDER_CNT   2
 static newfunc status_provider_newfuncs[STATUS_PROVIDER_CNT] = {
-	status_provider_pidgin_new
+	status_provider_pidgin_new,
+	status_provider_telepathy_new
 };
 static StatusProvider * status_providers[STATUS_PROVIDER_CNT] = { 0 };
 
@@ -52,7 +55,8 @@ static const gchar * status_strings [STATUS_PROVIDER_STATUS_LAST] = {
   /* STATUS_PROVIDER_STATUS_AWAY,      */ N_("Away"),
   /* STATUS_PROVIDER_STATUS_DND        */ N_("Busy"),
   /* STATUS_PROVIDER_STATUS_INVISIBLE  */ N_("Invisible"),
-  /* STATUS_PROVIDER_STATUS_OFFLINE,   */ N_("Offline")
+  /* STATUS_PROVIDER_STATUS_OFFLINE,   */ N_("Offline"),
+  /* STATUS_PROVIDER_STATUS_DISCONNECTED*/ N_("Offline")
 };
 
 static const gchar * status_icons[STATUS_PROVIDER_STATUS_LAST] = {
@@ -60,34 +64,61 @@ static const gchar * status_icons[STATUS_PROVIDER_STATUS_LAST] = {
   /* STATUS_PROVIDER_STATUS_AWAY, */       "user-away",
   /* STATUS_PROVIDER_STATUS_DND, */        "user-busy",
   /* STATUS_PROVIDER_STATUS_INVISIBLE, */  "user-invisible",
-  /* STATUS_PROVIDER_STATUS_OFFLINE */     "user-offline"
+  /* STATUS_PROVIDER_STATUS_OFFLINE */     "user-offline",
+  /* STATUS_PROVIDER_STATUS_DISCONNECTED */"user-offline"
 };
 
 
 static DbusmenuMenuitem * root_menuitem = NULL;
 static DbusmenuMenuitem * status_menuitem = NULL;
+static DbusmenuMenuitem * status_menuitems[STATUS_PROVIDER_STATUS_LAST] = {0};
 static GMainLoop * mainloop = NULL;
 static StatusServiceDbus * dbus_interface = NULL;
-static StatusProviderStatus global_status = STATUS_PROVIDER_STATUS_OFFLINE;
+static StatusProviderStatus global_status = STATUS_PROVIDER_STATUS_DISCONNECTED;
 
 static void
 status_update (void) {
 	StatusProviderStatus oldglobal = global_status;
-	global_status = STATUS_PROVIDER_STATUS_ONLINE;
+	global_status = STATUS_PROVIDER_STATUS_DISCONNECTED;
 
+	/* Ask everyone what they think the status should be, if
+	   they're more connected, up the global level */
 	int i;
 	for (i = 0; i < STATUS_PROVIDER_CNT; i++) {
 		StatusProviderStatus localstatus = status_provider_get_status(status_providers[i]);
-		if (localstatus > global_status) {
+		if (localstatus < global_status) {
 			global_status = localstatus;
 		}
 	}
 
+	/* If changed */
 	if (global_status != oldglobal) {
 		g_debug("Global status changed to: %s", _(status_strings[global_status]));
 
-		dbusmenu_menuitem_property_set(status_menuitem, "label", _(status_strings[global_status]));
+		/* Set the status name on the menu item */
+		dbusmenu_menuitem_property_set(status_menuitem, DBUSMENU_MENUITEM_PROP_LABEL, _(status_strings[global_status]));
+		/* Configure the icon on the panel */
 		status_service_dbus_set_status(dbus_interface, status_icons[global_status]);
+
+		/* If we're now disconnected, make setting the statuses
+		   insensitive. */
+		if (global_status == STATUS_PROVIDER_STATUS_DISCONNECTED) {
+			StatusProviderStatus i;
+			for (i = STATUS_PROVIDER_STATUS_ONLINE; i < STATUS_PROVIDER_STATUS_LAST; i++) {
+				if (status_menuitems[i] == NULL) continue;
+				dbusmenu_menuitem_property_set(status_menuitems[i], DBUSMENU_MENUITEM_PROP_SENSITIVE, "false");
+			}
+		}
+
+		/* If we're now back to a state where we have an IM client
+		   connected then we need to resensitize the items. */
+		if (oldglobal == STATUS_PROVIDER_STATUS_DISCONNECTED) {
+			StatusProviderStatus i;
+			for (i = STATUS_PROVIDER_STATUS_ONLINE; i < STATUS_PROVIDER_STATUS_LAST; i++) {
+				if (status_menuitems[i] == NULL) continue;
+				dbusmenu_menuitem_property_set(status_menuitems[i], DBUSMENU_MENUITEM_PROP_SENSITIVE, "true");
+			}
+		}
 	}
 
 	return;
@@ -163,10 +194,12 @@ build_user_item (DbusmenuMenuitem * root)
 		while (*walker != '\0' && *walker != ',') { walker++; }
 		*walker = '\0';
 
-		DbusmenuMenuitem * useritem = dbusmenu_menuitem_new();
-		dbusmenu_menuitem_property_set(useritem, "label", name);
-		dbusmenu_menuitem_property_set(useritem, "sensitive", "false");
-		dbusmenu_menuitem_child_append(root, useritem);
+		if (name[0] != '\0') {
+			DbusmenuMenuitem * useritem = dbusmenu_menuitem_new();
+			dbusmenu_menuitem_property_set(useritem, DBUSMENU_MENUITEM_PROP_LABEL, name);
+			dbusmenu_menuitem_property_set(useritem, DBUSMENU_MENUITEM_PROP_SENSITIVE, "false");
+			dbusmenu_menuitem_child_append(root, useritem);
+		}
 
 		g_free(name);
 	} else {
@@ -185,24 +218,34 @@ build_menu (gpointer data)
 	build_user_item(root);
 
 	status_menuitem = dbusmenu_menuitem_new();
-	dbusmenu_menuitem_property_set(status_menuitem, "label", _(status_strings[global_status]));
+	dbusmenu_menuitem_property_set(status_menuitem, DBUSMENU_MENUITEM_PROP_LABEL, _(status_strings[global_status]));
 	dbusmenu_menuitem_child_append(root, status_menuitem);
 
 	StatusProviderStatus i;
 	for (i = STATUS_PROVIDER_STATUS_ONLINE; i < STATUS_PROVIDER_STATUS_LAST; i++) {
-		DbusmenuMenuitem * mi = dbusmenu_menuitem_new();
+		if (i == STATUS_PROVIDER_STATUS_DISCONNECTED) {
+			/* We don't want an item for the disconnected status.  Users
+			   can't set that value through the menu :) */
+			continue;
+		}
 
-		dbusmenu_menuitem_property_set(mi, "label", _(status_strings[i]));
-		dbusmenu_menuitem_property_set(mi, "icon", status_icons[i]);
-		g_signal_connect(G_OBJECT(mi), DBUSMENU_MENUITEM_SIGNAL_ITEM_ACTIVATED, G_CALLBACK(status_menu_click), GINT_TO_POINTER(i));
+		status_menuitems[i] = dbusmenu_menuitem_new();
 
-		dbusmenu_menuitem_child_append(status_menuitem, mi);
+		dbusmenu_menuitem_property_set(status_menuitems[i], "type", DBUSMENU_CLIENT_TYPES_IMAGE);
+		dbusmenu_menuitem_property_set(status_menuitems[i], DBUSMENU_MENUITEM_PROP_LABEL, _(status_strings[i]));
+		dbusmenu_menuitem_property_set(status_menuitems[i], DBUSMENU_MENUITEM_PROP_ICON, status_icons[i]);
+		if (global_status == STATUS_PROVIDER_STATUS_DISCONNECTED) {
+			dbusmenu_menuitem_property_set(status_menuitems[i], DBUSMENU_MENUITEM_PROP_SENSITIVE, "false");
+		}
+		g_signal_connect(G_OBJECT(status_menuitems[i]), DBUSMENU_MENUITEM_SIGNAL_ITEM_ACTIVATED, G_CALLBACK(status_menu_click), GINT_TO_POINTER(i));
+
+		dbusmenu_menuitem_child_append(status_menuitem, status_menuitems[i]);
 
 		g_debug("Built %s", status_strings[i]);
 	}
 
 	DbusmenuMenuitem * mi = dbusmenu_menuitem_new();
-	dbusmenu_menuitem_property_set(mi, "label", _("Lock Screen"));
+	dbusmenu_menuitem_property_set(mi, DBUSMENU_MENUITEM_PROP_LABEL, _("Lock Screen"));
 	g_signal_connect(G_OBJECT(mi), DBUSMENU_MENUITEM_SIGNAL_ITEM_ACTIVATED, G_CALLBACK(lock_screen), GINT_TO_POINTER(i));
 	dbusmenu_menuitem_child_append(root, mi);
 
