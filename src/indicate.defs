@@ -7,13 +7,6 @@
   (gtype-id "INDICATE_TYPE_INDICATOR")
 )
 
-(define-object IndicatorMessage
-  (in-module "Indicate")
-  (parent "IndicateIndicator")
-  (c-name "IndicateIndicatorMessage")
-  (gtype-id "INDICATE_TYPE_INDICATOR_MESSAGE")
-)
-
 (define-object Listener
   (in-module "Indicate")
   (parent "GObject")
@@ -81,12 +74,6 @@
   (of-object "IndicateIndicator")
   (c-name "indicate_indicator_get_id")
   (return-type "guint")
-)
-
-(define-method get_indicator_type
-  (of-object "IndicateIndicator")
-  (c-name "indicate_indicator_get_indicator_type")
-  (return-type "const-gchar*")
 )
 
 (define-method user_display
