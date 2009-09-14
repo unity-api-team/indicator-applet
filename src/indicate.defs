@@ -419,44 +419,6 @@
   (return-type "none")
 )
 
-(define-method emit_indicator_added
-  (of-object "IndicateServer")
-  (c-name "indicate_server_emit_indicator_added")
-  (return-type "none")
-  (parameters
-    '("guint" "id")
-    '("const-gchar*" "type")
-  )
-)
-
-(define-method emit_indicator_removed
-  (of-object "IndicateServer")
-  (c-name "indicate_server_emit_indicator_removed")
-  (return-type "none")
-  (parameters
-    '("guint" "id")
-    '("const-gchar*" "type")
-  )
-)
-
-(define-method emit_indicator_modified
-  (of-object "IndicateServer")
-  (c-name "indicate_server_emit_indicator_modified")
-  (return-type "none")
-  (parameters
-    '("guint" "id")
-    '("const-gchar*" "property")
-  )
-)
-
-(define-method emit_server_display
-  (of-object "IndicateServer")
-  (c-name "indicate_server_emit_server_display")
-  (return-type "none")
-)
-
-
-
 ;; From interests.h
 
 
