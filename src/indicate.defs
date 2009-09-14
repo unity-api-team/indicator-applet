@@ -112,6 +112,26 @@
   )
 )
 
+(define-method set_property_int
+  (of-object "IndicateIndicator")
+  (c-name "indicate_indicator_set_property_int")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "key")
+    '("gint" "value")
+  )
+)
+
+(define-method set_property_bool
+  (of-object "IndicateIndicator")
+  (c-name "indicate_indicator_set_property_bool")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "key")
+    '("gboolean" "value")
+  )
+)
+
 (define-method get_property
   (of-object "IndicateIndicator")
   (c-name "indicate_indicator_get_property")
@@ -125,6 +145,21 @@
   (of-object "IndicateIndicator")
   (c-name "indicate_indicator_list_properties")
   (return-type "GPtrArray*")
+)
+
+(define-method set_displayed
+  (of-object "IndicateIndicator")
+  (c-name "indicate_indicator_set_displayed")
+  (return-type "none")
+  (parameters
+    '("gboolean" "displayed")
+  )
+)
+
+(define-method get_displayed
+  (of-object "IndicateIndicator")
+  (c-name "indicate_indicator_get_displayed")
+  (return-type "gboolean")
 )
 
 
