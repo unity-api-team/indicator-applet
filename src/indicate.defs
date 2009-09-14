@@ -356,6 +356,15 @@
   )
 )
 
+(define-method set_count
+  (of-object "IndicateServer")
+  (c-name "indicate_server_set_count")
+  (return-type "none")
+  (parameters
+    '("guint" "count")
+  )
+)
+
 (define-method show
   (of-object "IndicateServer")
   (c-name "indicate_server_show")
@@ -402,6 +411,24 @@
   (c-name "indicate_server_set_default")
   (return-type "none")
 )
+
+(define-method check_interest
+  (of-object "IndicateServer")
+  (c-name "indicate_server_check_interest")
+  (return-type "gboolean")
+  (parameters
+    '("IndicateInterests" "interest")
+  )
+)
+
+(define-method get_max_indicators
+  (of-object "IndicateServer")
+  (c-name "indicate_server_get_max_indicators")
+  (return-type "gint")
+)
+
+
+
 
 ;; From interests.h
 
