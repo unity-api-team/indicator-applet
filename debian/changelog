@@ -1,17 +1,14 @@
-indicate-python (0.2.0~bzr29-0ubuntu1~ppa2) karmic; urgency=low
+indicate-python (0.2.0-0ubuntu1) UNRELEASED; urgency=low
 
+  * Upstream release 0.2.0 (LP: #427991)
   * debian/control:
     - Require libindicate-dev >= 0.2.0 
+    - Changed Vcs-Bzr to ~ubuntu-desktop
 
- -- Ken VanDine <ken@gordo>  Sun, 06 Sep 2009 16:36:39 -0400
-
-indicate-python (0.2.0~bzr29-0ubuntu1~ppa1) karmic; urgency=low
-
-  * Incrementing to build with new libindicate
-  * Mergin' in the 0.2 branch
+  [Ted Gould]
   * debian/control: Build dep on indicate-gtk-dev
 
- -- Ted Gould <ted@ubuntu.com>  Wed, 05 Aug 2009 11:43:44 +0100
+ -- Ken VanDine <ken.vandine@canonical.com>  Thu, 17 Sep 2009 11:31:02 -0400
 
 indicate-python (0.0.3+1-0ubuntu1) jaunty; urgency=low
 
