@@ -29,8 +29,8 @@ import gobject
 import gtk
 from time import time
 
-PATHA = "/usr/share/icons/hicolor/16x16/apps/pidgin.png"
-PATHB = "/usr/share/icons/hicolor/22x22/apps/pidgin.png"
+PATHA = "/usr/share/icons/hicolor/16x16/apps/empathy.png"
+PATHB = "/usr/share/icons/hicolor/22x22/apps/empathy.png"
 lastpath = None
 
 def timeout_cb(indicator):
@@ -58,10 +58,10 @@ def server_display(server):
 if __name__ == "__main__":
     server = indicate.indicate_server_ref_default()
     server.set_type("message.im")
-    server.set_desktop_file("/usr/share/applications/pidgin.desktop")
+    server.set_desktop_file("/usr/share/applications/empathy.desktop")
     server.connect("server-display", server_display)
     
-    indicator = indicate.IndicatorMessage()
+    indicator = indicate.Indicator()
     indicator.set_property("subtype", "im")
     indicator.set_property("sender", "IM Client Test")
     indicator.set_property_time("time", time())
