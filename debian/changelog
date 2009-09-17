@@ -1,4 +1,4 @@
-indicate-python (0.2.0-0ubuntu1) UNRELEASED; urgency=low
+indicate-python (0.2.0-0ubuntu1) karmic; urgency=low
 
   * Upstream release 0.2.0 (LP: #427991)
   * debian/control:
