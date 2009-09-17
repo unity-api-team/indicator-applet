@@ -28,7 +28,7 @@ License version 3 and version 2.1 along with this program.  If not, see
 headers
 #include <Python.h>
 #include <libindicate/indicator.h>
-#include <libindicate/indicator-message.h>
+#include <libindicate/indicator-messages.h>
 #include <libindicate/listener.h>
 #include <libindicate/server.h>
 #include <libindicate/interests.h>

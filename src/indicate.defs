@@ -7,13 +7,6 @@
   (gtype-id "INDICATE_TYPE_INDICATOR")
 )
 
-(define-object IndicatorMessage
-  (in-module "Indicate")
-  (parent "IndicateIndicator")
-  (c-name "IndicateIndicatorMessage")
-  (gtype-id "INDICATE_TYPE_INDICATOR_MESSAGE")
-)
-
 (define-object Listener
   (in-module "Indicate")
   (parent "GObject")
@@ -83,12 +76,6 @@
   (return-type "guint")
 )
 
-(define-method get_indicator_type
-  (of-object "IndicateIndicator")
-  (c-name "indicate_indicator_get_indicator_type")
-  (return-type "const-gchar*")
-)
-
 (define-method user_display
   (of-object "IndicateIndicator")
   (c-name "indicate_indicator_user_display")
@@ -125,6 +112,26 @@
   )
 )
 
+(define-method set_property_int
+  (of-object "IndicateIndicator")
+  (c-name "indicate_indicator_set_property_int")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "key")
+    '("gint" "value")
+  )
+)
+
+(define-method set_property_bool
+  (of-object "IndicateIndicator")
+  (c-name "indicate_indicator_set_property_bool")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "key")
+    '("gboolean" "value")
+  )
+)
+
 (define-method get_property
   (of-object "IndicateIndicator")
   (c-name "indicate_indicator_get_property")
@@ -140,21 +147,20 @@
   (return-type "GPtrArray*")
 )
 
-
-
-;; From indicator-message.h
-
-(define-function indicate_indicator_message_get_type
-  (c-name "indicate_indicator_message_get_type")
-  (return-type "GType")
+(define-method set_displayed
+  (of-object "IndicateIndicator")
+  (c-name "indicate_indicator_set_displayed")
+  (return-type "none")
+  (parameters
+    '("gboolean" "displayed")
+  )
 )
 
-(define-function indicate_indicator_message_new
-  (c-name "indicate_indicator_message_new")
-  (is-constructor-of "IndicateIndicatorMessage")
-  (return-type "IndicateIndicatorMessage*")
+(define-method get_displayed
+  (of-object "IndicateIndicator")
+  (c-name "indicate_indicator_get_displayed")
+  (return-type "gboolean")
 )
-
 
 
 ;; From listener.h
@@ -350,6 +356,15 @@
   )
 )
 
+(define-method set_count
+  (of-object "IndicateServer")
+  (c-name "indicate_server_set_count")
+  (return-type "none")
+  (parameters
+    '("guint" "count")
+  )
+)
+
 (define-method show
   (of-object "IndicateServer")
   (c-name "indicate_server_show")
@@ -397,41 +412,21 @@
   (return-type "none")
 )
 
-(define-method emit_indicator_added
+(define-method check_interest
   (of-object "IndicateServer")
-  (c-name "indicate_server_emit_indicator_added")
-  (return-type "none")
+  (c-name "indicate_server_check_interest")
+  (return-type "gboolean")
   (parameters
-    '("guint" "id")
-    '("const-gchar*" "type")
+    '("IndicateInterests" "interest")
   )
 )
 
-(define-method emit_indicator_removed
+(define-method get_max_indicators
   (of-object "IndicateServer")
-  (c-name "indicate_server_emit_indicator_removed")
-  (return-type "none")
-  (parameters
-    '("guint" "id")
-    '("const-gchar*" "type")
-  )
+  (c-name "indicate_server_get_max_indicators")
+  (return-type "gint")
 )
 
-(define-method emit_indicator_modified
-  (of-object "IndicateServer")
-  (c-name "indicate_server_emit_indicator_modified")
-  (return-type "none")
-  (parameters
-    '("guint" "id")
-    '("const-gchar*" "property")
-  )
-)
-
-(define-method emit_server_display
-  (of-object "IndicateServer")
-  (c-name "indicate_server_emit_server_display")
-  (return-type "none")
-)
 
 
 
