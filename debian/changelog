@@ -1,3 +1,9 @@
+indicate-python (0.2.0-0ubuntu1~ppa1) UNRELEASED; urgency=low
+
+  * Upstream release 0.2.0
+
+ -- Ted Gould <ted@ubuntu.com>  Thu, 17 Sep 2009 09:26:21 -0500
+
 indicate-python (0.2.0~bzr29-0ubuntu1~ppa1) karmic; urgency=low
 
   * Incrementing to build with new libindicate
