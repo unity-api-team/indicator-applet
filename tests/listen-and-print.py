@@ -58,17 +58,17 @@ def get_properties(listener, server, indicator):
     # TODO: Not in libindicate API yet.
     return
 
-def indicator_added(listener, server, indicator, typ):
-    print "Indicator Added:          %s %s %s" % \
-        (server, indicator, typ)
+def indicator_added(listener, server, indicator):
+    print "Indicator Added:          %s %s" % \
+        (server, indicator)
 
-def indicator_removed(listener, server, indicator, typ):
-    print "Indicator Removed:        %s %s %s" % \
-        (server, indicator, typ)
+def indicator_removed(listener, server, indicator):
+    print "Indicator Removed:        %s %s" % \
+        (server, indicator)
 
-def indicator_modified(listener, server, indicator, typ, prop):
-    print "Indicator Modified:       %s %s %s %s" % \
-        (server, indicator, typ, prop)
+def indicator_modified(listener, server, indicator, prop):
+    print "Indicator Modified:       %s %s %s" % \
+        (server, indicator, prop)
     show_property(listener, server, 
                   indicator, prop)
 
