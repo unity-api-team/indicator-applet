@@ -61,7 +61,6 @@ def get_properties(server, indicator):
 def indicator_added(server, indicator, typ):
     print "Indicator Added:          %s %s %s" % \
         (server, indicator, typ)
-    import epdb;epdb.st()
 
 def indicator_removed(server, indicator, typ):
     print "Indicator Removed:        %s %s %s" % \
