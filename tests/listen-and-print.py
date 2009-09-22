@@ -29,21 +29,21 @@ import gobject
 import gtk
 from time import time, ctime, strftime, localtime
 
-def show_property_cb(listener, server, indicator, prop, propertydata):
+def show_property_cb(server, indicator, prop, propertydata):
     print "Indicator Property:       %s %s %s %s" % \
         (server, indicator, prop, propertydata)
 
-def show_property_time_cb(listener, server, indicator, prop, propertydata):
+def show_property_time_cb(server, indicator, prop, propertydata):
     print "Indicator Property:       %s %s %s %s" % \
         (server, indicator, prop, 
          strftime("%I:%M", localtime(propertydata)))
 
-def show_property_icon_cb(listener, server, indicator, prop, propertydata):
+def show_property_icon_cb(server, indicator, prop, propertydata):
     print "Indicator Property:       %s %s %s %dx%d" % \
         (server, indicator, prop, 
          propertydata.get_width(), propertydata.get_height())
 
-def show_property(listener, server, indicator, prop):
+def show_property(lserver, indicator, prop):
     if prop == "icon":
         listener.get_indicator_property_icon(server, indicator, 
                                              prop, show_property_icon_cb)
@@ -54,19 +54,20 @@ def show_property(listener, server, indicator, prop):
         listener.get_indicator_property(server, indicator, 
                                         prop, show_property_cb)
 
-def get_properties(listener, server, indicator):
+def get_properties(server, indicator):
     # TODO: Not in libindicate API yet.
     return
 
-def indicator_added(listener, server, indicator, typ):
+def indicator_added(server, indicator, typ):
     print "Indicator Added:          %s %s %s" % \
         (server, indicator, typ)
+    import epdb;epdb.st()
 
-def indicator_removed(listener, server, indicator, typ):
+def indicator_removed(server, indicator, typ):
     print "Indicator Removed:        %s %s %s" % \
         (server, indicator, typ)
 
-def indicator_modified(listener, server, indicator, typ, prop):
+def indicator_modified(server, indicator, typ, prop):
     print "Indicator Modified:       %s %s %s %s" % \
         (server, indicator, typ, prop)
     show_property(listener, server, 
