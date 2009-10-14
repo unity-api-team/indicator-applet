@@ -1,6 +1,8 @@
 indicator-applet (0.2.0-0ubuntu2) UNRELEASED; urgency=low
 
   * debian/rules: Enable simple-patchsys.
+  * Add debian/patches/01_stracciatella.patch: Do not show up in stracciatella
+    session. (LP: #444149)
 
  -- Martin Pitt <martin.pitt@ubuntu.com>  Wed, 14 Oct 2009 20:08:18 +0200
 
