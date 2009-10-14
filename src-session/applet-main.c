@@ -214,6 +214,12 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 	gint indicators_loaded = 0;
 	static gboolean first_time = FALSE;
 
+	/* check if we are running stracciatella session */
+	if (g_strcmp0(g_getenv("GDMSESSION"), "gnome-stracciatella") == 0) {
+		g_debug("Running stracciatella GNOME session, disabling myself");
+		return TRUE;
+	}
+
 	if (!first_time)
 	{
         gint argc = 1;
