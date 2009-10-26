@@ -1,17 +1,16 @@
-indicator-applet (0.2.0~bzr329-0ubuntu1~ppa2) karmic; urgency=low
+indicator-applet (0.2.0-0ubuntu2) karmic; urgency=low
 
-  * No ./autogen.sh  ~ppa1 is borked.
+  * debian/rules: Enable simple-patchsys.
+  * Add debian/patches/01_stracciatella.patch: Do not show up in stracciatella
+    session. (LP: #444149)
 
- -- Ted Gould <ted@ubuntu.com>  Mon, 24 Aug 2009 13:47:20 -0500
+ -- Martin Pitt <martin.pitt@ubuntu.com>  Wed, 14 Oct 2009 20:38:39 +0200
 
-indicator-applet (0.2.0~bzr329-0ubuntu1~ppa1) karmic; urgency=low
+indicator-applet (0.2.0-0ubuntu1) karmic; urgency=low
 
-  * Merge from trunk
-    * Icons fix
-    * AM 1.11 rules for cleaner build
-    * Some sus-based string changes.
+  * New upstream version
 
- -- Ted Gould <ted@ubuntu.com>  Mon, 24 Aug 2009 13:26:00 -0500
+ -- Sebastien Bacher <seb128@ubuntu.com>  Tue, 01 Sep 2009 16:18:35 +0200
 
 indicator-applet (0.2.0~bzr326-0ubuntu2) karmic; urgency=low
 
