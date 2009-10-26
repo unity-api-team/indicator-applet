@@ -1,3 +1,10 @@
+indicator-applet (0.2.0-0ubuntu3~ppa2~nice1) UNRELEASED; urgency=low
+
+  * Merging in nice-name branch to cleanup the about and drop the
+    libgnomeui dependency.
+
+ -- Ted Gould <ted@ubuntu.com>  Mon, 26 Oct 2009 14:46:50 -0500
+
 indicator-applet (0.2.0-0ubuntu3~ppa1) karmic; urgency=low
 
   * Patch from Martin Pitt to disable session menu on Stracciatella
