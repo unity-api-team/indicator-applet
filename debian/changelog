@@ -1,3 +1,11 @@
+indicator-applet (0.2.0-0ubuntu3~ppa1) UNRELEASED; urgency=low
+
+  * Patch from Martin Pitt to disable session menu on Stracciatella
+    session.
+  * Remove debian/patches/01_stracciatella.patch
+
+ -- Ted Gould <ted@ubuntu.com>  Mon, 26 Oct 2009 14:44:11 -0500
+
 indicator-applet (0.2.0-0ubuntu2) karmic; urgency=low
 
   * debian/rules: Enable simple-patchsys.
