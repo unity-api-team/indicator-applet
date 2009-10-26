@@ -22,7 +22,6 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <config.h>
 #include <panel-applet.h>
-#include <libgnomeui/gnome-ui-init.h>
 
 #include "libindicator/indicator.h"
 
