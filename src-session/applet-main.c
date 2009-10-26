@@ -165,9 +165,9 @@ about_cb (BonoboUIComponent *ui_container,
 	license_i18n = g_strconcat (_(license[0]), "\n\n", _(license[1]), "\n\n", _(license[2]), NULL);
 
 	gtk_show_about_dialog(NULL,
-		"version", "0.1",
+		"version", VERSION,
 		"copyright", "Copyright \xc2\xa9 2009 Canonical, Ltd.",
-		"comments", _("An applet to hold all of the system indicators."),
+		"comments", _("A place to adjust your status, change users or exit your session."),
 		"authors", authors,
 		"license", license_i18n,
 		"wrap-license", TRUE,
