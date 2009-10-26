@@ -1,9 +1,9 @@
-indicator-applet (0.2.0-0ubuntu3~ppa2~nice2) UNRELEASED; urgency=low
+indicator-applet (0.2.0-0ubuntu3~ppa2~nice2) karmic; urgency=low
 
   * Fixing version number
   * Fixing description on indicator-applet-session
 
- -- Ted Gould <ted@ubuntu.com>  Mon, 26 Oct 2009 14:53:21 -0500
+ -- Ted Gould <ted@ubuntu.com>  Mon, 26 Oct 2009 14:54:44 -0500
 
 indicator-applet (0.2.0-0ubuntu3~ppa2~nice1) karmic; urgency=low
 
