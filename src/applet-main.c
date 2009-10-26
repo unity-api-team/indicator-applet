@@ -35,13 +35,6 @@ static void cw_panel_background_changed (PanelApplet               *applet,
                         				         GdkPixmap                 *pixmap,
                                          GtkWidget                 *menubar);
 
-/* ****************** *
- *  Global Variables  *
- * ****************** */
-
-static GnomeProgram *program = NULL;
-
-
 /*************
  * main
  * ***********/
@@ -216,14 +209,8 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 
 	if (!first_time)
 	{
-        gint argc = 1;
-        gchar *argv[2] = { "indicator-applet", NULL};
-	    
 		first_time = TRUE;
-		program = gnome_program_init ("indicator-applet", "0.1",
-				    LIBGNOMEUI_MODULE, argc, argv,
-				    GNOME_PROGRAM_STANDARD_PROPERTIES,
-				    NULL);
+		g_set_application_name(_("Indicator Applet"));
 	}
 
 	/* Set panel options */
