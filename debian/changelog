@@ -2,6 +2,7 @@ indicator-applet (0.2.0-0ubuntu3~ppa2~nice1) UNRELEASED; urgency=low
 
   * Merging in nice-name branch to cleanup the about and drop the
     libgnomeui dependency.
+  * debian/control: Removing dependency on libgnomeui-dev 
 
  -- Ted Gould <ted@ubuntu.com>  Mon, 26 Oct 2009 14:46:50 -0500
 
