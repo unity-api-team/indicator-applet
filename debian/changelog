@@ -1,11 +1,11 @@
-indicator-applet (0.2.0-0ubuntu3~ppa2) UNRELEASED; urgency=low
+indicator-applet (0.2.0-0ubuntu3~ppa2) karmic; urgency=low
 
   * Fixing version number in About dialog.  (LP: #443196)
   * Fixing application names in About dialog. (LP: #449036)
   * Removing libgnomeui dependency. (LP: #458470)
   * debian/control: Removing dependency on libgnomeui-dev 
 
- -- Ted Gould <ted@ubuntu.com>  Mon, 26 Oct 2009 20:55:08 -0500
+ -- Ted Gould <ted@ubuntu.com>  Mon, 26 Oct 2009 20:58:09 -0500
 
 indicator-applet (0.2.0-0ubuntu3~ppa1) karmic; urgency=low
 
