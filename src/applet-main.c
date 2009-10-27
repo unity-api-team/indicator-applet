@@ -22,7 +22,6 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <config.h>
 #include <panel-applet.h>
-#include <libgnomeui/gnome-ui-init.h>
 
 #include "libindicator/indicator.h"
 
@@ -34,13 +33,6 @@ static void cw_panel_background_changed (PanelApplet               *applet,
                         				         GdkColor                  *colour,
                         				         GdkPixmap                 *pixmap,
                                          GtkWidget                 *menubar);
-
-/* ****************** *
- *  Global Variables  *
- * ****************** */
-
-static GnomeProgram *program = NULL;
-
 
 /*************
  * main
@@ -173,7 +165,7 @@ about_cb (BonoboUIComponent *ui_container,
 	license_i18n = g_strconcat (_(license[0]), "\n\n", _(license[1]), "\n\n", _(license[2]), NULL);
 
 	gtk_show_about_dialog(NULL,
-		"version", "0.1",
+		"version", VERSION,
 		"copyright", "Copyright \xc2\xa9 2009 Canonical, Ltd.",
 		"comments", _("An applet to hold all of the system indicators."),
 		"authors", authors,
@@ -216,14 +208,8 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 
 	if (!first_time)
 	{
-        gint argc = 1;
-        gchar *argv[2] = { "indicator-applet", NULL};
-	    
 		first_time = TRUE;
-		program = gnome_program_init ("indicator-applet", "0.1",
-				    LIBGNOMEUI_MODULE, argc, argv,
-				    GNOME_PROGRAM_STANDARD_PROPERTIES,
-				    NULL);
+		g_set_application_name(_("Indicator Applet"));
 	}
 
 	/* Set panel options */
