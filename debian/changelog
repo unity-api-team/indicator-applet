@@ -1,6 +1,7 @@
 indicator-applet (0.3.0~dev-0ubuntu1~ppa1) UNRELEASED; urgency=low
 
   * Upstream update to libindicator 0.3.0 API
+  * debian/control: Updating libindicator to 0.3.0~dev or greater.
 
  -- Ted Gould <ted@ubuntu.com>  Wed, 04 Nov 2009 14:15:45 -0600
 
