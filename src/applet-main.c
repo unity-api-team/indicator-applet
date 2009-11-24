@@ -72,8 +72,24 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 }
 
 static void
-entry_removed (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * menu)
+entry_removed_cb (GtkWidget * widget, gpointer userdata)
 {
+	gpointer data = g_object_get_data(G_OBJECT(widget), ENTRY_DATA_NAME);
+
+	if (data != userdata) {
+		return;
+	}
+
+	gtk_widget_destroy(widget);
+	return;
+}
+
+static void 
+entry_removed (IndicatorObject * io, IndicatorObjectEntry * entry, gpointer user_data)
+{
+	g_debug("Signal: Entry Removed");
+
+	gtk_container_foreach(GTK_CONTAINER(user_data), entry_removed_cb, entry);
 
 	return;
 }
