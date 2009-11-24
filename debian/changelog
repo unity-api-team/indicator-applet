@@ -1,8 +1,8 @@
-indicator-applet (0.3.0~dev-0ubuntu1~ppa3~dyn2) UNRELEASED; urgency=low
+indicator-applet (0.3.0~dev-0ubuntu1~ppa3~dyn2) karmic; urgency=low
 
   * Supporting removing items too!
 
- -- Ted Gould <ted@ubuntu.com>  Tue, 24 Nov 2009 17:13:04 -0600
+ -- Ted Gould <ted@ubuntu.com>  Tue, 24 Nov 2009 17:16:23 -0600
 
 indicator-applet (0.3.0~dev-0ubuntu1~ppa3~dyn1) karmic; urgency=low
 
