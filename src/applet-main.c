@@ -25,6 +25,8 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "libindicator/indicator-object.h"
 
+#define ENTRY_DATA_NAME "indicator-custom-entry-data"
+
 static gboolean     applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data);
 
 
@@ -49,6 +51,8 @@ PANEL_APPLET_BONOBO_FACTORY ("OAFIID:GNOME_IndicatorApplet_Factory",
 static void
 entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * menu)
 {
+	g_debug("Signal: Entry Added");
+
 	GtkWidget * menuitem = gtk_menu_item_new();
 	GtkWidget * hbox = gtk_hbox_new(FALSE, 3);
 
@@ -67,6 +71,8 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
 	gtk_widget_show(menuitem);
+
+	g_object_set_data(G_OBJECT(menuitem), ENTRY_DATA_NAME, entry);
 
 	return;
 }
