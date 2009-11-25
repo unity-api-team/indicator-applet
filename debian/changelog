@@ -1,8 +1,8 @@
-indicator-applet (0.3.0~dev-0ubuntu1~ppa3) UNRELEASED; urgency=low
+indicator-applet (0.3.0~dev-0ubuntu1~ppa3) karmic; urgency=low
 
   * Adding support for dynamically adding in indicators.
 
- -- Ted Gould <ted@ubuntu.com>  Wed, 25 Nov 2009 15:26:38 -0600
+ -- Ted Gould <ted@ubuntu.com>  Wed, 25 Nov 2009 16:04:17 -0600
 
 indicator-applet (0.3.0~dev-0ubuntu1~ppa2) karmic; urgency=low
 
