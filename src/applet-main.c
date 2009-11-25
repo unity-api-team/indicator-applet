@@ -25,6 +25,8 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "libindicator/indicator-object.h"
 
+#define ENTRY_DATA_NAME "indicator-custom-entry-data"
+
 static gboolean     applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data);
 
 
@@ -46,6 +48,58 @@ PANEL_APPLET_BONOBO_FACTORY ("OAFIID:GNOME_IndicatorApplet_Factory",
 /*************
  * init function
  * ***********/
+static void
+entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * menu)
+{
+	g_debug("Signal: Entry Added");
+
+	GtkWidget * menuitem = gtk_menu_item_new();
+	GtkWidget * hbox = gtk_hbox_new(FALSE, 3);
+
+	if (entry->image != NULL) {
+		gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(entry->image), FALSE, FALSE, 0);
+	}
+	if (entry->label != NULL) {
+		gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(entry->label), FALSE, FALSE, 0);
+	}
+	gtk_container_add(GTK_CONTAINER(menuitem), hbox);
+	gtk_widget_show(hbox);
+
+	if (entry->menu != NULL) {
+		gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem), GTK_WIDGET(entry->menu));
+	}
+
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+	gtk_widget_show(menuitem);
+
+	g_object_set_data(G_OBJECT(menuitem), ENTRY_DATA_NAME, entry);
+
+	return;
+}
+
+static void
+entry_removed_cb (GtkWidget * widget, gpointer userdata)
+{
+	gpointer data = g_object_get_data(G_OBJECT(widget), ENTRY_DATA_NAME);
+
+	if (data != userdata) {
+		return;
+	}
+
+	gtk_widget_destroy(widget);
+	return;
+}
+
+static void 
+entry_removed (IndicatorObject * io, IndicatorObjectEntry * entry, gpointer user_data)
+{
+	g_debug("Signal: Entry Removed");
+
+	gtk_container_foreach(GTK_CONTAINER(user_data), entry_removed_cb, entry);
+
+	return;
+}
+
 static gboolean
 load_module (const gchar * name, GtkWidget * menu)
 {
@@ -58,33 +112,22 @@ load_module (const gchar * name, GtkWidget * menu)
 
 	g_debug("Loading Module: %s", name);
 
+	/* Build the object for the module */
 	gchar * fullpath = g_build_filename(INDICATOR_DIR, name, NULL);
 	IndicatorObject * io = indicator_object_new_from_file(fullpath);
 	g_free(fullpath);
 
+	/* Connect to it's signals */
+	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_ADDED,   G_CALLBACK(entry_added),    menu);
+	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_REMOVED, G_CALLBACK(entry_removed),  menu);
+
+	/* Work on the entries */
 	GList * entries = indicator_object_get_entries(io);
 	GList * entry = NULL;
 
 	for (entry = entries; entry != NULL; entry = g_list_next(entry)) {
 		IndicatorObjectEntry * entrydata = (IndicatorObjectEntry *)entry->data;
-
-		GtkWidget * menuitem = gtk_menu_item_new();
-		GtkWidget * hbox = gtk_hbox_new(FALSE, 3);
-		if (entrydata->image != NULL) {
-			gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(entrydata->image), FALSE, FALSE, 0);
-		}
-		if (entrydata->label != NULL) {
-			gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(entrydata->label), FALSE, FALSE, 0);
-		}
-		gtk_container_add(GTK_CONTAINER(menuitem), hbox);
-		gtk_widget_show(hbox);
-
-		if (entrydata->menu != NULL) {
-			gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem), GTK_WIDGET(entrydata->menu));
-		}
-
-		gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
-		gtk_widget_show(menuitem);
+		entry_added(io, entrydata, menu);
 	}
 
 	g_list_free(entries);
