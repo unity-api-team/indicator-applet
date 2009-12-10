@@ -1,4 +1,4 @@
-indicator-applet (0.2.1-0ubuntu1~ppa1) UNRELEASED; urgency=low
+indicator-applet (0.2.1-0ubuntu1~ppa1) karmic; urgency=low
 
   * Upstream release 0.2.1
     * Fixing version number in About dialog.  (LP: #443196)
@@ -7,7 +7,7 @@ indicator-applet (0.2.1-0ubuntu1~ppa1) UNRELEASED; urgency=low
   * debian/control: Removing dependency on libgnomeui-dev 
   * Remove debian/patches/01_stracciatella.patch
 
- -- Ted Gould <ted@ubuntu.com>  Thu, 10 Dec 2009 12:25:54 -0600
+ -- Ted Gould <ted@ubuntu.com>  Thu, 10 Dec 2009 12:28:13 -0600
 
 indicator-applet (0.2.0-0ubuntu2) karmic; urgency=low
 
