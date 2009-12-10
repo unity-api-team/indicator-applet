@@ -1,8 +1,8 @@
-indicator-applet (0.3.0-0ubuntu1~ppa1) karmic; urgency=low
+indicator-applet (0.3.0-0ubuntu1) karmic; urgency=low
 
   * Upstream release 0.3.0
     * Update to libindicator 0.3.0 API 
-  * debian/control: Updating libindicator to 0.3.0~dev or greater.
+  * debian/control: Updating libindicator to 0.3.0 or greater.
 
  -- Ted Gould <ted@ubuntu.com>  Thu, 10 Dec 2009 11:34:33 -0600
 
