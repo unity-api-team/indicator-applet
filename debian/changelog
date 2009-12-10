@@ -1,15 +1,10 @@
-indicator-applet (0.3.0~dev-0ubuntu1~ppa3) karmic; urgency=low
+indicator-applet (0.3.0-0ubuntu1~ppa1) UNRELEASED; urgency=low
 
-  * Adding support for dynamically adding in indicators.
-
- -- Ted Gould <ted@ubuntu.com>  Wed, 25 Nov 2009 16:04:17 -0600
-
-indicator-applet (0.3.0~dev-0ubuntu1~ppa2) karmic; urgency=low
-
-  * Upstream update to libindicator 0.3.0 API 
+  * Upstream release 0.3.0
+    * Update to libindicator 0.3.0 API 
   * debian/control: Updating libindicator to 0.3.0~dev or greater.
 
- -- Ted Gould <ted@ubuntu.com>  Thu, 05 Nov 2009 08:34:51 -0600
+ -- Ted Gould <ted@ubuntu.com>  Thu, 10 Dec 2009 11:27:46 -0600
 
 indicator-applet (0.2.0-0ubuntu3~ppa2) karmic; urgency=low
 
