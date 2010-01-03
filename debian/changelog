@@ -1,8 +1,8 @@
-indicator-applet (0.3.0-0ubuntu2~ppa1~me1) UNRELEASED; urgency=low
+indicator-applet (0.3.0-0ubuntu2~ppa1~me1) karmic; urgency=low
 
   * Merging in me support
 
- -- Ted Gould <ted@ubuntu.com>  Sat, 02 Jan 2010 23:55:22 -0600
+ -- Ted Gould <ted@ubuntu.com>  Sat, 02 Jan 2010 23:56:41 -0600
 
 indicator-applet (0.3.0-0ubuntu1) karmic; urgency=low
 
