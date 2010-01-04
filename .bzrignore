@@ -104,3 +104,5 @@ data/GNOME_IndicatorAppletSUS.server
 data/GNOME_IndicatorAppletSUS.server.in
 src-session/indicator-applet-no-sus
 src-session/indicator-applet-session
+src/indicator-applet-complete
+src/indicator-applet-session
