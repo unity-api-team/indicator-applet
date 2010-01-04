@@ -1,3 +1,10 @@
+indicator-applet (0.3.0-0ubuntu2~ppa1) UNRELEASED; urgency=low
+
+  * Adding in handling of the me menu indicator.  It should go
+    in indicator-applet-session.
+
+ -- Ted Gould <ted@ubuntu.com>  Mon, 04 Jan 2010 14:04:14 -0600
+
 indicator-applet (0.3.0-0ubuntu1) karmic; urgency=low
 
   * Upstream release 0.3.0
