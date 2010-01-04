@@ -249,7 +249,7 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 
 		const gchar * name;
 		while ((name = g_dir_read_name(dir)) != NULL) {
-			if (g_strcmp0(name, "libsession.so")) {
+			if (g_strcmp0(name, "libsession.so") && g_strcmp0(name, "libme.so")) {
 				continue;
 			}
 			if (load_module(name, menubar)) {
