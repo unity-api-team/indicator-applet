@@ -40,10 +40,24 @@ static void cw_panel_background_changed (PanelApplet               *applet,
  * main
  * ***********/
 
+#ifdef INDICATOR_APPLET
 PANEL_APPLET_BONOBO_FACTORY ("OAFIID:GNOME_IndicatorApplet_Factory",
                PANEL_TYPE_APPLET,
                "indicator-applet", "0",
                applet_fill_cb, NULL);
+#endif
+#ifdef INDICATOR_APPLET_SESSION
+PANEL_APPLET_BONOBO_FACTORY ("OAFIID:GNOME_FastUserSwitchApplet_Factory",
+               PANEL_TYPE_APPLET,
+               "indicator-applet-session", "0",
+               applet_fill_cb, NULL);
+#endif
+#ifdef INDICATOR_APPLET_COMPLETE
+PANEL_APPLET_BONOBO_FACTORY ("OAFIID:GNOME_IndicatorAppletComplete_Factory",
+               PANEL_TYPE_APPLET,
+               "indicator-applet-complete", "0",
+               applet_fill_cb, NULL);
+#endif
 
 /*************
  * init function
@@ -188,7 +202,11 @@ about_cb (BonoboUIComponent *ui_container,
 	gtk_show_about_dialog(NULL,
 		"version", VERSION,
 		"copyright", "Copyright \xc2\xa9 2009 Canonical, Ltd.",
+#ifdef INDICATOR_APPLET_SESSION
+		"comments", _("A place to adjust your status, change users or exit your session."),
+#else
 		"comments", _("An applet to hold all of the system indicators."),
+#endif
 		"authors", authors,
 		"license", license_i18n,
 		"wrap-license", TRUE,
@@ -234,18 +252,44 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
   
 	static gboolean first_time = FALSE;
 
+#ifdef INDICATOR_APPLET_SESSION
+	/* check if we are running stracciatella session */
+	if (g_strcmp0(g_getenv("GDMSESSION"), "gnome-stracciatella") == 0) {
+		g_debug("Running stracciatella GNOME session, disabling myself");
+		return TRUE;
+	}
+#endif
+
 	if (!first_time)
 	{
 		first_time = TRUE;
+#ifdef INDICATOR_APPLET
 		g_set_application_name(_("Indicator Applet"));
+#endif
+#ifdef INDICATOR_APPLET_SESSION
+		g_set_application_name(_("Indicator Applet Session"));
+#endif
+#ifdef INDICATOR_APPLET_COMPLETE
+		g_set_application_name(_("Indicator Applet Complete"));
+#endif
 	}
 
 	/* Set panel options */
 	gtk_container_set_border_width(GTK_CONTAINER (applet), 0);
 	panel_applet_set_flags(applet, PANEL_APPLET_EXPAND_MINOR);
 	panel_applet_setup_menu(applet, menu_xml, menu_verbs, NULL);
-    atk_object_set_name (gtk_widget_get_accessible (GTK_WIDGET (applet)),
-                         "indicator-applet");
+#ifdef INDICATOR_APPLET
+	atk_object_set_name (gtk_widget_get_accessible (GTK_WIDGET (applet)),
+	                     "indicator-applet");
+#endif
+#ifdef INDICATOR_APPLET_SESSION
+	atk_object_set_name (gtk_widget_get_accessible (GTK_WIDGET (applet)),
+	                     "indicator-applet-session");
+#endif
+#ifdef INDICATOR_APPLET_COMPLETE
+	atk_object_set_name (gtk_widget_get_accessible (GTK_WIDGET (applet)),
+	                     "indicator-applet-complete");
+#endif
   
 	/* Init some theme/icon stuff */
 	gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(),
@@ -293,12 +337,19 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 
 		const gchar * name;
 		while ((name = g_dir_read_name(dir)) != NULL) {
+#ifdef INDICATOR_APPLET
 			if (!g_strcmp0(name, "libsession.so")) {
 				continue;
 			}
 			if (!g_strcmp0(name, "libme.so")) {
 				continue;
 			}
+#endif
+#ifdef INDICATOR_APPLET_SESSION
+			if (g_strcmp0(name, "libsession.so") && g_strcmp0(name, "libme.so")) {
+				continue;
+			}
+#endif
 			if (load_module(name, menubar)) {
 				indicators_loaded++;
 			}
