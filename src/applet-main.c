@@ -296,6 +296,9 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 			if (!g_strcmp0(name, "libsession.so")) {
 				continue;
 			}
+			if (!g_strcmp0(name, "libme.so")) {
+				continue;
+			}
 			if (load_module(name, menubar)) {
 				indicators_loaded++;
 			}
