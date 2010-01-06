@@ -1,4 +1,4 @@
-indicator-applet (0.3.0-0ubuntu2~ppa2) UNRELEASED; urgency=low
+indicator-applet (0.3.0-0ubuntu2~ppa2) karmic; urgency=low
 
   * Upstream merge
     * Unifing all of the code into one C file with defines
@@ -6,7 +6,7 @@ indicator-applet (0.3.0-0ubuntu2~ppa2) UNRELEASED; urgency=low
   * debian/control: Adding package indicator-applet-complete
   * Added debian/indicator-applet-complete.install
 
- -- Ted Gould <ted@ubuntu.com>  Tue, 05 Jan 2010 21:50:38 -0600
+ -- Ted Gould <ted@ubuntu.com>  Tue, 05 Jan 2010 21:56:08 -0600
 
 indicator-applet (0.3.0-0ubuntu2~ppa1) karmic; urgency=low
 
