@@ -1,7 +1,18 @@
+indicator-applet (0.3.0-0ubuntu2~ppa2) UNRELEASED; urgency=low
+
+  * Upstream merge
+    * Unifing all of the code into one C file with defines
+    * Adding an indicator-applet-complete build
+  * debian/control: Adding package indicator-applet-complete
+  * Added debian/indicator-applet-complete.install
+
+ -- Ted Gould <ted@ubuntu.com>  Tue, 05 Jan 2010 21:50:38 -0600
+
 indicator-applet (0.3.0-0ubuntu2~ppa1) karmic; urgency=low
 
-  * Adding in handling of the me menu indicator.  It should go
-    in indicator-applet-session.
+  * Upstream merge
+    * Adding in handling of the me menu indicator.  It should go
+      in indicator-applet-session.
 
  -- Ted Gould <ted@ubuntu.com>  Mon, 04 Jan 2010 14:05:54 -0600
 

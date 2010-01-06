@@ -47,3 +47,16 @@ Description: A clone of the GNOME panel indicator applet.
  This instance will only load the session menu which provies
  status changing, user choosing and session management.
 
+Package: indicator-applet-complete
+Architecture: any
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+         gnome-panel,
+         indicator-applet (= ${binary:Version})
+Description: A clone of the GNOME panel indicator applet.
+ Indicator-applet is an applet to display information from
+ various applications consistently in the GNOME panel. 
+ .
+ This instance will load all indicators in a single panel
+ applet.
+
