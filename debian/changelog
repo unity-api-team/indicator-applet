@@ -1,3 +1,11 @@
+indicator-applet (0.3.1-0ubuntu2) lucid; urgency=low
+
+  * debian/control
+    - drop the dependancy for indicator-applet-session on indicator-me
+      until indicator-me gets uploaded
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Fri, 08 Jan 2010 16:57:52 -0500
+
 indicator-applet (0.3.1-0ubuntu1) lucid; urgency=low
 
   * Upstream release 0.3.1
