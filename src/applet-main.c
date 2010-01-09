@@ -25,6 +25,15 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "libindicator/indicator-object.h"
 
+static gchar * indicator_order[] = {
+	"libapplication.so",
+	"libmessaging.so",
+	"libdatetime.so",
+	"libme.so",
+	"libsession.so",
+	NULL
+};
+
 #define ENTRY_DATA_NAME "indicator-custom-entry-data"
 
 static gboolean     applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data);
