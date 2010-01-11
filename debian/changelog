@@ -1,60 +1,34 @@
-indicator-applet (0.3.1-0ubuntu1~ppa1) karmic; urgency=low
+indicator-applet (0.3.1-0ubuntu2) lucid; urgency=low
+
+  * debian/control
+    - drop the dependancy for indicator-applet-session on indicator-me
+      until indicator-me gets uploaded
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Fri, 08 Jan 2010 16:57:52 -0500
+
+indicator-applet (0.3.1-0ubuntu1) lucid; urgency=low
 
   * Upstream release 0.3.1
     * Add support for indicator-me in session applet
     * Change built to use one source
+    * Unifing all of the code into one C file with defines
+    * Adding an indicator-applet-complete build
+    * Adding in handling of the me menu indicator.  It should go
+      in indicator-applet-session.
+  * debian/control: Adding package indicator-applet-complete
+  * debian/control: Making indicator-applet-session depend on
+    indicator-me.
+  * Added debian/indicator-applet-complete.install
 
  -- Ted Gould <ted@ubuntu.com>  Fri, 08 Jan 2010 08:53:18 -0600
 
-indicator-applet (0.3.0-0ubuntu2~ppa3) karmic; urgency=low
-
-  * debian/control: Making indicator-applet-session depend on
-    indicator-me.
-
- -- Ted Gould <ted@ubuntu.com>  Tue, 05 Jan 2010 22:33:07 -0600
-
-indicator-applet (0.3.0-0ubuntu2~ppa2) karmic; urgency=low
-
-  * Upstream merge
-    * Unifing all of the code into one C file with defines
-    * Adding an indicator-applet-complete build
-  * debian/control: Adding package indicator-applet-complete
-  * Added debian/indicator-applet-complete.install
-
- -- Ted Gould <ted@ubuntu.com>  Tue, 05 Jan 2010 21:56:08 -0600
-
-indicator-applet (0.3.0-0ubuntu2~ppa1) karmic; urgency=low
-
-  * Upstream merge
-    * Adding in handling of the me menu indicator.  It should go
-      in indicator-applet-session.
-
- -- Ted Gould <ted@ubuntu.com>  Mon, 04 Jan 2010 14:05:54 -0600
-
-indicator-applet (0.3.0-0ubuntu1) karmic; urgency=low
+indicator-applet (0.3.0-0ubuntu1) lucid; urgency=low
 
   * Upstream release 0.3.0
     * Update to libindicator 0.3.0 API 
   * debian/control: Updating libindicator to 0.3.0 or greater.
 
  -- Ted Gould <ted@ubuntu.com>  Thu, 10 Dec 2009 11:34:33 -0600
-
-indicator-applet (0.2.0-0ubuntu3~ppa2) karmic; urgency=low
-
-  * Fixing version number in About dialog.  (LP: #443196)
-  * Fixing application names in About dialog. (LP: #449036)
-  * Removing libgnomeui dependency. (LP: #458470)
-  * debian/control: Removing dependency on libgnomeui-dev 
-
- -- Ted Gould <ted@ubuntu.com>  Mon, 26 Oct 2009 20:58:09 -0500
-
-indicator-applet (0.2.0-0ubuntu3~ppa1) karmic; urgency=low
-
-  * Patch from Martin Pitt to disable session menu on Stracciatella
-    session.
-  * Remove debian/patches/01_stracciatella.patch
-
- -- Ted Gould <ted@ubuntu.com>  Mon, 26 Oct 2009 14:46:02 -0500
 
 indicator-applet (0.2.0-0ubuntu2) karmic; urgency=low
 
