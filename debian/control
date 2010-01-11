@@ -37,7 +37,8 @@ Depends: ${shlibs:Depends},
          ${misc:Depends},
          gnome-panel,
          indicator-applet (= ${binary:Version}),
-         indicator-session
+         indicator-session,
+         indicator-me
 Conflicts: indicator-applet-sus, gdm (<< 2.27.90-0ubuntu1)
 Replaces: indicator-applet-sus, gdm (<< 2.27.90-0ubuntu1)
 Description: A clone of the GNOME panel indicator applet.
