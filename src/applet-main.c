@@ -28,7 +28,7 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define  MENU_DATA_INDICATOR_OBJECT  "indicator-object"
 #define  MENU_DATA_INDICATOR_ENTRY   "indicator-entry"
 
-#define  IO_DATA_FILE_NAME           "indicator-file-name"
+#define  IO_DATA_ORDER_NUMBER        "indicator-order-number"
 
 static gchar * indicator_order[] = {
 	"libapplication.so",
@@ -76,6 +76,20 @@ PANEL_APPLET_BONOBO_FACTORY ("OAFIID:GNOME_IndicatorAppletComplete_Factory",
 /*************
  * init function
  * ***********/
+
+static gint
+name2order (const gchar * name) {
+	int i;
+
+	for (i = 0; indicator_order[i] != NULL; i++) {
+		if (g_strcmp0(name, indicator_order[i]) == 0) {
+			return i;
+		}
+	}
+
+	return -1;
+}
+
 static void
 entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * menu)
 {
@@ -146,9 +160,7 @@ load_module (const gchar * name, GtkWidget * menu)
 	g_free(fullpath);
 
 	/* Attach the 'name' to the object */
-	gchar * savedfilename = g_strdup(name);
-	g_object_set_data(G_OBJECT(io), IO_DATA_FILE_NAME, savedfilename);
-	g_signal_connect(G_OBJECT(io), "destroy", G_CALLBACK(g_free), savedfilename);
+	g_object_set_data(G_OBJECT(io), IO_DATA_ORDER_NUMBER, GINT_TO_POINTER(name2order(name)));
 
 	/* Connect to it's signals */
 	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_ADDED,   G_CALLBACK(entry_added),    menu);
