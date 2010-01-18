@@ -25,6 +25,11 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "libindicator/indicator-object.h"
 
+#define  MENU_DATA_INDICATOR_OBJECT  "indicator-object"
+#define  MENU_DATA_INDICATOR_ENTRY   "indicator-entry"
+
+#define  IO_DATA_FILE_NAME           "indicator-file-name"
+
 static gchar * indicator_order[] = {
 	"libapplication.so",
 	"libmessaging.so",
@@ -139,6 +144,11 @@ load_module (const gchar * name, GtkWidget * menu)
 	gchar * fullpath = g_build_filename(INDICATOR_DIR, name, NULL);
 	IndicatorObject * io = indicator_object_new_from_file(fullpath);
 	g_free(fullpath);
+
+	/* Attach the 'name' to the object */
+	gchar * savedfilename = g_strdup(name);
+	g_object_set_data(G_OBJECT(io), IO_DATA_FILE_NAME, savedfilename);
+	g_signal_connect(G_OBJECT(io), "destroy", G_CALLBACK(g_free), savedfilename);
 
 	/* Connect to it's signals */
 	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_ADDED,   G_CALLBACK(entry_added),    menu);
