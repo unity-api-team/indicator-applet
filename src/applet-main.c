@@ -262,11 +262,8 @@ log_to_file (const gchar * domain, GLogLevelFlags level, const gchar * message, 
 		GFile * file = g_file_new_for_path(filename);
 		g_free(filename);
 
-		g_file_make_directory_with_parents(file, NULL, &error);
-		if (error != NULL) {
-			g_error("Unable to make directory: %s", error->message);
-			return;
-		}
+		GFile * cachedir = g_file_new_for_path(g_get_user_cache_dir());
+		g_file_make_directory_with_parents(cachedir, NULL, NULL);
 
 		log_file = g_file_replace(file,
 		                          NULL, /* entry tag */
