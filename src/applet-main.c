@@ -71,7 +71,7 @@ PANEL_APPLET_BONOBO_FACTORY ("OAFIID:GNOME_IndicatorAppletComplete_Factory",
 #ifdef INDICATOR_APPLET_COMPLETE
 #define LOG_FILE_NAME  "indicator-applet-complete.log"
 #endif
-GFile * log_file = NULL;
+GOutputStream * log_file = NULL;
 
 /*************
  * init function
@@ -242,6 +242,41 @@ about_cb (BonoboUIComponent *ui_container,
 #endif
 #define N_(x) x
 
+static void
+log_to_file_cb (GObject * source_obj, GAsyncResult * result, gpointer user_data)
+{
+	return;
+}
+
+static void
+log_to_file (const gchar * domain, GLogLevelFlags level, const gchar * message, gpointer data)
+{
+	if (log_file == NULL) {
+		gchar * filename = g_build_path(g_get_user_cache_dir(), LOG_FILE_NAME, NULL);
+		GFile * file = g_file_new_for_path(filename);
+		g_free(filename);
+
+		g_file_make_directory_with_parents(file, NULL, NULL);
+
+		log_file = g_file_replace(file,
+		                          NULL, /* entry tag */
+		                          TRUE, /* make backup */
+		                          G_FILE_CREATE_NONE, /* flags */
+		                          NULL, /* cancelable */
+		                          NULL); /* error */
+	}
+
+	g_output_stream_write_async(log_file,
+	                            message, /* data */
+	                            strlen(message), /* length */
+	                            G_PRIORITY_LOW, /* priority */
+	                            NULL, /* cancelable */
+	                            log_to_file_cb, /* callback */
+	                            NULL); /* data */
+
+	return;
+}
+
 static gboolean
 applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 {
@@ -279,6 +314,8 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 #ifdef INDICATOR_APPLET_COMPLETE
 		g_set_application_name(_("Indicator Applet Complete"));
 #endif
+
+		g_log_set_default_handler(log_to_file, NULL);
 	}
 
 	/* Set panel options */
