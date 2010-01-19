@@ -263,8 +263,15 @@ log_to_file (const gchar * domain, GLogLevelFlags level, const gchar * message, 
 		GFile * file = g_file_new_for_path(filename);
 		g_free(filename);
 
-		GFile * cachedir = g_file_new_for_path(g_get_user_cache_dir());
-		g_file_make_directory_with_parents(cachedir, NULL, NULL);
+		if (!g_file_test(g_get_user_cache_dir(), G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR)) {
+			GFile * cachedir = g_file_new_for_path(g_get_user_cache_dir());
+			g_file_make_directory_with_parents(cachedir, NULL, &error);
+
+			if (error != NULL) {
+				g_error("Unable to make directory '%s' for log file: %s", g_get_user_cache_dir(), error->message);
+				return;
+			}
+		}
 
 		log_file = g_file_replace(file,
 		                          NULL, /* entry tag */
