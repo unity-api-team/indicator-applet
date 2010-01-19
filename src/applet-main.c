@@ -208,6 +208,58 @@ entry_removed (IndicatorObject * io, IndicatorObjectEntry * entry, gpointer user
 	return;
 }
 
+static void
+entry_moved_find_cb (GtkWidget * widget, gpointer userdata)
+{
+	gpointer * array = (gpointer *)userdata;
+	if (array[1] != NULL) {
+		return;
+	}
+
+	gpointer data = g_object_get_data(G_OBJECT(widget), MENU_DATA_INDICATOR_ENTRY);
+
+	if (data != array[0]) {
+		return;
+	}
+
+	array[1] = widget;
+	return;
+}
+
+/* Gets called when an entry for an object was moved. */
+static void 
+entry_moved (IndicatorObject * io, IndicatorObjectEntry * entry, gint old, gint new, gpointer user_data)
+{
+	GtkWidget * menu = GTK_WIDGET(user_data);
+
+	gpointer array[2];
+	array[0] = entry;
+	array[1] = NULL;
+
+	gtk_container_foreach(GTK_CONTAINER(user_data), entry_moved_find_cb, array);
+	if (array[1] == NULL) {
+		g_warning("Moving an entry that isn't in our menus.");
+		return;
+	}
+
+	GtkWidget * mi = GTK_WIDGET(array[1]);
+	g_object_ref(G_OBJECT(mi));
+	gtk_container_remove(GTK_CONTAINER(user_data), mi);
+
+	incoming_position_t position;
+	position.objposition = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(io), IO_DATA_ORDER_NUMBER));
+	position.entryposition = indicator_object_get_location(io, entry);
+	position.menupos = 0;
+	position.found = FALSE;
+
+	gtk_container_foreach(GTK_CONTAINER(menu), place_in_menu, &position);
+
+	gtk_menu_shell_insert(GTK_MENU_SHELL(menu), mi, position.menupos);
+	g_object_unref(G_OBJECT(mi));
+
+	return;
+}
+
 static gboolean
 load_module (const gchar * name, GtkWidget * menu)
 {
@@ -231,6 +283,7 @@ load_module (const gchar * name, GtkWidget * menu)
 	/* Connect to it's signals */
 	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_ADDED,   G_CALLBACK(entry_added),    menu);
 	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_REMOVED, G_CALLBACK(entry_removed),  menu);
+	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_MOVED,   G_CALLBACK(entry_moved),    menu);
 
 	/* Work on the entries */
 	GList * entries = indicator_object_get_entries(io);
