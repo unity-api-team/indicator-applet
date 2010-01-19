@@ -246,6 +246,7 @@ about_cb (BonoboUIComponent *ui_container,
 static void
 log_to_file_cb (GObject * source_obj, GAsyncResult * result, gpointer user_data)
 {
+	g_free(user_data);
 	return;
 }
 
@@ -276,14 +277,15 @@ log_to_file (const gchar * domain, GLogLevelFlags level, const gchar * message, 
 			return;
 		}
 	}
-
+	
+	gchar * outputstring = g_strdup_printf("Message: %s\n", message);
 	g_output_stream_write_async(G_OUTPUT_STREAM(log_file),
-	                            message, /* data */
-	                            strlen(message), /* length */
+	                            outputstring, /* data */
+	                            strlen(outputstring), /* length */
 	                            G_PRIORITY_LOW, /* priority */
 	                            NULL, /* cancelable */
 	                            log_to_file_cb, /* callback */
-	                            NULL); /* data */
+	                            outputstring); /* data */
 
 	return;
 }
