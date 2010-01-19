@@ -72,7 +72,7 @@ PANEL_APPLET_BONOBO_FACTORY ("OAFIID:GNOME_IndicatorAppletComplete_Factory",
 #ifdef INDICATOR_APPLET_COMPLETE
 #define LOG_FILE_NAME  "indicator-applet-complete.log"
 #endif
-GOutputStream * log_file = NULL;
+GFileOutputStream * log_file = NULL;
 
 /*************
  * init function
@@ -277,7 +277,7 @@ log_to_file (const gchar * domain, GLogLevelFlags level, const gchar * message, 
 		}
 	}
 
-	g_output_stream_write_async(log_file,
+	g_output_stream_write_async(G_OUTPUT_STREAM(log_file),
 	                            message, /* data */
 	                            strlen(message), /* length */
 	                            G_PRIORITY_LOW, /* priority */
