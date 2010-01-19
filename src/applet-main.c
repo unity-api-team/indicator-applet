@@ -20,6 +20,7 @@ You should have received a copy of the GNU General Public License along
 with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <stdlib.h>
 #include <config.h>
 #include <panel-applet.h>
 
@@ -251,19 +252,32 @@ log_to_file_cb (GObject * source_obj, GAsyncResult * result, gpointer user_data)
 static void
 log_to_file (const gchar * domain, GLogLevelFlags level, const gchar * message, gpointer data)
 {
+	if (level & (G_LOG_LEVEL_ERROR | G_LOG_LEVEL_CRITICAL)) {
+		return g_log_default_handler(domain, level, message, data);
+	}
+
 	if (log_file == NULL) {
+		GError * error = NULL;
 		gchar * filename = g_build_path(g_get_user_cache_dir(), LOG_FILE_NAME, NULL);
 		GFile * file = g_file_new_for_path(filename);
 		g_free(filename);
 
-		g_file_make_directory_with_parents(file, NULL, NULL);
+		g_file_make_directory_with_parents(file, NULL, &error);
+		if (error != NULL) {
+			g_error("Unable to make directory: %s", error->message);
+			return;
+		}
 
 		log_file = g_file_replace(file,
 		                          NULL, /* entry tag */
 		                          TRUE, /* make backup */
 		                          G_FILE_CREATE_NONE, /* flags */
 		                          NULL, /* cancelable */
-		                          NULL); /* error */
+		                          &error); /* error */
+		if (error != NULL) {
+			g_error("Unable to replace file: %s", error->message);
+			return;
+		}
 	}
 
 	g_output_stream_write_async(log_file,
