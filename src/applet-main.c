@@ -72,7 +72,7 @@ PANEL_APPLET_BONOBO_FACTORY ("OAFIID:GNOME_IndicatorAppletComplete_Factory",
 #ifdef INDICATOR_APPLET_COMPLETE
 #define LOG_FILE_NAME  "indicator-applet-complete.log"
 #endif
-GFileOutputStream * log_file = NULL;
+GOutputStream * log_file = NULL;
 
 /*************
  * init function
@@ -273,9 +273,9 @@ log_to_file (const gchar * domain, GLogLevelFlags level, const gchar * message, 
 			}
 		}
 
-		log_file = g_file_replace(file,
-		                          NULL, /* entry tag */
-		                          FALSE, /* make backup */
+		g_file_delete(file, NULL, NULL);
+
+		GFileIOStream * io = g_file_create_readwrite(file,
 		                          G_FILE_CREATE_REPLACE_DESTINATION, /* flags */
 		                          NULL, /* cancelable */
 		                          &error); /* error */
@@ -283,10 +283,12 @@ log_to_file (const gchar * domain, GLogLevelFlags level, const gchar * message, 
 			g_error("Unable to replace file: %s", error->message);
 			return;
 		}
+
+		log_file = g_io_stream_get_output_stream(G_IO_STREAM(io));
 	}
 	
 	gchar * outputstring = g_strdup_printf("%s\n", message);
-	g_output_stream_write_async(G_OUTPUT_STREAM(log_file),
+	g_output_stream_write_async(log_file,
 	                            outputstring, /* data */
 	                            strlen(outputstring), /* length */
 	                            G_PRIORITY_LOW, /* priority */
