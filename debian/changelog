@@ -1,9 +1,9 @@
-indicator-applet (0.3.1-0ubuntu3~ppa1) UNRELEASED; urgency=low
+indicator-applet (0.3.1-0ubuntu3~ppa1) karmic; urgency=low
 
   * Upstream Merge
     * Adding support for sorting the indicators.
 
- -- Ted Gould <ted@ubuntu.com>  Tue, 19 Jan 2010 09:44:31 -0600
+ -- Ted Gould <ted@ubuntu.com>  Tue, 19 Jan 2010 09:46:37 -0600
 
 indicator-applet (0.3.1-0ubuntu2) lucid; urgency=low
 
