@@ -275,8 +275,8 @@ log_to_file (const gchar * domain, GLogLevelFlags level, const gchar * message, 
 
 		log_file = g_file_replace(file,
 		                          NULL, /* entry tag */
-		                          TRUE, /* make backup */
-		                          G_FILE_CREATE_NONE, /* flags */
+		                          FALSE, /* make backup */
+		                          G_FILE_CREATE_REPLACE_DESTINATION, /* flags */
 		                          NULL, /* cancelable */
 		                          &error); /* error */
 		if (error != NULL) {
@@ -285,7 +285,7 @@ log_to_file (const gchar * domain, GLogLevelFlags level, const gchar * message, 
 		}
 	}
 	
-	gchar * outputstring = g_strdup_printf("Message: %s\n", message);
+	gchar * outputstring = g_strdup_printf("%s\n", message);
 	g_output_stream_write_async(G_OUTPUT_STREAM(log_file),
 	                            outputstring, /* data */
 	                            strlen(outputstring), /* length */
