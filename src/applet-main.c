@@ -25,7 +25,20 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "libindicator/indicator-object.h"
 
-#define ENTRY_DATA_NAME "indicator-custom-entry-data"
+
+static gchar * indicator_order[] = {
+	"libapplication.so",
+	"libmessaging.so",
+	"libdatetime.so",
+	"libme.so",
+	"libsession.so",
+	NULL
+};
+
+#define  MENU_DATA_INDICATOR_OBJECT  "indicator-object"
+#define  MENU_DATA_INDICATOR_ENTRY   "indicator-entry"
+
+#define  IO_DATA_ORDER_NUMBER        "indicator-order-number"
 
 static gboolean     applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data);
 
@@ -62,6 +75,78 @@ PANEL_APPLET_BONOBO_FACTORY ("OAFIID:GNOME_IndicatorAppletComplete_Factory",
 /*************
  * init function
  * ***********/
+
+static gint
+name2order (const gchar * name) {
+	int i;
+
+	for (i = 0; indicator_order[i] != NULL; i++) {
+		if (g_strcmp0(name, indicator_order[i]) == 0) {
+			return i;
+		}
+	}
+
+	return -1;
+}
+
+typedef struct _incoming_position_t incoming_position_t;
+struct _incoming_position_t {
+	gint objposition;
+	gint entryposition;
+	gint menupos;
+	gboolean found;
+};
+
+/* This function helps by determining where in the menu list
+   this new entry should be placed.  It compares the objects
+   that they're on, and then the individual entries.  Each
+   is progressively more expensive. */
+static void
+place_in_menu (GtkWidget * widget, gpointer user_data)
+{
+	incoming_position_t * position = (incoming_position_t *)user_data;
+	if (position->found) {
+		/* We've already been placed, just finish the foreach */
+		return;
+	}
+
+	IndicatorObject * io = INDICATOR_OBJECT(g_object_get_data(G_OBJECT(widget), MENU_DATA_INDICATOR_OBJECT));
+	g_assert(io != NULL);
+
+	gint objposition = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(io), IO_DATA_ORDER_NUMBER));
+	/* We've already passed it, well, then this is where
+	   we should be be.  Stop! */
+	if (objposition > position->objposition) {
+		position->found = TRUE;
+		return;
+	}
+
+	/* The objects don't match yet, keep looking */
+	if (objposition < position->objposition) {
+		position->menupos++;
+		return;
+	}
+
+	/* The objects are the same, let's start looking at entries. */
+	IndicatorObjectEntry * entry = (IndicatorObjectEntry *)g_object_get_data(G_OBJECT(widget), MENU_DATA_INDICATOR_ENTRY);
+	gint entryposition = indicator_object_get_location(io, entry);
+
+	if (entryposition > position->entryposition) {
+		position->found = TRUE;
+		return;
+	}
+
+	if (entryposition < position->entryposition) {
+		position->menupos++;
+		return;
+	}
+
+	/* We've got the same object and the same entry.  Well,
+	   let's just put it right here then. */
+	position->found = TRUE;
+	return;
+}
+
 static void
 entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * menu)
 {
@@ -83,10 +168,19 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 		gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem), GTK_WIDGET(entry->menu));
 	}
 
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+	incoming_position_t position;
+	position.objposition = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(io), IO_DATA_ORDER_NUMBER));
+	position.entryposition = indicator_object_get_location(io, entry);
+	position.menupos = 0;
+	position.found = FALSE;
+
+	gtk_container_foreach(GTK_CONTAINER(menu), place_in_menu, &position);
+
+	gtk_menu_shell_insert(GTK_MENU_SHELL(menu), menuitem, position.menupos);
 	gtk_widget_show(menuitem);
 
-	g_object_set_data(G_OBJECT(menuitem), ENTRY_DATA_NAME, entry);
+	g_object_set_data(G_OBJECT(menuitem), MENU_DATA_INDICATOR_ENTRY,  entry);
+	g_object_set_data(G_OBJECT(menuitem), MENU_DATA_INDICATOR_OBJECT, io);
 
 	return;
 }
@@ -94,7 +188,7 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 static void
 entry_removed_cb (GtkWidget * widget, gpointer userdata)
 {
-	gpointer data = g_object_get_data(G_OBJECT(widget), ENTRY_DATA_NAME);
+	gpointer data = g_object_get_data(G_OBJECT(widget), MENU_DATA_INDICATOR_ENTRY);
 
 	if (data != userdata) {
 		return;
@@ -110,6 +204,58 @@ entry_removed (IndicatorObject * io, IndicatorObjectEntry * entry, gpointer user
 	g_debug("Signal: Entry Removed");
 
 	gtk_container_foreach(GTK_CONTAINER(user_data), entry_removed_cb, entry);
+
+	return;
+}
+
+static void
+entry_moved_find_cb (GtkWidget * widget, gpointer userdata)
+{
+	gpointer * array = (gpointer *)userdata;
+	if (array[1] != NULL) {
+		return;
+	}
+
+	gpointer data = g_object_get_data(G_OBJECT(widget), MENU_DATA_INDICATOR_ENTRY);
+
+	if (data != array[0]) {
+		return;
+	}
+
+	array[1] = widget;
+	return;
+}
+
+/* Gets called when an entry for an object was moved. */
+static void 
+entry_moved (IndicatorObject * io, IndicatorObjectEntry * entry, gint old, gint new, gpointer user_data)
+{
+	GtkWidget * menu = GTK_WIDGET(user_data);
+
+	gpointer array[2];
+	array[0] = entry;
+	array[1] = NULL;
+
+	gtk_container_foreach(GTK_CONTAINER(user_data), entry_moved_find_cb, array);
+	if (array[1] == NULL) {
+		g_warning("Moving an entry that isn't in our menus.");
+		return;
+	}
+
+	GtkWidget * mi = GTK_WIDGET(array[1]);
+	g_object_ref(G_OBJECT(mi));
+	gtk_container_remove(GTK_CONTAINER(user_data), mi);
+
+	incoming_position_t position;
+	position.objposition = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(io), IO_DATA_ORDER_NUMBER));
+	position.entryposition = indicator_object_get_location(io, entry);
+	position.menupos = 0;
+	position.found = FALSE;
+
+	gtk_container_foreach(GTK_CONTAINER(menu), place_in_menu, &position);
+
+	gtk_menu_shell_insert(GTK_MENU_SHELL(menu), mi, position.menupos);
+	g_object_unref(G_OBJECT(mi));
 
 	return;
 }
@@ -131,9 +277,13 @@ load_module (const gchar * name, GtkWidget * menu)
 	IndicatorObject * io = indicator_object_new_from_file(fullpath);
 	g_free(fullpath);
 
+	/* Attach the 'name' to the object */
+	g_object_set_data(G_OBJECT(io), IO_DATA_ORDER_NUMBER, GINT_TO_POINTER(name2order(name)));
+
 	/* Connect to it's signals */
 	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_ADDED,   G_CALLBACK(entry_added),    menu);
 	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_REMOVED, G_CALLBACK(entry_removed),  menu);
+	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_MOVED,   G_CALLBACK(entry_moved),    menu);
 
 	/* Work on the entries */
 	GList * entries = indicator_object_get_entries(io);
