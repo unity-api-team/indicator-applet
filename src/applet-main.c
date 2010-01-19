@@ -253,10 +253,6 @@ log_to_file_cb (GObject * source_obj, GAsyncResult * result, gpointer user_data)
 static void
 log_to_file (const gchar * domain, GLogLevelFlags level, const gchar * message, gpointer data)
 {
-	if (level & (G_LOG_LEVEL_ERROR | G_LOG_LEVEL_CRITICAL)) {
-		return g_log_default_handler(domain, level, message, data);
-	}
-
 	if (log_file == NULL) {
 		GError * error = NULL;
 		gchar * filename = g_build_path(g_get_user_cache_dir(), LOG_FILE_NAME, NULL);
