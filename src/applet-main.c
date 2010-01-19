@@ -60,6 +60,20 @@ PANEL_APPLET_BONOBO_FACTORY ("OAFIID:GNOME_IndicatorAppletComplete_Factory",
 #endif
 
 /*************
+ * log files
+ * ***********/
+#ifdef INDICATOR_APPLET
+#define LOG_FILE_NAME  "indicator-applet.log"
+#endif
+#ifdef INDICATOR_APPLET_SESSION
+#define LOG_FILE_NAME  "indicator-applet-session.log"
+#endif
+#ifdef INDICATOR_APPLET_COMPLETE
+#define LOG_FILE_NAME  "indicator-applet-complete.log"
+#endif
+GFile * log_file = NULL;
+
+/*************
  * init function
  * ***********/
 static void
