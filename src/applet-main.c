@@ -405,7 +405,7 @@ log_to_file (const gchar * domain, GLogLevelFlags level, const gchar * message, 
 {
 	if (log_file == NULL) {
 		GError * error = NULL;
-		gchar * filename = g_build_path(g_get_user_cache_dir(), LOG_FILE_NAME, NULL);
+		gchar * filename = g_build_filename(g_get_user_cache_dir(), LOG_FILE_NAME, NULL);
 		GFile * file = g_file_new_for_path(filename);
 		g_free(filename);
 
