@@ -1,9 +1,9 @@
-indicator-applet (0.3.1-0ubuntu3~ppa2) UNRELEASED; urgency=low
+indicator-applet (0.3.1-0ubuntu3~ppa2) karmic; urgency=low
 
   * Upstream Merge
     * Send debug information to a file
 
- -- Ted Gould <ted@ubuntu.com>  Tue, 19 Jan 2010 22:44:16 -0600
+ -- Ted Gould <ted@ubuntu.com>  Tue, 19 Jan 2010 22:45:46 -0600
 
 indicator-applet (0.3.1-0ubuntu3~ppa1) karmic; urgency=low
 
