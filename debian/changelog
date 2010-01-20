@@ -1,3 +1,10 @@
+indicator-applet (0.3.1-0ubuntu3~ppa3) UNRELEASED; urgency=low
+
+  * Upstream Merge
+    * Fixing logging bug from last commit
+
+ -- Ted Gould <ted@ubuntu.com>  Wed, 20 Jan 2010 08:19:46 -0600
+
 indicator-applet (0.3.1-0ubuntu3~ppa2) karmic; urgency=low
 
   * Upstream Merge
