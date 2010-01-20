@@ -20,6 +20,7 @@ You should have received a copy of the GNU General Public License along
 with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <stdlib.h>
 #include <config.h>
 #include <panel-applet.h>
 
@@ -71,6 +72,20 @@ PANEL_APPLET_BONOBO_FACTORY ("OAFIID:GNOME_IndicatorAppletComplete_Factory",
                "indicator-applet-complete", "0",
                applet_fill_cb, NULL);
 #endif
+
+/*************
+ * log files
+ * ***********/
+#ifdef INDICATOR_APPLET
+#define LOG_FILE_NAME  "indicator-applet.log"
+#endif
+#ifdef INDICATOR_APPLET_SESSION
+#define LOG_FILE_NAME  "indicator-applet-session.log"
+#endif
+#ifdef INDICATOR_APPLET_COMPLETE
+#define LOG_FILE_NAME  "indicator-applet-complete.log"
+#endif
+GOutputStream * log_file = NULL;
 
 /*************
  * init function
@@ -378,6 +393,58 @@ about_cb (BonoboUIComponent *ui_container,
 #endif
 #define N_(x) x
 
+static void
+log_to_file_cb (GObject * source_obj, GAsyncResult * result, gpointer user_data)
+{
+	g_free(user_data);
+	return;
+}
+
+static void
+log_to_file (const gchar * domain, GLogLevelFlags level, const gchar * message, gpointer data)
+{
+	if (log_file == NULL) {
+		GError * error = NULL;
+		gchar * filename = g_build_path(g_get_user_cache_dir(), LOG_FILE_NAME, NULL);
+		GFile * file = g_file_new_for_path(filename);
+		g_free(filename);
+
+		if (!g_file_test(g_get_user_cache_dir(), G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR)) {
+			GFile * cachedir = g_file_new_for_path(g_get_user_cache_dir());
+			g_file_make_directory_with_parents(cachedir, NULL, &error);
+
+			if (error != NULL) {
+				g_error("Unable to make directory '%s' for log file: %s", g_get_user_cache_dir(), error->message);
+				return;
+			}
+		}
+
+		g_file_delete(file, NULL, NULL);
+
+		GFileIOStream * io = g_file_create_readwrite(file,
+		                          G_FILE_CREATE_REPLACE_DESTINATION, /* flags */
+		                          NULL, /* cancelable */
+		                          &error); /* error */
+		if (error != NULL) {
+			g_error("Unable to replace file: %s", error->message);
+			return;
+		}
+
+		log_file = g_io_stream_get_output_stream(G_IO_STREAM(io));
+	}
+	
+	gchar * outputstring = g_strdup_printf("%s\n", message);
+	g_output_stream_write_async(log_file,
+	                            outputstring, /* data */
+	                            strlen(outputstring), /* length */
+	                            G_PRIORITY_LOW, /* priority */
+	                            NULL, /* cancelable */
+	                            log_to_file_cb, /* callback */
+	                            outputstring); /* data */
+
+	return;
+}
+
 static gboolean
 applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 {
@@ -422,6 +489,8 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 #ifdef INDICATOR_APPLET_COMPLETE
 		g_set_application_name(_("Indicator Applet Complete"));
 #endif
+
+		g_log_set_default_handler(log_to_file, NULL);
 	}
 
 	/* Set panel options */
