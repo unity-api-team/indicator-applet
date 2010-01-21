@@ -19,6 +19,13 @@ indicator-applet (0.3.1-0ubuntu3~ppa1) karmic; urgency=low
 
  -- Ted Gould <ted@ubuntu.com>  Tue, 19 Jan 2010 09:46:37 -0600
 
+indicator-applet (0.3.1-0ubuntu3) lucid; urgency=low
+
+  * debian/control:
+    - depends on the new indicator-me since it is in lucid now.
+
+ -- Sebastien Bacher <seb128@ubuntu.com>  Mon, 11 Jan 2010 16:48:08 +0100
+
 indicator-applet (0.3.1-0ubuntu2) lucid; urgency=low
 
   * debian/control
