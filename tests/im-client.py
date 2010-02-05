@@ -48,10 +48,10 @@ def timeout_cb(indicator):
 
     return True
 
-def display(indicator):
+def display(indicator, timestamp):
     print "Ah, my indicator has been displayed"
 
-def server_display(server):
+def server_display(server, timestamp):
     print "Ah, my server has been displayed"
 
 
