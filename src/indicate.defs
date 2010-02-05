@@ -247,6 +247,7 @@
   (parameters
     '("IndicateListenerServer*" "server")
     '("IndicateListenerIndicator*" "indicator")
+    '("guint" "timestamp")
   )
 )
 
