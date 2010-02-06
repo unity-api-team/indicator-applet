@@ -1,16 +1,16 @@
-AC_INIT(indicate-python, 0.2.0, eitan@ascender.com)
+AC_INIT(indicate-python, 0.3.0, eitan@ascender.com)
 AC_PREREQ(2.50)
 AC_CONFIG_SRCDIR(config.h.in)
 AC_COPYRIGHT([Copyright 2009 Canonical])
 
 PACKAGE=indicate-python
-VERSION=0.2.0
+VERSION=0.3.0
 
 AM_INIT_AUTOMAKE($PACKAGE, $VERSION)
 AM_CONFIG_HEADER(config.h)
 
 PYGTK_REQUIRED=2.14.0
-LIBINDICATE_REQUIRED=0.2.0
+LIBINDICATE_REQUIRED=0.3.1
 PYGOBJECT_REQUIRED=0.22
 
 AM_MAINTAINER_MODE
@@ -40,7 +40,7 @@ AC_MSG_RESULT($PYGTK_CODEGEN)
 
 AC_CONFIG_FILES([
 Makefile
-src/Makefile
+indicate/Makefile
 tests/Makefile
 ])
 

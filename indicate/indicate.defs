@@ -80,6 +80,9 @@
   (of-object "IndicateIndicator")
   (c-name "indicate_indicator_user_display")
   (return-type "none")
+  (parameters
+    '("guint" "timestamp")
+  )
 )
 
 (define-method set_property
@@ -244,6 +247,7 @@
   (parameters
     '("IndicateListenerServer*" "server")
     '("IndicateListenerIndicator*" "indicator")
+    '("guint" "timestamp")
   )
 )
 

@@ -1,3 +1,10 @@
+indicate-python (0.3.0-0ubuntu1) UNRELEASED; urgency=low
+
+  * Upstream Release 0.3.0
+    * Update to libindicate 0.3.0
+
+ -- Ted Gould <ted@ubuntu.com>  Fri, 05 Feb 2010 16:38:02 -0800
+
 indicate-python (0.2.0-0ubuntu1) karmic; urgency=low
 
   * Upstream release 0.2.0 (LP: #427991)
