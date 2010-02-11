@@ -1,7 +1,6 @@
 
 SUBDIRS = \
 	src \
-	src-session \
 	data \
 	po
 
