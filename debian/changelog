@@ -1,3 +1,13 @@
+indicator-applet (0.3.2-0ubuntu3) lucid; urgency=low
+
+  * debian/control:
+    - Switching indicator-session and indicator-me to recommends
+      of indicator-applet-session.
+    - Switching indicator-applet-complete to recommend everything.
+    - Adding indicator-application to indicator-applet recommends
+
+ -- Ted Gould <ted@ubuntu.com>  Mon, 15 Feb 2010 11:58:15 -0600
+
 indicator-applet (0.3.2-0ubuntu2) lucid; urgency=low
 
   * debian/control:
