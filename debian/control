@@ -24,7 +24,8 @@ Depends: ${shlibs:Depends},
          ${misc:Depends},
          gnome-panel
 Recommends: indicator-messages,
-            indicator-sound
+            indicator-sound,
+            indicator-application
 Description: GNOME panel indicator applet
  indicator-applet is an applet to display information from
  various applications consistently in the GNOME panel. 
@@ -37,8 +38,8 @@ Architecture: any
 Depends: ${shlibs:Depends},
          ${misc:Depends},
          gnome-panel,
-         indicator-applet (= ${binary:Version}),
-         indicator-session,
+         indicator-applet (= ${binary:Version})
+Recommends: indicator-session,
          indicator-me
 Conflicts: indicator-applet-sus, gdm (<< 2.27.90-0ubuntu1)
 Replaces: indicator-applet-sus, gdm (<< 2.27.90-0ubuntu1)
@@ -55,6 +56,11 @@ Depends: ${shlibs:Depends},
          ${misc:Depends},
          gnome-panel,
          indicator-applet (= ${binary:Version})
+Recommends: indicator-session,
+         indicator-me,
+         indicator-messages,
+         indicator-sound,
+         indicator-application
 Description: A clone of the GNOME panel indicator applet.
  Indicator-applet is an applet to display information from
  various applications consistently in the GNOME panel. 
