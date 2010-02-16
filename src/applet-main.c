@@ -331,7 +331,26 @@ load_module (const gchar * name, GtkWidget * menu)
 static GdkFilterReturn
 hotkey_filter (GdkXEvent * xevent, GdkEvent * event, gpointer data)
 {
-	return GDK_FILTER_CONTINUE;
+	g_print("Filter\n");
+	if (event->type != GDK_KEY_PRESS) {
+		return GDK_FILTER_CONTINUE;
+	}
+	if (event->key.keyval != hotkey_keycode) {
+		return GDK_FILTER_CONTINUE;
+	}
+	if (event->key.state & GDK_SUPER_MASK == 0) {
+		return GDK_FILTER_CONTINUE;
+	}
+
+	/* Oh, wow, it's us! */
+	GList * children = gtk_container_get_children(GTK_CONTAINER(data));
+	if (children == NULL) {
+		return GDK_FILTER_CONTINUE;
+	}
+
+	gtk_menu_shell_activate_item(GTK_MENU_SHELL(data), GTK_WIDGET(g_list_last(children)), FALSE);
+	g_list_free(children);
+	return GDK_FILTER_REMOVE;
 }
 
 static gboolean
