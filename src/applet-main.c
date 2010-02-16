@@ -23,6 +23,7 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdlib.h>
 #include <config.h>
 #include <panel-applet.h>
+#include <gdk/gdkkeysyms.h>
 
 #include "libindicator/indicator-object.h"
 
@@ -86,6 +87,19 @@ PANEL_APPLET_BONOBO_FACTORY ("OAFIID:GNOME_IndicatorAppletComplete_Factory",
 #define LOG_FILE_NAME  "indicator-applet-complete.log"
 #endif
 GOutputStream * log_file = NULL;
+
+/*****************
+ * Hotkey support 
+ * **************/
+#ifdef INDICATOR_APPLET
+guint hotkey_keycode = GDK_m;
+#endif
+#ifdef INDICATOR_APPLET_SESSION
+guint hotkey_keycode = GDK_s;
+#endif
+#ifdef INDICATOR_APPLET_COMPLETE
+guint hotkey_keycode = GDK_s;
+#endif
 
 /*************
  * init function
@@ -314,6 +328,12 @@ load_module (const gchar * name, GtkWidget * menu)
 	return TRUE;
 }
 
+static GdkFilterReturn
+hotkey_filter (GdkXEvent * xevent, GdkEvent * event, gpointer data)
+{
+	return GDK_FILTER_CONTINUE;
+}
+
 static gboolean
 menubar_press (GtkWidget * widget,
                     GdkEventButton *event,
@@ -482,7 +502,7 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 #ifdef INDICATOR_APPLET_COMPLETE
 		g_set_application_name(_("Indicator Applet Complete"));
 #endif
-
+		
 		g_log_set_default_handler(log_to_file, NULL);
 	}
 
@@ -542,6 +562,9 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 	g_signal_connect(menubar, "button-press-event", G_CALLBACK(menubar_press), NULL);
 	g_signal_connect_after(menubar, "expose-event", G_CALLBACK(menubar_on_expose), menubar);
 	gtk_container_set_border_width(GTK_CONTAINER(menubar), 0);
+
+	/* Add in filter func */
+	gdk_window_add_filter (NULL, hotkey_filter, menubar);
 
 	/* load 'em */
 	if (g_file_test(INDICATOR_DIR, (G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))) {
