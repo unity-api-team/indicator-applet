@@ -28,7 +28,7 @@ Recommends: indicator-messages,
             indicator-application
 Description: GNOME panel indicator applet
  indicator-applet is an applet to display information from
- various applications consistently in the GNOME panel. 
+ various applications consistently in the GNOME panel.
  .
  Currently this includes support for messaging applications in the
  indicator-messages package.
@@ -43,11 +43,11 @@ Recommends: indicator-session,
          indicator-me
 Conflicts: indicator-applet-sus, gdm (<< 2.27.90-0ubuntu1)
 Replaces: indicator-applet-sus, gdm (<< 2.27.90-0ubuntu1)
-Description: A clone of the GNOME panel indicator applet.
+Description: Clone of the GNOME panel indicator applet
  Indicator-applet is an applet to display information from
- various applications consistently in the GNOME panel. 
+ various applications consistently in the GNOME panel.
  .
- This instance will only load the session menu which provies
+ This instance will only load the session menu which provides
  status changing, user choosing and session management.
 
 Package: indicator-applet-complete
@@ -61,9 +61,9 @@ Recommends: indicator-session,
          indicator-messages,
          indicator-sound,
          indicator-application
-Description: A clone of the GNOME panel indicator applet.
+Description: Clone of the GNOME panel indicator applet
  Indicator-applet is an applet to display information from
- various applications consistently in the GNOME panel. 
+ various applications consistently in the GNOME panel.
  .
  This instance will load all indicators in a single panel
  applet.

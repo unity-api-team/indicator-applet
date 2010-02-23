@@ -1,3 +1,9 @@
+indicator-applet (0.3.2-0ubuntu4) UNRELEASED; urgency=low
+
+  * Fix typo in description.
+
+ -- Loïc Minier <loic.minier@ubuntu.com>  Tue, 23 Feb 2010 16:52:16 +0100
+
 indicator-applet (0.3.2-0ubuntu3) lucid; urgency=low
 
   * debian/control:
