@@ -583,7 +583,7 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 	gtk_container_set_border_width(GTK_CONTAINER(menubar), 0);
 
 	/* Add in filter func */
-	GtkWidget * invisible = gtk_invisible_new();
+	GtkWidget * invisible = gtk_invisible_new_for_screen(gdk_screen_get_default());
 	g_signal_connect (G_OBJECT(invisible), "key-press-event", G_CALLBACK(hotkey_filter), menubar);
 	gdk_window_set_events(gtk_widget_get_window(invisible), GDK_KEY_PRESS_MASK);
 	gtk_widget_show(invisible);
