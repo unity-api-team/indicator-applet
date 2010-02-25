@@ -328,29 +328,29 @@ load_module (const gchar * name, GtkWidget * menu)
 	return TRUE;
 }
 
-static GdkFilterReturn
-hotkey_filter (GdkXEvent * xevent, GdkEvent * event, gpointer data)
+static gboolean
+hotkey_filter (GtkWidget * widget, GdkEventKey * event, gpointer data)
 {
 	g_print("Filter\n");
 	if (event->type != GDK_KEY_PRESS) {
-		return GDK_FILTER_CONTINUE;
+		return TRUE;
 	}
-	if (event->key.keyval != hotkey_keycode) {
-		return GDK_FILTER_CONTINUE;
+	if (event->keyval != hotkey_keycode) {
+		return TRUE;
 	}
-	if (event->key.state & GDK_SUPER_MASK == 0) {
-		return GDK_FILTER_CONTINUE;
+	if (event->state & GDK_SUPER_MASK == 0) {
+		return TRUE;
 	}
 
 	/* Oh, wow, it's us! */
 	GList * children = gtk_container_get_children(GTK_CONTAINER(data));
 	if (children == NULL) {
-		return GDK_FILTER_CONTINUE;
+		return TRUE;
 	}
 
 	gtk_menu_shell_activate_item(GTK_MENU_SHELL(data), GTK_WIDGET(g_list_last(children)), FALSE);
 	g_list_free(children);
-	return GDK_FILTER_REMOVE;
+	return FALSE;
 }
 
 static gboolean
@@ -583,7 +583,10 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 	gtk_container_set_border_width(GTK_CONTAINER(menubar), 0);
 
 	/* Add in filter func */
-	gdk_window_add_filter (NULL, hotkey_filter, menubar);
+	GtkWidget * invisible = gtk_invisible_new();
+	g_signal_connect (G_OBJECT(invisible), "key-press-event", G_CALLBACK(hotkey_filter), menubar);
+	gdk_window_set_events(gtk_widget_get_window(invisible), GDK_KEY_PRESS_MASK);
+	gtk_widget_show(invisible);
 
 	/* load 'em */
 	if (g_file_test(INDICATOR_DIR, (G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))) {
