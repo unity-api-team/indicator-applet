@@ -321,7 +321,7 @@ menubar_press (GtkWidget * widget,
                     gpointer data)
 {
 	if (event->button != 1) {
-		g_signal_stop_emission_by_name(widget, "button-press-event");
+		return TRUE;
 	}
 
 	return FALSE;
@@ -489,7 +489,7 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 
 	/* Set panel options */
 	gtk_container_set_border_width(GTK_CONTAINER (applet), 0);
-	panel_applet_set_flags(applet, PANEL_APPLET_EXPAND_MINOR);
+	panel_applet_set_flags(applet, PANEL_APPLET_EXPAND_MINOR | PANEL_APPLET_HAS_HANDLE);
 	panel_applet_setup_menu(applet, menu_xml, menu_verbs, NULL);
 #ifdef INDICATOR_APPLET
 	atk_object_set_name (gtk_widget_get_accessible (GTK_WIDGET (applet)),
