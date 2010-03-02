@@ -92,13 +92,13 @@ GOutputStream * log_file = NULL;
  * Hotkey support 
  * **************/
 #ifdef INDICATOR_APPLET
-guint hotkey_keycode = GDK_m;
+gchar * hotkey_keycode = "<Super>M";
 #endif
 #ifdef INDICATOR_APPLET_SESSION
-guint hotkey_keycode = GDK_s;
+gchar * hotkey_keycode = "<Super>Esc";
 #endif
 #ifdef INDICATOR_APPLET_COMPLETE
-guint hotkey_keycode = GDK_s;
+gchar * hotkey_keycode = "<Super>Esc";
 #endif
 
 /*************
@@ -328,29 +328,20 @@ load_module (const gchar * name, GtkWidget * menu)
 	return TRUE;
 }
 
-static gboolean
-hotkey_filter (GtkWidget * widget, GdkEventKey * event, gpointer data)
+static void
+hotkey_filter (char * keystring, gpointer data)
 {
 	g_print("Filter\n");
-	if (event->type != GDK_KEY_PRESS) {
-		return TRUE;
-	}
-	if (event->keyval != hotkey_keycode) {
-		return TRUE;
-	}
-	if (event->state & GDK_SUPER_MASK == 0) {
-		return TRUE;
-	}
 
 	/* Oh, wow, it's us! */
 	GList * children = gtk_container_get_children(GTK_CONTAINER(data));
 	if (children == NULL) {
-		return TRUE;
+		return;
 	}
 
 	gtk_menu_shell_activate_item(GTK_MENU_SHELL(data), GTK_WIDGET(g_list_last(children)), FALSE);
 	g_list_free(children);
-	return FALSE;
+	return;
 }
 
 static gboolean
@@ -523,6 +514,8 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 #endif
 		
 		g_log_set_default_handler(log_to_file, NULL);
+
+		tomboy_keybinder_init();
 	}
 
 	/* Set panel options */
@@ -583,10 +576,7 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 	gtk_container_set_border_width(GTK_CONTAINER(menubar), 0);
 
 	/* Add in filter func */
-	GtkWidget * invisible = gtk_invisible_new_for_screen(gdk_screen_get_default());
-	g_signal_connect (G_OBJECT(invisible), "key-press-event", G_CALLBACK(hotkey_filter), menubar);
-	gdk_window_set_events(gtk_widget_get_window(invisible), GDK_KEY_PRESS_MASK);
-	gtk_widget_show(invisible);
+	tomboy_keybinder_bind(hotkey_keycode, hotkey_filter, menubar);
 
 	/* load 'em */
 	if (g_file_test(INDICATOR_DIR, (G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))) {
