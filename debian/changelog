@@ -1,6 +1,11 @@
 indicator-applet (0.3.2-0ubuntu4) UNRELEASED; urgency=low
 
+  [ Loïc Minier ]
   * Fix typo in description.
+
+  [ Colin Watson ]
+  * Conflict/replace fast-user-switch-applet, since they both ship
+    /usr/lib/bonobo/servers/GNOME_FastUserSwitchApplet.server.
 
  -- Loïc Minier <loic.minier@ubuntu.com>  Tue, 23 Feb 2010 16:52:16 +0100
 
