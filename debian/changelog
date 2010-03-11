@@ -1,3 +1,11 @@
+indicator-applet (0.3.3-0ubuntu1~ppa1) UNRELEASED; urgency=low
+
+  * Upstream release 0.3.3
+    * Add libsoundmenu.so to the ordering to place it next
+      to the messaging menu.
+
+ -- Ted Gould <ted@ubuntu.com>  Thu, 11 Mar 2010 15:22:55 -0600
+
 indicator-applet (0.3.2-0ubuntu4) UNRELEASED; urgency=low
 
   [ Loïc Minier ]
