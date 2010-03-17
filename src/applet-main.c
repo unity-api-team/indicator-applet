@@ -171,6 +171,8 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 	GtkWidget * menuitem = gtk_menu_item_new();
 	GtkWidget * hbox = gtk_hbox_new(FALSE, 3);
 
+        g_object_set_data (G_OBJECT (menuitem), "indicator", io);
+
 	if (entry->image != NULL) {
 		gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(entry->image), FALSE, FALSE, 0);
 	}
@@ -296,8 +298,6 @@ load_module (const gchar * name, GtkWidget * menu)
 	/* Attach the 'name' to the object */
 	g_object_set_data(G_OBJECT(io), IO_DATA_ORDER_NUMBER, GINT_TO_POINTER(name2order(name)));
 
-        g_object_set_data (G_OBJECT (menu), "indicator", io);
-
 	/* Connect to it's signals */
 	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_ADDED,   G_CALLBACK(entry_added),    menu);
 	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_REMOVED, G_CALLBACK(entry_removed),  menu);
@@ -339,28 +339,8 @@ menubar_scroll (GtkWidget      *widget,
 
   menuitem = gtk_get_event_widget ((GdkEvent *)event);
 
-  while (menuitem && !GTK_IS_MENU_ITEM (menuitem))
-    menuitem = menuitem->parent;
-
-  parent = menuitem->parent;
-  while (GTK_IS_MENU_SHELL (parent))
-    {
-      if (parent == widget)
-        {
-          IndicatorObject *io;
-
-          io = g_object_get_data (G_OBJECT (parent),
-                                  "indicator");
-
-          g_signal_emit_by_name (io, "scroll",
-                                 1, event->direction);
-
-          g_print ("scroll [%f,%f]: %s\n", event->x, event->y,
-                   menuitem ? G_OBJECT_TYPE_NAME (menuitem) : "none");
-        }
-
-      parent = GTK_MENU_SHELL (parent)->parent_menu_shell;
-    }
+  IndicatorObject *io = g_object_get_data (G_OBJECT (menuitem), "indicator");
+  g_signal_emit_by_name (io, "scroll", 1, event->direction);
 }
 
 static gboolean
