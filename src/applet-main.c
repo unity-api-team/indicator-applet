@@ -296,6 +296,8 @@ load_module (const gchar * name, GtkWidget * menu)
 	/* Attach the 'name' to the object */
 	g_object_set_data(G_OBJECT(io), IO_DATA_ORDER_NUMBER, GINT_TO_POINTER(name2order(name)));
 
+        g_object_set_data (G_OBJECT (menu), "indicator", io);
+
 	/* Connect to it's signals */
 	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_ADDED,   G_CALLBACK(entry_added),    menu);
 	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_REMOVED, G_CALLBACK(entry_removed),  menu);
@@ -348,7 +350,7 @@ menubar_scroll (GtkWidget      *widget,
           IndicatorObject *io;
 
           io = g_object_get_data (G_OBJECT (parent),
-                                  MENU_DATA_INDICATOR_OBJECT);
+                                  "indicator");
 
           g_signal_emit_by_name (io, "scroll",
                                  1, event->direction);
