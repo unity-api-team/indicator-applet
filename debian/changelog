@@ -1,11 +1,11 @@
-indicator-applet (0.3.4-0ubuntu1~ppa1) UNRELEASED; urgency=low
+indicator-applet (0.3.4-0ubuntu1~ppa1) lucid; urgency=low
 
   * Upstream release 0.3.4
     * Add in scrolling support (LP: #521046)
     * Fix autogen.sh to allow parameters (LP: #539767)
   * debian/control: libindicator requirement to 0.3.6
 
- -- Ted Gould <ted@ubuntu.com>  Thu, 18 Mar 2010 12:43:04 -0500
+ -- Ted Gould <ted@ubuntu.com>  Thu, 18 Mar 2010 12:46:36 -0500
 
 indicator-applet (0.3.3-0ubuntu1~ppa1) lucid; urgency=low
 
