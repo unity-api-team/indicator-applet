@@ -96,10 +96,10 @@ GOutputStream * log_file = NULL;
 gchar * hotkey_keycode = "<Super>M";
 #endif
 #ifdef INDICATOR_APPLET_SESSION
-gchar * hotkey_keycode = "<Super>Esc";
+gchar * hotkey_keycode = "<Ctrl><Alt>Esc";
 #endif
 #ifdef INDICATOR_APPLET_COMPLETE
-gchar * hotkey_keycode = "<Super>Esc";
+gchar * hotkey_keycode = "<Ctrl><Alt>Esc";
 #endif
 
 /*************

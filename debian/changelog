@@ -1,3 +1,10 @@
+indicator-applet (0.3.4-0ubuntu2~ppa1~hotkey1ubuntu1) UNRELEASED; urgency=low
+
+  * Upstream merge
+    * Switching from Super to Ctrl+Alt
+
+ -- Ted Gould <ted@ubuntu.com>  Wed, 31 Mar 2010 15:41:54 -0500
+
 indicator-applet (0.3.4-0ubuntu2~ppa1~hotkey1) lucid; urgency=low
 
   * Upstream merge
