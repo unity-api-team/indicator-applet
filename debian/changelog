@@ -1,9 +1,9 @@
-indicator-applet (0.3.4-0ubuntu2~ppa1~hotkey3) UNRELEASED; urgency=low
+indicator-applet (0.3.4-0ubuntu2~ppa1~hotkey3) lucid; urgency=low
 
   * Upstream merge
     * Trying `
 
- -- Ted Gould <ted@ubuntu.com>  Wed, 31 Mar 2010 15:48:45 -0500
+ -- Ted Gould <ted@ubuntu.com>  Wed, 31 Mar 2010 15:50:06 -0500
 
 indicator-applet (0.3.4-0ubuntu2~ppa1~hotkey2) lucid; urgency=low
 
