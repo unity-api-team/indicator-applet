@@ -14,7 +14,11 @@ indicator_applet_CFLAGS = \
 	$(APPLET_CFLAGS)
 
 indicator_applet_SOURCES = \
-	applet-main.c
+	applet-main.c \
+	eggaccelerators.c \
+	eggaccelerators.h \
+	tomboykeybinder.c \
+	tomboykeybinder.h
 
 indicator_applet_LDADD = \
 	$(APPLET_LIBS)
@@ -29,7 +33,11 @@ indicator_applet_session_CFLAGS = \
 	$(APPLET_CFLAGS)
 
 indicator_applet_session_SOURCES = \
-	applet-main.c
+	applet-main.c \
+	eggaccelerators.c \
+	eggaccelerators.h \
+	tomboykeybinder.c \
+	tomboykeybinder.h
 
 indicator_applet_session_LDADD = \
 	$(APPLET_LIBS)
@@ -44,7 +52,11 @@ indicator_applet_complete_CFLAGS = \
 	$(APPLET_CFLAGS)
 
 indicator_applet_complete_SOURCES =	\
-	applet-main.c
+	applet-main.c \
+	eggaccelerators.c \
+	eggaccelerators.h \
+	tomboykeybinder.c \
+	tomboykeybinder.h
 
 indicator_applet_complete_LDADD = \
 	$(APPLET_LIBS)
