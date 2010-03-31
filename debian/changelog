@@ -1,10 +1,10 @@
-indicator-applet (0.3.4-0ubuntu2~ppa1~hotkey4) UNRELEASED; urgency=low
+indicator-applet (0.3.4-0ubuntu2~ppa1~hotkey4) lucid; urgency=low
 
   * Upstream merge
     * Sticking with 'S'
     * Using select_item
 
- -- Ted Gould <ted@ubuntu.com>  Wed, 31 Mar 2010 16:30:21 -0500
+ -- Ted Gould <ted@ubuntu.com>  Wed, 31 Mar 2010 16:31:57 -0500
 
 indicator-applet (0.3.4-0ubuntu2~ppa1~hotkey3) lucid; urgency=low
 
