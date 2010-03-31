@@ -7,16 +7,16 @@ Copyright 2009 Canonical Ltd.
 Authors:
     Ted Gould <ted@canonical.com>
 
-This program is free software: you can redistribute it and/or modify it 
-under the terms of the GNU General Public License version 3, as published 
+This program is free software: you can redistribute it and/or modify it
+under the terms of the GNU General Public License version 3, as published
 by the Free Software Foundation.
 
-This program is distributed in the hope that it will be useful, but 
-WITHOUT ANY WARRANTY; without even the implied warranties of 
-MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR 
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranties of
+MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
 PURPOSE.  See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License along 
+You should have received a copy of the GNU General Public License along
 with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
@@ -30,6 +30,7 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 static gchar * indicator_order[] = {
 	"libapplication.so",
+	"libsoundmenu.so",
 	"libmessaging.so",
 	"libdatetime.so",
 	"libme.so",
@@ -184,6 +185,8 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 	GtkWidget * menuitem = gtk_menu_item_new();
 	GtkWidget * hbox = gtk_hbox_new(FALSE, 3);
 
+        g_object_set_data (G_OBJECT (menuitem), "indicator", io);
+
 	if (entry->image != NULL) {
 		gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(entry->image), FALSE, FALSE, 0);
 	}
@@ -227,7 +230,7 @@ entry_removed_cb (GtkWidget * widget, gpointer userdata)
 	return;
 }
 
-static void 
+static void
 entry_removed (IndicatorObject * io, IndicatorObjectEntry * entry, gpointer user_data)
 {
 	g_debug("Signal: Entry Removed");
@@ -256,7 +259,7 @@ entry_moved_find_cb (GtkWidget * widget, gpointer userdata)
 }
 
 /* Gets called when an entry for an object was moved. */
-static void 
+static void
 entry_moved (IndicatorObject * io, IndicatorObjectEntry * entry, gint old, gint new, gpointer user_data)
 {
 	GtkWidget * menu = GTK_WIDGET(user_data);
@@ -354,6 +357,20 @@ menubar_press (GtkWidget * widget,
 	}
 
 	return FALSE;
+}
+
+static gboolean
+menubar_scroll (GtkWidget      *widget,
+                GdkEventScroll *event,
+                gpointer        data)
+{
+  GtkWidget *menuitem;
+  GtkWidget *parent;
+
+  menuitem = gtk_get_event_widget ((GdkEvent *)event);
+
+  IndicatorObject *io = g_object_get_data (G_OBJECT (menuitem), "indicator");
+  g_signal_emit_by_name (io, "scroll", 1, event->direction);
 }
 
 static gboolean
@@ -462,7 +479,7 @@ log_to_file (const gchar * domain, GLogLevelFlags level, const gchar * message, 
 
 		log_file = g_io_stream_get_output_stream(G_IO_STREAM(io));
 	}
-	
+
 	gchar * outputstring = g_strdup_printf("%s\n", message);
 	g_output_stream_write_async(log_file,
 	                            outputstring, /* data */
@@ -482,7 +499,7 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 		BONOBO_UI_VERB ("IndicatorAppletAbout", about_cb),
 		BONOBO_UI_VERB_END
 	};
-	static const gchar * menu_xml = 
+	static const gchar * menu_xml =
 		"<popup name=\"button3\">"
 			"<menuitem name=\"About Item\" verb=\"IndicatorAppletAbout\" _label=\"" N_("_About") "\" pixtype=\"stock\" pixname=\"gtk-about\"/>"
 		"</popup>";
@@ -534,7 +551,7 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 	atk_object_set_name (gtk_widget_get_accessible (GTK_WIDGET (applet)),
 	                     "indicator-applet-complete");
 #endif
-  
+
 	/* Init some theme/icon stuff */
 	gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(),
 	                                  INDICATOR_ICONS_DIR);
@@ -572,6 +589,7 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 	GTK_WIDGET_SET_FLAGS (menubar, GTK_WIDGET_FLAGS(menubar) | GTK_CAN_FOCUS);
 	gtk_widget_set_name(GTK_WIDGET (menubar), "fast-user-switch-menubar");
 	g_signal_connect(menubar, "button-press-event", G_CALLBACK(menubar_press), NULL);
+        g_signal_connect(menubar, "scroll-event", G_CALLBACK (menubar_scroll), NULL);
 	g_signal_connect_after(menubar, "expose-event", G_CALLBACK(menubar_on_expose), menubar);
 	gtk_container_set_border_width(GTK_CONTAINER(menubar), 0);
 
@@ -614,17 +632,17 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 		panel_applet_set_background_widget(applet, menubar);
 		gtk_widget_show(menubar);
 	}
-  
+
 	/* Background of applet */
 	g_signal_connect(applet, "change-background",
 			  G_CALLBACK(cw_panel_background_changed), menubar);
-  
+
 	gtk_widget_show(GTK_WIDGET(applet));
 
 	return TRUE;
 }
 
-static void 
+static void
 cw_panel_background_changed (PanelApplet               *applet,
                              PanelAppletBackgroundType  type,
                              GdkColor                  *colour,
@@ -642,7 +660,7 @@ cw_panel_background_changed (PanelApplet               *applet,
 	gtk_widget_modify_style(menubar, rc_style);
 	gtk_rc_style_unref(rc_style);
 
-	switch (type) 
+	switch (type)
 	{
 		case PANEL_NO_BACKGROUND:
 			break;
@@ -650,7 +668,7 @@ cw_panel_background_changed (PanelApplet               *applet,
 			gtk_widget_modify_bg(GTK_WIDGET (applet), GTK_STATE_NORMAL, colour);
 			gtk_widget_modify_bg(menubar, GTK_STATE_NORMAL, colour);
 			break;
-    
+
 		case PANEL_PIXMAP_BACKGROUND:
 			style = gtk_style_copy(GTK_WIDGET (applet)->style);
 			if (style->bg_pixmap[GTK_STATE_NORMAL])
