@@ -334,15 +334,14 @@ load_module (const gchar * name, GtkWidget * menu)
 static void
 hotkey_filter (char * keystring, gpointer data)
 {
-	g_print("Filter\n");
-
 	/* Oh, wow, it's us! */
 	GList * children = gtk_container_get_children(GTK_CONTAINER(data));
 	if (children == NULL) {
+		g_debug("Menubar has no children");
 		return;
 	}
 
-	gtk_menu_shell_activate_item(GTK_MENU_SHELL(data), GTK_WIDGET(g_list_last(children)), FALSE);
+	gtk_menu_shell_select_item(GTK_MENU_SHELL(data), GTK_WIDGET(g_list_last(children)->data));
 	g_list_free(children);
 	return;
 }
