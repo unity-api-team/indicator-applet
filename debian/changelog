@@ -1,7 +1,8 @@
-indicator-applet (0.3.6-0ubuntu1) UNRELEASED; urgency=low
+indicator-applet (0.3.6-0ubuntu1~ppa1) UNRELEASED; urgency=low
 
   * New upstream release.
     * Adds LGPL for TomboyBinder and EggAccelerators
+  * debian/copyright: Updated for LGPL code in files above
 
  -- Ted Gould <ted@ubuntu.com>  Thu, 01 Apr 2010 15:36:54 -0500
 
