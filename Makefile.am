@@ -10,3 +10,6 @@ DISTCLEANFILES = \
 	indicator-applet-*.tar.gz \
 	gtk-doc.make
 
+EXTRA_DIST = \
+	COPYING.LGPL
+
