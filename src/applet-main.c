@@ -23,6 +23,7 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdlib.h>
 #include <config.h>
 #include <panel-applet.h>
+#include <gdk/gdkkeysyms.h>
 
 #include "libindicator/indicator-object.h"
 
@@ -87,6 +88,19 @@ PANEL_APPLET_BONOBO_FACTORY ("OAFIID:GNOME_IndicatorAppletComplete_Factory",
 #define LOG_FILE_NAME  "indicator-applet-complete.log"
 #endif
 GOutputStream * log_file = NULL;
+
+/*****************
+ * Hotkey support 
+ * **************/
+#ifdef INDICATOR_APPLET
+gchar * hotkey_keycode = "<Super>M";
+#endif
+#ifdef INDICATOR_APPLET_SESSION
+gchar * hotkey_keycode = "<Super>S";
+#endif
+#ifdef INDICATOR_APPLET_COMPLETE
+gchar * hotkey_keycode = "<Super>S";
+#endif
 
 /*************
  * init function
@@ -317,6 +331,21 @@ load_module (const gchar * name, GtkWidget * menu)
 	return TRUE;
 }
 
+static void
+hotkey_filter (char * keystring, gpointer data)
+{
+	/* Oh, wow, it's us! */
+	GList * children = gtk_container_get_children(GTK_CONTAINER(data));
+	if (children == NULL) {
+		g_debug("Menubar has no children");
+		return;
+	}
+
+	gtk_menu_shell_select_item(GTK_MENU_SHELL(data), GTK_WIDGET(g_list_last(children)->data));
+	g_list_free(children);
+	return;
+}
+
 static gboolean
 menubar_press (GtkWidget * widget,
                     GdkEventButton *event,
@@ -499,8 +528,10 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 #ifdef INDICATOR_APPLET_COMPLETE
 		g_set_application_name(_("Indicator Applet Complete"));
 #endif
-
+		
 		g_log_set_default_handler(log_to_file, NULL);
+
+		tomboy_keybinder_init();
 	}
 
 	/* Set panel options */
@@ -560,6 +591,9 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
         g_signal_connect(menubar, "scroll-event", G_CALLBACK (menubar_scroll), NULL);
 	g_signal_connect_after(menubar, "expose-event", G_CALLBACK(menubar_on_expose), menubar);
 	gtk_container_set_border_width(GTK_CONTAINER(menubar), 0);
+
+	/* Add in filter func */
+	tomboy_keybinder_bind(hotkey_keycode, hotkey_filter, menubar);
 
 	/* load 'em */
 	if (g_file_test(INDICATOR_DIR, (G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))) {
