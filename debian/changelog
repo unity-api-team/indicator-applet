@@ -1,9 +1,9 @@
-indicator-applet (0.3.5-0ubuntu1~ppa1) UNRELEASED; urgency=low
+indicator-applet (0.3.5-0ubuntu1~ppa1) lucid; urgency=low
 
   * New upstream release.
     * Adding hotkey support.  Super+S.  (LP: #334544)
 
- -- Ted Gould <ted@ubuntu.com>  Thu, 01 Apr 2010 09:45:23 -0500
+ -- Ted Gould <ted@ubuntu.com>  Thu, 01 Apr 2010 09:51:33 -0500
 
 indicator-applet (0.3.4-0ubuntu1) lucid; urgency=low
 
