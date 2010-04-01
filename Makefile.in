@@ -267,6 +267,9 @@ DISTCLEANFILES = \
 	indicator-applet-*.tar.gz \
 	gtk-doc.make
 
+EXTRA_DIST = \
+	COPYING.LGPL
+
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 
