@@ -1,4 +1,4 @@
-indicator-applet (0.3.6-0ubuntu1~ppa1) lucid; urgency=low
+indicator-applet (0.3.6-0ubuntu1) lucid; urgency=low
 
   * New upstream release.
     * Adds LGPL for TomboyBinder and EggAccelerators
@@ -6,7 +6,7 @@ indicator-applet (0.3.6-0ubuntu1~ppa1) lucid; urgency=low
 
  -- Ted Gould <ted@ubuntu.com>  Thu, 01 Apr 2010 15:44:06 -0500
 
-indicator-applet (0.3.5-0ubuntu1~ppa1) lucid; urgency=low
+indicator-applet (0.3.5-0ubuntu1) lucid; urgency=low
 
   * New upstream release.
     * Adding hotkey support.  Super+S.  (LP: #334544)
