@@ -1,3 +1,9 @@
+indicator-applet (0.3.6-0ubuntu2) lucid; urgency=low
+
+  * Backport change to fix keyboard grabbing issues (lp: #553918)
+
+ -- Sebastien Bacher <seb128@ubuntu.com>  Fri, 02 Apr 2010 19:35:18 +0200
+
 indicator-applet (0.3.6-0ubuntu1) lucid; urgency=low
 
   * New upstream release.
