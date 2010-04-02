@@ -334,6 +334,8 @@ load_module (const gchar * name, GtkWidget * menu)
 static void
 hotkey_filter (char * keystring, gpointer data)
 {
+	g_return_if_fail(GTK_IS_MENU_SHELL(data));
+
 	/* Oh, wow, it's us! */
 	GList * children = gtk_container_get_children(GTK_CONTAINER(data));
 	if (children == NULL) {
