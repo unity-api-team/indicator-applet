@@ -184,18 +184,19 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 	g_debug("Signal: Entry Added");
 
 	GtkWidget * menuitem = gtk_menu_item_new();
-	GtkWidget * vbox = gtk_vbox_new(FALSE, 3);
+	GtkWidget * box = (packdirection == GTK_PACK_DIRECTION_LTR) ?
+			gtk_hbox_new(FALSE, 3) : gtk_vbox_new(FALSE, 3);
 
         g_object_set_data (G_OBJECT (menuitem), "indicator", io);
 
 	if (entry->image != NULL) {
-		gtk_box_pack_start(GTK_BOX(vbox), GTK_WIDGET(entry->image), FALSE, FALSE, 0);
+		gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry->image), FALSE, FALSE, 0);
 	}
 	if (entry->label != NULL) {
-		gtk_box_pack_start(GTK_BOX(vbox), GTK_WIDGET(entry->label), FALSE, FALSE, 0);
+		gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry->label), FALSE, FALSE, 0);
 	}
-	gtk_container_add(GTK_CONTAINER(menuitem), vbox);
-	gtk_widget_show(vbox);
+	gtk_container_add(GTK_CONTAINER(menuitem), box);
+	gtk_widget_show(box);
 
 	if (entry->menu != NULL) {
 		gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem), GTK_WIDGET(entry->menu));
