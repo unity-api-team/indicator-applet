@@ -579,11 +579,11 @@ properties_cb (BonoboUIComponent *ui_container,
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	notebook = gtk_notebook_new();
 	
-	label = gtk_label_new("Orientation");
+	label = gtk_label_new(_("Orientation"));
 	radio_0 = gtk_radio_button_new_with_label_from_widget(
-			NULL, "Horizontal");
+			NULL, _("Horizontal"));
 	radio_90 = gtk_radio_button_new_with_label_from_widget(
-			GTK_RADIO_BUTTON(radio_0), "Vertical");
+			GTK_RADIO_BUTTON(radio_0), _("Vertical"));
 	ok_button = gtk_button_new_from_stock(GTK_STOCK_OK);
 	ok_image = gtk_image_new_from_stock(GTK_STOCK_OK,
 			GTK_ICON_SIZE_BUTTON);
