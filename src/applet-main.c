@@ -204,18 +204,16 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 		gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry->image), FALSE, FALSE, 0);
 	}
 	if (entry->label != NULL) {
-		switch(orient) {
-			case PANEL_APPLET_ORIENT_UP:
+		switch(packdirection) {
+			case GTK_PACK_DIRECTION_LTR:
 				gtk_label_set_angle(GTK_LABEL(entry->label), 0.0);
 				break;
-			case PANEL_APPLET_ORIENT_DOWN:
-				gtk_label_set_angle(GTK_LABEL(entry->label), 0.0);
+			case GTK_PACK_DIRECTION_TTB:
+				gtk_label_set_angle(GTK_LABEL(entry->label),
+						(orient == PANEL_APPLET_ORIENT_LEFT) ? 
+						270.0 : 90.0);
 				break;
-			case PANEL_APPLET_ORIENT_LEFT:
-				gtk_label_set_angle(GTK_LABEL(entry->label), 270.0);
-				break;
-			case PANEL_APPLET_ORIENT_RIGHT:
-				gtk_label_set_angle(GTK_LABEL(entry->label), 90.0);
+			default:
 				break;
 		}		
 		gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry->label), FALSE, FALSE, 0);
@@ -476,20 +474,18 @@ swap_orient_cb (GtkWidget *item, gpointer data)
 	g_object_ref(G_OBJECT(item));
 	gtk_container_remove(GTK_CONTAINER(theswapper->from), item);
 	if (GTK_IS_LABEL(item)) {
-		switch(orient) {
-			case PANEL_APPLET_ORIENT_UP:
+			switch(packdirection) {
+			case GTK_PACK_DIRECTION_LTR:
 				gtk_label_set_angle(GTK_LABEL(item), 0.0);
 				break;
-			case PANEL_APPLET_ORIENT_DOWN:
-				gtk_label_set_angle(GTK_LABEL(item), 0.0);
+			case GTK_PACK_DIRECTION_TTB:
+				gtk_label_set_angle(GTK_LABEL(item),
+						(orient == PANEL_APPLET_ORIENT_LEFT) ? 
+						270.0 : 90.0);
 				break;
-			case PANEL_APPLET_ORIENT_LEFT:
-				gtk_label_set_angle(GTK_LABEL(item), 270.0);
+			default:
 				break;
-			case PANEL_APPLET_ORIENT_RIGHT:
-				gtk_label_set_angle(GTK_LABEL(item), 90.0);
-				break;
-		}
+		}		
 	}
 	gtk_box_pack_start(GTK_BOX(theswapper->to), item, FALSE, FALSE, 0);
 	return TRUE;
