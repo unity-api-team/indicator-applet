@@ -204,6 +204,20 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 		gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry->image), FALSE, FALSE, 0);
 	}
 	if (entry->label != NULL) {
+		switch(orient) {
+			case PANEL_APPLET_ORIENT_UP:
+				gtk_label_set_angle(GTK_LABEL(entry->label), 0.0);
+				break;
+			case PANEL_APPLET_ORIENT_DOWN:
+				gtk_label_set_angle(GTK_LABEL(entry->label), 0.0);
+				break;
+			case PANEL_APPLET_ORIENT_LEFT:
+				gtk_label_set_angle(GTK_LABEL(entry->label), 270.0);
+				break;
+			case PANEL_APPLET_ORIENT_RIGHT:
+				gtk_label_set_angle(GTK_LABEL(entry->label), 90.0);
+				break;
+		}		
 		gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry->label), FALSE, FALSE, 0);
 	}
 	gtk_container_add(GTK_CONTAINER(menuitem), box);
@@ -461,6 +475,22 @@ swap_orient_cb (GtkWidget *item, gpointer data)
 	struct swapper *theswapper = (struct swapper *) data;
 	g_object_ref(G_OBJECT(item));
 	gtk_container_remove(GTK_CONTAINER(theswapper->from), item);
+	if (GTK_IS_LABEL(item)) {
+		switch(orient) {
+			case PANEL_APPLET_ORIENT_UP:
+				gtk_label_set_angle(GTK_LABEL(item), 0.0);
+				break;
+			case PANEL_APPLET_ORIENT_DOWN:
+				gtk_label_set_angle(GTK_LABEL(item), 0.0);
+				break;
+			case PANEL_APPLET_ORIENT_LEFT:
+				gtk_label_set_angle(GTK_LABEL(item), 270.0);
+				break;
+			case PANEL_APPLET_ORIENT_RIGHT:
+				gtk_label_set_angle(GTK_LABEL(item), 90.0);
+				break;
+		}
+	}
 	gtk_box_pack_start(GTK_BOX(theswapper->to), item, FALSE, FALSE, 0);
 	return TRUE;
 }
@@ -468,10 +498,10 @@ swap_orient_cb (GtkWidget *item, gpointer data)
 static gboolean
 reorient_box_cb (GtkWidget *menuitem, gpointer data)
 {
-	int orient = GPOINTER_TO_INT(data);
+	int reorient = GPOINTER_TO_INT(data);
 	struct swapper theswapper;
 	theswapper.from = g_object_get_data(G_OBJECT(menuitem), "box");
-	theswapper.to = (orient == HORIZ_TO_VERT) ? gtk_vbox_new(FALSE, 0) :
+	theswapper.to = (reorient == HORIZ_TO_VERT) ? gtk_vbox_new(FALSE, 0) :
 			gtk_hbox_new(FALSE, 0);
 	gtk_container_foreach(GTK_CONTAINER(theswapper.from), (GtkCallback)swap_orient_cb,
 			&theswapper);
@@ -483,10 +513,10 @@ reorient_box_cb (GtkWidget *menuitem, gpointer data)
 }
 
 static void 
-reorient_boxes (GtkWidget *menubar, int orient)
+reorient_boxes (GtkWidget *menubar, int reorient)
 {
 	gtk_container_foreach(GTK_CONTAINER(menubar), (GtkCallback)reorient_box_cb,
-			GINT_TO_POINTER(orient));
+			GINT_TO_POINTER(reorient));
 }
 
 static gboolean
@@ -528,6 +558,7 @@ panelapplet_reorient_cb (GtkWidget *applet, PanelAppletOrient neworient,
 				GTK_PACK_DIRECTION_TTB : GTK_PACK_DIRECTION_LTR;
 		gtk_menu_bar_set_pack_direction(GTK_MENU_BAR(menubar),
 				packdirection);
+		orient = neworient;
 		reorient_boxes(menubar, 
 				(packdirection == GTK_PACK_DIRECTION_LTR) ?
 				VERT_TO_HORIZ : HORIZ_TO_VERT);
