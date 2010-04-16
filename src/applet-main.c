@@ -26,7 +26,7 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <gdk/gdkkeysyms.h>
 
 #include "libindicator/indicator-object.h"
-
+#include "tomboykeybinder.h"
 
 static gchar * indicator_order[] = {
 	"libapplication.so",
@@ -372,12 +372,13 @@ menubar_scroll (GtkWidget      *widget,
                 gpointer        data)
 {
   GtkWidget *menuitem;
-  GtkWidget *parent;
 
   menuitem = gtk_get_event_widget ((GdkEvent *)event);
 
   IndicatorObject *io = g_object_get_data (G_OBJECT (menuitem), "indicator");
   g_signal_emit_by_name (io, "scroll", 1, event->direction);
+
+  return FALSE;
 }
 
 static gboolean
@@ -512,7 +513,6 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 		"</popup>";
 
 	GtkWidget *menubar;
-	gint i;
 	gint indicators_loaded = 0;
 	static gboolean first_time = FALSE;
 
