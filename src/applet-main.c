@@ -37,6 +37,16 @@ static gchar * indicator_order[] = {
 	NULL
 };
 
+static enum orienters {
+	HORIZ_TO_VERT = 1,
+	VERT_TO_HORIZ
+} box_reorient;
+
+struct swapper{
+	GtkWidget *from;
+	GtkWidget *to;
+};
+
 static GtkPackDirection packdirection;
 static PanelAppletOrient orient;
 
@@ -179,7 +189,7 @@ place_in_menu (GtkWidget * widget, gpointer user_data)
 }
 
 static void
-entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * menu)
+entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * menubar)
 {
 	g_debug("Signal: Entry Added");
 
@@ -187,7 +197,8 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 	GtkWidget * box = (packdirection == GTK_PACK_DIRECTION_LTR) ?
 			gtk_hbox_new(FALSE, 3) : gtk_vbox_new(FALSE, 3);
 
-        g_object_set_data (G_OBJECT (menuitem), "indicator", io);
+	g_object_set_data (G_OBJECT (menuitem), "indicator", io);
+	g_object_set_data (G_OBJECT (menuitem), "box", box);
 
 	if (entry->image != NULL) {
 		gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry->image), FALSE, FALSE, 0);
@@ -208,9 +219,9 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 	position.menupos = 0;
 	position.found = FALSE;
 
-	gtk_container_foreach(GTK_CONTAINER(menu), place_in_menu, &position);
+	gtk_container_foreach(GTK_CONTAINER(menubar), place_in_menu, &position);
 
-	gtk_menu_shell_insert(GTK_MENU_SHELL(menu), menuitem, position.menupos);
+	gtk_menu_shell_insert(GTK_MENU_SHELL(menubar), menuitem, position.menupos);
 	gtk_widget_show(menuitem);
 
 	g_object_set_data(G_OBJECT(menuitem), MENU_DATA_INDICATOR_ENTRY,  entry);
@@ -264,13 +275,13 @@ entry_moved_find_cb (GtkWidget * widget, gpointer userdata)
 static void
 entry_moved (IndicatorObject * io, IndicatorObjectEntry * entry, gint old, gint new, gpointer user_data)
 {
-	GtkWidget * menu = GTK_WIDGET(user_data);
+	GtkWidget * menubar = GTK_WIDGET(user_data);
 
 	gpointer array[2];
 	array[0] = entry;
 	array[1] = NULL;
 
-	gtk_container_foreach(GTK_CONTAINER(user_data), entry_moved_find_cb, array);
+	gtk_container_foreach(GTK_CONTAINER(menubar), entry_moved_find_cb, array);
 	if (array[1] == NULL) {
 		g_warning("Moving an entry that isn't in our menus.");
 		return;
@@ -278,7 +289,7 @@ entry_moved (IndicatorObject * io, IndicatorObjectEntry * entry, gint old, gint 
 
 	GtkWidget * mi = GTK_WIDGET(array[1]);
 	g_object_ref(G_OBJECT(mi));
-	gtk_container_remove(GTK_CONTAINER(user_data), mi);
+	gtk_container_remove(GTK_CONTAINER(menubar), mi);
 
 	incoming_position_t position;
 	position.objposition = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(io), IO_DATA_ORDER_NUMBER));
@@ -286,16 +297,16 @@ entry_moved (IndicatorObject * io, IndicatorObjectEntry * entry, gint old, gint 
 	position.menupos = 0;
 	position.found = FALSE;
 
-	gtk_container_foreach(GTK_CONTAINER(menu), place_in_menu, &position);
+	gtk_container_foreach(GTK_CONTAINER(menubar), place_in_menu, &position);
 
-	gtk_menu_shell_insert(GTK_MENU_SHELL(menu), mi, position.menupos);
+	gtk_menu_shell_insert(GTK_MENU_SHELL(menubar), mi, position.menupos);
 	g_object_unref(G_OBJECT(mi));
 
 	return;
 }
 
 static gboolean
-load_module (const gchar * name, GtkWidget * menu)
+load_module (const gchar * name, GtkWidget * menubar)
 {
 	g_debug("Looking at Module: %s", name);
 	g_return_val_if_fail(name != NULL, FALSE);
@@ -315,9 +326,9 @@ load_module (const gchar * name, GtkWidget * menu)
 	g_object_set_data(G_OBJECT(io), IO_DATA_ORDER_NUMBER, GINT_TO_POINTER(name2order(name)));
 
 	/* Connect to its signals */
-	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_ADDED,   G_CALLBACK(entry_added),    menu);
-	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_REMOVED, G_CALLBACK(entry_removed),  menu);
-	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_MOVED,   G_CALLBACK(entry_moved),    menu);
+	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_ADDED,   G_CALLBACK(entry_added),    menubar);
+	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_REMOVED, G_CALLBACK(entry_removed),  menubar);
+	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_MOVED,   G_CALLBACK(entry_moved),    menubar);
 
 	/* Work on the entries */
 	GList * entries = indicator_object_get_entries(io);
@@ -325,7 +336,7 @@ load_module (const gchar * name, GtkWidget * menu)
 
 	for (entry = entries; entry != NULL; entry = g_list_next(entry)) {
 		IndicatorObjectEntry * entrydata = (IndicatorObjectEntry *)entry->data;
-		entry_added(io, entrydata, menu);
+		entry_added(io, entrydata, menubar);
 	}
 
 	g_list_free(entries);
@@ -443,6 +454,41 @@ about_cb (BonoboUIComponent *ui_container,
 
 	return;
 }
+
+static gboolean
+swap_orient_cb (GtkWidget *item, gpointer data)
+{
+	struct swapper *theswapper = (struct swapper *) data;
+	g_object_ref(G_OBJECT(item));
+	gtk_container_remove(GTK_CONTAINER(theswapper->from), item);
+	gtk_box_pack_start(GTK_BOX(theswapper->to), item, FALSE, FALSE, 0);
+	return TRUE;
+}
+
+static gboolean
+reorient_box_cb (GtkWidget *menuitem, gpointer data)
+{
+	int orient = GPOINTER_TO_INT(data);
+	struct swapper theswapper;
+	theswapper.from = g_object_get_data(G_OBJECT(menuitem), "box");
+	theswapper.to = (orient == HORIZ_TO_VERT) ? gtk_vbox_new(FALSE, 0) :
+			gtk_hbox_new(FALSE, 0);
+	gtk_container_foreach(GTK_CONTAINER(theswapper.from), (GtkCallback)swap_orient_cb,
+			&theswapper);
+	gtk_container_remove(GTK_CONTAINER(menuitem), theswapper.from);
+	gtk_container_add(GTK_CONTAINER(menuitem), theswapper.to);
+	g_object_set_data(G_OBJECT(menuitem), "box", theswapper.to);
+	gtk_widget_show_all(menuitem);
+	return TRUE;
+}
+
+static void 
+reorient_boxes (GtkWidget *menubar, int orient)
+{
+	gtk_container_foreach(GTK_CONTAINER(menubar), (GtkCallback)reorient_box_cb,
+			GINT_TO_POINTER(orient));
+}
+
 static gboolean
 reorient_cb (GtkWidget *radio_0, gpointer data)
 {
@@ -450,17 +496,17 @@ reorient_cb (GtkWidget *radio_0, gpointer data)
 	if ((gtk_toggle_button_get_active(
 			GTK_TOGGLE_BUTTON(radio_0)) == TRUE) && 
 			(packdirection == GTK_PACK_DIRECTION_TTB)) {
-	
 		packdirection = GTK_PACK_DIRECTION_LTR;
 		gtk_menu_bar_set_pack_direction(GTK_MENU_BAR(menubar),
 				packdirection);
+		reorient_boxes(menubar, VERT_TO_HORIZ);
 	} else if ((gtk_toggle_button_get_active(
 			GTK_TOGGLE_BUTTON(radio_0)) == FALSE) && 
 			(packdirection == GTK_PACK_DIRECTION_LTR)) {
-	
 		packdirection = GTK_PACK_DIRECTION_TTB;
 		gtk_menu_bar_set_pack_direction(GTK_MENU_BAR(menubar),
 				packdirection);
+		reorient_boxes(menubar, HORIZ_TO_VERT);
 	}
 	return FALSE;
 }
@@ -481,7 +527,10 @@ panelapplet_reorient_cb (GtkWidget *applet, PanelAppletOrient neworient,
 		packdirection = (packdirection == GTK_PACK_DIRECTION_LTR) ?
 				GTK_PACK_DIRECTION_TTB : GTK_PACK_DIRECTION_LTR;
 		gtk_menu_bar_set_pack_direction(GTK_MENU_BAR(menubar),
-				packdirection);	
+				packdirection);
+		reorient_boxes(menubar, 
+				(packdirection == GTK_PACK_DIRECTION_LTR) ?
+				VERT_TO_HORIZ : HORIZ_TO_VERT);
 	}
 	orient = neworient;
 	return FALSE;
