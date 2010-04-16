@@ -27,7 +27,6 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "libindicator/indicator-object.h"
 
-
 static gchar * indicator_order[] = {
 	"libapplication.so",
 	"libsoundmenu.so",
@@ -38,13 +37,15 @@ static gchar * indicator_order[] = {
 	NULL
 };
 
+static GtkPackDirection packdirection;
+static PanelAppletOrient orient;
+
 #define  MENU_DATA_INDICATOR_OBJECT  "indicator-object"
 #define  MENU_DATA_INDICATOR_ENTRY   "indicator-entry"
 
 #define  IO_DATA_ORDER_NUMBER        "indicator-order-number"
 
 static gboolean     applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data);
-
 
 static void cw_panel_background_changed (PanelApplet               *applet,
                                          PanelAppletBackgroundType  type,
@@ -183,18 +184,18 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 	g_debug("Signal: Entry Added");
 
 	GtkWidget * menuitem = gtk_menu_item_new();
-	GtkWidget * hbox = gtk_hbox_new(FALSE, 3);
+	GtkWidget * vbox = gtk_vbox_new(FALSE, 3);
 
         g_object_set_data (G_OBJECT (menuitem), "indicator", io);
 
 	if (entry->image != NULL) {
-		gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(entry->image), FALSE, FALSE, 0);
+		gtk_box_pack_start(GTK_BOX(vbox), GTK_WIDGET(entry->image), FALSE, FALSE, 0);
 	}
 	if (entry->label != NULL) {
-		gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(entry->label), FALSE, FALSE, 0);
+		gtk_box_pack_start(GTK_BOX(vbox), GTK_WIDGET(entry->label), FALSE, FALSE, 0);
 	}
-	gtk_container_add(GTK_CONTAINER(menuitem), hbox);
-	gtk_widget_show(hbox);
+	gtk_container_add(GTK_CONTAINER(menuitem), vbox);
+	gtk_widget_show(vbox);
 
 	if (entry->menu != NULL) {
 		gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem), GTK_WIDGET(entry->menu));
@@ -312,7 +313,7 @@ load_module (const gchar * name, GtkWidget * menu)
 	/* Attach the 'name' to the object */
 	g_object_set_data(G_OBJECT(io), IO_DATA_ORDER_NUMBER, GINT_TO_POINTER(name2order(name)));
 
-	/* Connect to it's signals */
+	/* Connect to its signals */
 	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_ADDED,   G_CALLBACK(entry_added),    menu);
 	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_REMOVED, G_CALLBACK(entry_removed),  menu);
 	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_MOVED,   G_CALLBACK(entry_moved),    menu);
@@ -441,6 +442,101 @@ about_cb (BonoboUIComponent *ui_container,
 
 	return;
 }
+static gboolean
+reorient_cb (GtkWidget *radio_0, gpointer data)
+{
+	GtkWidget *menubar = (GtkWidget *)data;
+	if ((gtk_toggle_button_get_active(
+			GTK_TOGGLE_BUTTON(radio_0)) == TRUE) && 
+			(packdirection == GTK_PACK_DIRECTION_TTB)) {
+	
+		packdirection = GTK_PACK_DIRECTION_LTR;
+		gtk_menu_bar_set_pack_direction(GTK_MENU_BAR(menubar),
+				packdirection);
+	} else if ((gtk_toggle_button_get_active(
+			GTK_TOGGLE_BUTTON(radio_0)) == FALSE) && 
+			(packdirection == GTK_PACK_DIRECTION_LTR)) {
+	
+		packdirection = GTK_PACK_DIRECTION_TTB;
+		gtk_menu_bar_set_pack_direction(GTK_MENU_BAR(menubar),
+				packdirection);
+	}
+	return FALSE;
+}
+
+static gboolean
+panelapplet_reorient_cb (GtkWidget *applet, PanelAppletOrient neworient,
+		gpointer data)
+{
+	GtkWidget *menubar = (GtkWidget *)data;
+	if ((((neworient == PANEL_APPLET_ORIENT_UP) || 
+			(neworient == PANEL_APPLET_ORIENT_DOWN)) && 
+			((orient == PANEL_APPLET_ORIENT_LEFT) || 
+			(orient == PANEL_APPLET_ORIENT_RIGHT))) || 
+			(((neworient == PANEL_APPLET_ORIENT_LEFT) || 
+			(neworient == PANEL_APPLET_ORIENT_RIGHT)) && 
+			((orient == PANEL_APPLET_ORIENT_UP) ||
+			(orient == PANEL_APPLET_ORIENT_DOWN)))) {
+		packdirection = (packdirection == GTK_PACK_DIRECTION_LTR) ?
+				GTK_PACK_DIRECTION_TTB : GTK_PACK_DIRECTION_LTR;
+		gtk_menu_bar_set_pack_direction(GTK_MENU_BAR(menubar),
+				packdirection);	
+	}
+	orient = neworient;
+	return FALSE;
+}
+
+
+static void
+properties_cb (BonoboUIComponent *ui_container,
+				gpointer           data,
+				const gchar       *cname)
+{
+	GtkWidget *window, *radio_0, *radio_90, *radio_group, *label, *hbox1,
+			*hbox2, *vbox, *ok_button, *cancel_button, *ok_image,
+			*cancel_image, *notebook;
+	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	notebook = gtk_notebook_new();
+	
+	label = gtk_label_new("Orientation");
+	radio_0 = gtk_radio_button_new_with_label_from_widget(
+			NULL, "Horizontal");
+	radio_90 = gtk_radio_button_new_with_label_from_widget(
+			GTK_RADIO_BUTTON(radio_0), "Vertical");
+	ok_button = gtk_button_new_from_stock(GTK_STOCK_OK);
+	ok_image = gtk_image_new_from_stock(GTK_STOCK_OK,
+			GTK_ICON_SIZE_BUTTON);
+	gtk_button_set_image(GTK_BUTTON(ok_button), ok_image);
+	cancel_button = gtk_button_new_from_stock(GTK_STOCK_CANCEL);
+	cancel_image = gtk_image_new_from_stock(GTK_STOCK_CANCEL,
+			GTK_ICON_SIZE_BUTTON);
+	gtk_button_set_image(GTK_BUTTON(cancel_button), cancel_image);
+	g_signal_connect_swapped(cancel_button, "clicked",
+			G_CALLBACK(gtk_widget_destroy), window);
+	g_signal_connect_swapped(ok_button, "clicked",
+			G_CALLBACK(gtk_widget_destroy), window);
+	g_signal_connect(radio_0, "toggled", G_CALLBACK(reorient_cb), data);
+			
+	hbox1 = gtk_hbox_new(TRUE, 5);
+	hbox2 = gtk_hbox_new(TRUE, 3);
+	vbox = gtk_vbox_new(TRUE, 3);
+	gtk_box_pack_start(GTK_BOX(hbox1), radio_0, TRUE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox1), radio_90, TRUE, FALSE, 0);
+	gtk_box_pack_end(GTK_BOX(hbox2), cancel_button, FALSE, FALSE, 0);
+	gtk_box_pack_end(GTK_BOX(hbox2), ok_button, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), hbox1, TRUE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), hbox2, TRUE, FALSE, 0);
+	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), vbox, label);
+	gtk_container_add(GTK_CONTAINER(window), notebook);
+	gtk_window_set_default_size(GTK_WINDOW(window), 250, 110);
+	gtk_widget_show_all(window);
+	gtk_toggle_button_set_active(
+			(packdirection == GTK_PACK_DIRECTION_LTR) ? 
+			GTK_TOGGLE_BUTTON(radio_0) : GTK_TOGGLE_BUTTON(radio_90),
+			TRUE);
+}
+
+
 
 #ifdef N_
 #undef N_
@@ -504,17 +600,19 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 {
 	static const BonoboUIVerb menu_verbs[] = {
 		BONOBO_UI_VERB ("IndicatorAppletAbout", about_cb),
+		BONOBO_UI_VERB ("IndicatorAppletProperties", properties_cb),
 		BONOBO_UI_VERB_END
 	};
 	static const gchar * menu_xml =
 		"<popup name=\"button3\">"
 			"<menuitem name=\"About Item\" verb=\"IndicatorAppletAbout\" _label=\"" N_("_About") "\" pixtype=\"stock\" pixname=\"gtk-about\"/>"
+			"<menuitem name=\"Properties Item\" verb=\"IndicatorAppletProperties\" label=\"" N_("_Properties") "\" pixtype=\"stock\" pixname=\"gtk-properties\"/>"
 		"</popup>";
 
-	GtkWidget *menubar;
+	static gboolean first_time = FALSE;
 	gint i;
 	gint indicators_loaded = 0;
-	static gboolean first_time = FALSE;
+	GtkWidget *menubar;
 
 #ifdef INDICATOR_APPLET_SESSION
 	/* check if we are running stracciatella session */
@@ -545,7 +643,8 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 	/* Set panel options */
 	gtk_container_set_border_width(GTK_CONTAINER (applet), 0);
 	panel_applet_set_flags(applet, PANEL_APPLET_EXPAND_MINOR);
-	panel_applet_setup_menu(applet, menu_xml, menu_verbs, NULL);
+	menubar = gtk_menu_bar_new();
+	panel_applet_setup_menu(applet, menu_xml, menu_verbs, menubar);
 #ifdef INDICATOR_APPLET
 	atk_object_set_name (gtk_widget_get_accessible (GTK_WIDGET (applet)),
 	                     "indicator-applet");
@@ -592,12 +691,19 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 	gtk_widget_set_name(GTK_WIDGET (applet), "fast-user-switch-applet");
 
 	/* Build menubar */
-	menubar = gtk_menu_bar_new();
+	orient = (panel_applet_get_orient(applet));
+	packdirection = ((orient == PANEL_APPLET_ORIENT_UP) ||
+			(orient == PANEL_APPLET_ORIENT_DOWN)) ? 
+			GTK_PACK_DIRECTION_LTR : GTK_PACK_DIRECTION_TTB;
+	gtk_menu_bar_set_pack_direction(GTK_MENU_BAR(menubar),
+			packdirection);
 	GTK_WIDGET_SET_FLAGS (menubar, GTK_WIDGET_FLAGS(menubar) | GTK_CAN_FOCUS);
 	gtk_widget_set_name(GTK_WIDGET (menubar), "fast-user-switch-menubar");
 	g_signal_connect(menubar, "button-press-event", G_CALLBACK(menubar_press), NULL);
         g_signal_connect(menubar, "scroll-event", G_CALLBACK (menubar_scroll), NULL);
 	g_signal_connect_after(menubar, "expose-event", G_CALLBACK(menubar_on_expose), menubar);
+	g_signal_connect(applet, "change-orient", 
+			G_CALLBACK(panelapplet_reorient_cb), menubar);
 	gtk_container_set_border_width(GTK_CONTAINER(menubar), 0);
 
 	/* Add in filter func */
@@ -647,6 +753,7 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 	gtk_widget_show(GTK_WIDGET(applet));
 
 	return TRUE;
+
 }
 
 static void
