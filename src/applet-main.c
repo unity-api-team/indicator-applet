@@ -26,6 +26,7 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <gdk/gdkkeysyms.h>
 
 #include "libindicator/indicator-object.h"
+#include "tomboykeybinder.h"
 
 static gchar * indicator_order[] = {
 	"libapplication.so",
