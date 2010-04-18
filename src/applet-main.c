@@ -42,11 +42,6 @@ static enum orienters {
 	VERT_TO_HORIZ
 } box_reorient;
 
-struct swapper{
-	GtkWidget *from;
-	GtkWidget *to;
-};
-
 static GtkPackDirection packdirection;
 static PanelAppletOrient orient;
 
@@ -470,9 +465,10 @@ about_cb (BonoboUIComponent *ui_container,
 static gboolean
 swap_orient_cb (GtkWidget *item, gpointer data)
 {
-	struct swapper *theswapper = (struct swapper *) data;
+	GtkWidget *from = (GtkWidget *) data;
+	GtkWidget *to = (GtkWidget *) g_object_get_data(G_OBJECT(from), "to");
 	g_object_ref(G_OBJECT(item));
-	gtk_container_remove(GTK_CONTAINER(theswapper->from), item);
+	gtk_container_remove(GTK_CONTAINER(from), item);
 	if (GTK_IS_LABEL(item)) {
 			switch(packdirection) {
 			case GTK_PACK_DIRECTION_LTR:
@@ -487,7 +483,7 @@ swap_orient_cb (GtkWidget *item, gpointer data)
 				break;
 		}		
 	}
-	gtk_box_pack_start(GTK_BOX(theswapper->to), item, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(to), item, FALSE, FALSE, 0);
 	return TRUE;
 }
 
@@ -495,15 +491,15 @@ static gboolean
 reorient_box_cb (GtkWidget *menuitem, gpointer data)
 {
 	int reorient = GPOINTER_TO_INT(data);
-	struct swapper theswapper;
-	theswapper.from = g_object_get_data(G_OBJECT(menuitem), "box");
-	theswapper.to = (reorient == HORIZ_TO_VERT) ? gtk_vbox_new(FALSE, 0) :
+	GtkWidget *from = g_object_get_data(G_OBJECT(menuitem), "box");
+	GtkWidget *to = (reorient == HORIZ_TO_VERT) ? gtk_vbox_new(FALSE, 0) :
 			gtk_hbox_new(FALSE, 0);
-	gtk_container_foreach(GTK_CONTAINER(theswapper.from), (GtkCallback)swap_orient_cb,
-			&theswapper);
-	gtk_container_remove(GTK_CONTAINER(menuitem), theswapper.from);
-	gtk_container_add(GTK_CONTAINER(menuitem), theswapper.to);
-	g_object_set_data(G_OBJECT(menuitem), "box", theswapper.to);
+	g_object_set_data(G_OBJECT(from), "to", to);
+	gtk_container_foreach(GTK_CONTAINER(from), (GtkCallback)swap_orient_cb,
+			from);
+	gtk_container_remove(GTK_CONTAINER(menuitem), from);
+	gtk_container_add(GTK_CONTAINER(menuitem), to);
+	g_object_set_data(G_OBJECT(menuitem), "box", to);
 	gtk_widget_show_all(menuitem);
 	return TRUE;
 }
