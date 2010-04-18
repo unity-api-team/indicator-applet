@@ -516,28 +516,6 @@ reorient_boxes (GtkWidget *menubar, int reorient)
 }
 
 static gboolean
-reorient_cb (GtkWidget *radio_0, gpointer data)
-{
-	GtkWidget *menubar = (GtkWidget *)data;
-	if ((gtk_toggle_button_get_active(
-			GTK_TOGGLE_BUTTON(radio_0)) == TRUE) && 
-			(packdirection == GTK_PACK_DIRECTION_TTB)) {
-		packdirection = GTK_PACK_DIRECTION_LTR;
-		gtk_menu_bar_set_pack_direction(GTK_MENU_BAR(menubar),
-				packdirection);
-		reorient_boxes(menubar, VERT_TO_HORIZ);
-	} else if ((gtk_toggle_button_get_active(
-			GTK_TOGGLE_BUTTON(radio_0)) == FALSE) && 
-			(packdirection == GTK_PACK_DIRECTION_LTR)) {
-		packdirection = GTK_PACK_DIRECTION_TTB;
-		gtk_menu_bar_set_pack_direction(GTK_MENU_BAR(menubar),
-				packdirection);
-		reorient_boxes(menubar, HORIZ_TO_VERT);
-	}
-	return FALSE;
-}
-
-static gboolean
 panelapplet_reorient_cb (GtkWidget *applet, PanelAppletOrient neworient,
 		gpointer data)
 {
@@ -562,58 +540,6 @@ panelapplet_reorient_cb (GtkWidget *applet, PanelAppletOrient neworient,
 	orient = neworient;
 	return FALSE;
 }
-
-
-static void
-properties_cb (BonoboUIComponent *ui_container,
-				gpointer           data,
-				const gchar       *cname)
-{
-	GtkWidget *window, *radio_0, *radio_90, *radio_group, *label, *hbox1,
-			*hbox2, *vbox, *ok_button, *cancel_button, *ok_image,
-			*cancel_image, *notebook;
-	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	notebook = gtk_notebook_new();
-	
-	label = gtk_label_new(_("Orientation"));
-	radio_0 = gtk_radio_button_new_with_label_from_widget(
-			NULL, _("Horizontal"));
-	radio_90 = gtk_radio_button_new_with_label_from_widget(
-			GTK_RADIO_BUTTON(radio_0), _("Vertical"));
-	ok_button = gtk_button_new_from_stock(GTK_STOCK_OK);
-	ok_image = gtk_image_new_from_stock(GTK_STOCK_OK,
-			GTK_ICON_SIZE_BUTTON);
-	gtk_button_set_image(GTK_BUTTON(ok_button), ok_image);
-	cancel_button = gtk_button_new_from_stock(GTK_STOCK_CANCEL);
-	cancel_image = gtk_image_new_from_stock(GTK_STOCK_CANCEL,
-			GTK_ICON_SIZE_BUTTON);
-	gtk_button_set_image(GTK_BUTTON(cancel_button), cancel_image);
-	g_signal_connect_swapped(cancel_button, "clicked",
-			G_CALLBACK(gtk_widget_destroy), window);
-	g_signal_connect_swapped(ok_button, "clicked",
-			G_CALLBACK(gtk_widget_destroy), window);
-	g_signal_connect(radio_0, "toggled", G_CALLBACK(reorient_cb), data);
-			
-	hbox1 = gtk_hbox_new(TRUE, 5);
-	hbox2 = gtk_hbox_new(TRUE, 3);
-	vbox = gtk_vbox_new(TRUE, 3);
-	gtk_box_pack_start(GTK_BOX(hbox1), radio_0, TRUE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(hbox1), radio_90, TRUE, FALSE, 0);
-	gtk_box_pack_end(GTK_BOX(hbox2), cancel_button, FALSE, FALSE, 0);
-	gtk_box_pack_end(GTK_BOX(hbox2), ok_button, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(vbox), hbox1, TRUE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(vbox), hbox2, TRUE, FALSE, 0);
-	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), vbox, label);
-	gtk_container_add(GTK_CONTAINER(window), notebook);
-	gtk_window_set_default_size(GTK_WINDOW(window), 250, 110);
-	gtk_widget_show_all(window);
-	gtk_toggle_button_set_active(
-			(packdirection == GTK_PACK_DIRECTION_LTR) ? 
-			GTK_TOGGLE_BUTTON(radio_0) : GTK_TOGGLE_BUTTON(radio_90),
-			TRUE);
-}
-
-
 
 #ifdef N_
 #undef N_
@@ -677,13 +603,11 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 {
 	static const BonoboUIVerb menu_verbs[] = {
 		BONOBO_UI_VERB ("IndicatorAppletAbout", about_cb),
-		BONOBO_UI_VERB ("IndicatorAppletProperties", properties_cb),
 		BONOBO_UI_VERB_END
 	};
 	static const gchar * menu_xml =
 		"<popup name=\"button3\">"
 			"<menuitem name=\"About Item\" verb=\"IndicatorAppletAbout\" _label=\"" N_("_About") "\" pixtype=\"stock\" pixname=\"gtk-about\"/>"
-			"<menuitem name=\"Properties Item\" verb=\"IndicatorAppletProperties\" label=\"" N_("_Properties") "\" pixtype=\"stock\" pixname=\"gtk-properties\"/>"
 		"</popup>";
 
 	static gboolean first_time = FALSE;
