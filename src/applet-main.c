@@ -37,11 +37,6 @@ static gchar * indicator_order[] = {
 	NULL
 };
 
-static enum orienters {
-	HORIZ_TO_VERT = 1,
-	VERT_TO_HORIZ
-} box_reorient;
-
 static GtkPackDirection packdirection;
 static PanelAppletOrient orient;
 
@@ -490,10 +485,9 @@ swap_orient_cb (GtkWidget *item, gpointer data)
 static gboolean
 reorient_box_cb (GtkWidget *menuitem, gpointer data)
 {
-	int reorient = GPOINTER_TO_INT(data);
 	GtkWidget *from = g_object_get_data(G_OBJECT(menuitem), "box");
-	GtkWidget *to = (reorient == HORIZ_TO_VERT) ? gtk_vbox_new(FALSE, 0) :
-			gtk_hbox_new(FALSE, 0);
+	GtkWidget *to = (packdirection == GTK_PACK_DIRECTION_LTR) ?
+			gtk_hbox_new(FALSE, 0) : gtk_vbox_new(FALSE, 0);
 	g_object_set_data(G_OBJECT(from), "to", to);
 	gtk_container_foreach(GTK_CONTAINER(from), (GtkCallback)swap_orient_cb,
 			from);
@@ -502,13 +496,6 @@ reorient_box_cb (GtkWidget *menuitem, gpointer data)
 	g_object_set_data(G_OBJECT(menuitem), "box", to);
 	gtk_widget_show_all(menuitem);
 	return TRUE;
-}
-
-static void 
-reorient_boxes (GtkWidget *menubar, int reorient)
-{
-	gtk_container_foreach(GTK_CONTAINER(menubar), (GtkCallback)reorient_box_cb,
-			GINT_TO_POINTER(reorient));
 }
 
 static gboolean
@@ -529,9 +516,8 @@ panelapplet_reorient_cb (GtkWidget *applet, PanelAppletOrient neworient,
 		gtk_menu_bar_set_pack_direction(GTK_MENU_BAR(menubar),
 				packdirection);
 		orient = neworient;
-		reorient_boxes(menubar, 
-				(packdirection == GTK_PACK_DIRECTION_LTR) ?
-				VERT_TO_HORIZ : HORIZ_TO_VERT);
+		gtk_container_foreach(GTK_CONTAINER(menubar),
+				(GtkCallback)reorient_box_cb, NULL);
 	}
 	orient = neworient;
 	return FALSE;
