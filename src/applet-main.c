@@ -247,7 +247,8 @@ entry_removed_cb (GtkWidget * widget, gpointer userdata)
 }
 
 static void
-entry_removed (IndicatorObject * io, IndicatorObjectEntry * entry, gpointer user_data)
+entry_removed (IndicatorObject * io G_GNUC_UNUSED, IndicatorObjectEntry * entry,
+               gpointer user_data)
 {
 	g_debug("Signal: Entry Removed");
 
@@ -276,7 +277,8 @@ entry_moved_find_cb (GtkWidget * widget, gpointer userdata)
 
 /* Gets called when an entry for an object was moved. */
 static void
-entry_moved (IndicatorObject * io, IndicatorObjectEntry * entry, gint old, gint new, gpointer user_data)
+entry_moved (IndicatorObject * io, IndicatorObjectEntry * entry,
+             gint old G_GNUC_UNUSED, gint new G_GNUC_UNUSED, gpointer user_data)
 {
 	GtkWidget * menubar = GTK_WIDGET(user_data);
 
@@ -348,7 +350,7 @@ load_module (const gchar * name, GtkWidget * menubar)
 }
 
 static void
-hotkey_filter (char * keystring, gpointer data)
+hotkey_filter (char * keystring G_GNUC_UNUSED, gpointer data)
 {
 	g_return_if_fail(GTK_IS_MENU_SHELL(data));
 
@@ -373,7 +375,7 @@ hotkey_filter (char * keystring, gpointer data)
 static gboolean
 menubar_press (GtkWidget * widget,
                     GdkEventButton *event,
-                    gpointer data)
+                    gpointer data G_GNUC_UNUSED)
 {
 	if (event->button != 1) {
 		g_signal_stop_emission_by_name(widget, "button-press-event");
@@ -383,22 +385,23 @@ menubar_press (GtkWidget * widget,
 }
 
 static gboolean
-menubar_scroll (GtkWidget      *widget,
+menubar_scroll (GtkWidget      *widget G_GNUC_UNUSED,
                 GdkEventScroll *event,
-                gpointer        data)
+                gpointer        data G_GNUC_UNUSED)
 {
   GtkWidget *menuitem;
-  GtkWidget *parent;
 
   menuitem = gtk_get_event_widget ((GdkEvent *)event);
 
   IndicatorObject *io = g_object_get_data (G_OBJECT (menuitem), "indicator");
   g_signal_emit_by_name (io, "scroll", 1, event->direction);
+
+  return FALSE;
 }
 
 static gboolean
 menubar_on_expose (GtkWidget * widget,
-                    GdkEventExpose *event,
+                    GdkEventExpose *event G_GNUC_UNUSED,
                     GtkWidget * menubar)
 {
 	if (GTK_WIDGET_HAS_FOCUS(menubar))
@@ -409,9 +412,9 @@ menubar_on_expose (GtkWidget * widget,
 }
 
 static void
-about_cb (BonoboUIComponent *ui_container,
-	  gpointer           data,
-	  const gchar       *cname)
+about_cb (BonoboUIComponent *ui_container G_GNUC_UNUSED,
+	  gpointer           data G_GNUC_UNUSED,
+	  const gchar       *cname G_GNUC_UNUSED)
 {
 	static const gchar *authors[] = {
 		"Ted Gould <ted@canonical.com>",
@@ -530,14 +533,18 @@ panelapplet_reorient_cb (GtkWidget *applet, PanelAppletOrient neworient,
 #define N_(x) x
 
 static void
-log_to_file_cb (GObject * source_obj, GAsyncResult * result, gpointer user_data)
+log_to_file_cb (GObject * source_obj G_GNUC_UNUSED,
+                GAsyncResult * result G_GNUC_UNUSED, gpointer user_data)
 {
 	g_free(user_data);
 	return;
 }
 
 static void
-log_to_file (const gchar * domain, GLogLevelFlags level, const gchar * message, gpointer data)
+log_to_file (const gchar * domain G_GNUC_UNUSED,
+             GLogLevelFlags level G_GNUC_UNUSED,
+             const gchar * message,
+             gpointer data G_GNUC_UNUSED)
 {
 	if (log_file == NULL) {
 		GError * error = NULL;
@@ -582,7 +589,8 @@ log_to_file (const gchar * domain, GLogLevelFlags level, const gchar * message, 
 }
 
 static gboolean
-applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
+applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
+                gpointer data G_GNUC_UNUSED)
 {
 	static const BonoboUIVerb menu_verbs[] = {
 		BONOBO_UI_VERB ("IndicatorAppletAbout", about_cb),
@@ -594,9 +602,8 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data)
 		"</popup>";
 
 	static gboolean first_time = FALSE;
-	gint i;
-	gint indicators_loaded = 0;
 	GtkWidget *menubar;
+	gint indicators_loaded = 0;
 
 #ifdef INDICATOR_APPLET_SESSION
 	/* check if we are running stracciatella session */
