@@ -137,3 +137,6 @@ po/POTFILES
 po/stamp-it
 src/Makefile
 src/Makefile.in
+data/GNOME_IndicatorAppletAppmenu.server
+data/GNOME_IndicatorAppletAppmenu.server.in
+src/indicator-applet-appmenu
