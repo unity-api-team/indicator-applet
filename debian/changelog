@@ -1,4 +1,4 @@
-indicator-applet (0.3.6-0ubuntu2~ppa2~appmenu1) UNRELEASED; urgency=low
+indicator-applet (0.3.6-0ubuntu2~ppa2~appmenu1) lucid; urgency=low
 
   * Upstream Merge
     * Creating a new binary target indicator-applet-appmenu
@@ -6,7 +6,7 @@ indicator-applet (0.3.6-0ubuntu2~ppa2~appmenu1) UNRELEASED; urgency=low
     a new binary package for indicator-applet-appmenu
   * Autogen rerun.
 
- -- Ted Gould <ted@ubuntu.com>  Tue, 27 Apr 2010 11:21:30 -0500
+ -- Ted Gould <ted@ubuntu.com>  Tue, 27 Apr 2010 11:31:24 -0500
 
 indicator-applet (0.3.6-0ubuntu2~ppa1) lucid; urgency=low
 
