@@ -140,3 +140,4 @@ src/Makefile.in
 data/GNOME_IndicatorAppletAppmenu.server
 data/GNOME_IndicatorAppletAppmenu.server.in
 src/indicator-applet-appmenu
+data/GNOME_IndicatorAppletComplete.server.in
