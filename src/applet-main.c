@@ -728,6 +728,11 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
 
 		const gchar * name;
 		while ((name = g_dir_read_name(dir)) != NULL) {
+#ifdef INDICATOR_COMPLETE
+			if (!g_strcmp0(name, "libappmenu.so")) {
+				continue;
+			}
+#endif
 #ifdef INDICATOR_APPLET
 			if (!g_strcmp0(name, "libsession.so")) {
 				continue;
