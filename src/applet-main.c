@@ -38,13 +38,15 @@ static gchar * indicator_order[] = {
 	NULL
 };
 
+static GtkPackDirection packdirection;
+static PanelAppletOrient orient;
+
 #define  MENU_DATA_INDICATOR_OBJECT  "indicator-object"
 #define  MENU_DATA_INDICATOR_ENTRY   "indicator-entry"
 
 #define  IO_DATA_ORDER_NUMBER        "indicator-order-number"
 
 static gboolean     applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data);
-
 
 static void cw_panel_background_changed (PanelApplet               *applet,
                                          PanelAppletBackgroundType  type,
@@ -178,23 +180,37 @@ place_in_menu (GtkWidget * widget, gpointer user_data)
 }
 
 static void
-entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * menu)
+entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * menubar)
 {
 	g_debug("Signal: Entry Added");
 
 	GtkWidget * menuitem = gtk_menu_item_new();
-	GtkWidget * hbox = gtk_hbox_new(FALSE, 3);
+	GtkWidget * box = (packdirection == GTK_PACK_DIRECTION_LTR) ?
+			gtk_hbox_new(FALSE, 3) : gtk_vbox_new(FALSE, 3);
 
-        g_object_set_data (G_OBJECT (menuitem), "indicator", io);
+	g_object_set_data (G_OBJECT (menuitem), "indicator", io);
+	g_object_set_data (G_OBJECT (menuitem), "box", box);
 
 	if (entry->image != NULL) {
-		gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(entry->image), FALSE, FALSE, 0);
+		gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry->image), FALSE, FALSE, 0);
 	}
 	if (entry->label != NULL) {
-		gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(entry->label), FALSE, FALSE, 0);
+		switch(packdirection) {
+			case GTK_PACK_DIRECTION_LTR:
+				gtk_label_set_angle(GTK_LABEL(entry->label), 0.0);
+				break;
+			case GTK_PACK_DIRECTION_TTB:
+				gtk_label_set_angle(GTK_LABEL(entry->label),
+						(orient == PANEL_APPLET_ORIENT_LEFT) ? 
+						270.0 : 90.0);
+				break;
+			default:
+				break;
+		}		
+		gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry->label), FALSE, FALSE, 0);
 	}
-	gtk_container_add(GTK_CONTAINER(menuitem), hbox);
-	gtk_widget_show(hbox);
+	gtk_container_add(GTK_CONTAINER(menuitem), box);
+	gtk_widget_show(box);
 
 	if (entry->menu != NULL) {
 		gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem), GTK_WIDGET(entry->menu));
@@ -206,9 +222,9 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 	position.menupos = 0;
 	position.found = FALSE;
 
-	gtk_container_foreach(GTK_CONTAINER(menu), place_in_menu, &position);
+	gtk_container_foreach(GTK_CONTAINER(menubar), place_in_menu, &position);
 
-	gtk_menu_shell_insert(GTK_MENU_SHELL(menu), menuitem, position.menupos);
+	gtk_menu_shell_insert(GTK_MENU_SHELL(menubar), menuitem, position.menupos);
 	gtk_widget_show(menuitem);
 
 	g_object_set_data(G_OBJECT(menuitem), MENU_DATA_INDICATOR_ENTRY,  entry);
@@ -264,13 +280,13 @@ static void
 entry_moved (IndicatorObject * io, IndicatorObjectEntry * entry,
              gint old G_GNUC_UNUSED, gint new G_GNUC_UNUSED, gpointer user_data)
 {
-	GtkWidget * menu = GTK_WIDGET(user_data);
+	GtkWidget * menubar = GTK_WIDGET(user_data);
 
 	gpointer array[2];
 	array[0] = entry;
 	array[1] = NULL;
 
-	gtk_container_foreach(GTK_CONTAINER(user_data), entry_moved_find_cb, array);
+	gtk_container_foreach(GTK_CONTAINER(menubar), entry_moved_find_cb, array);
 	if (array[1] == NULL) {
 		g_warning("Moving an entry that isn't in our menus.");
 		return;
@@ -278,7 +294,7 @@ entry_moved (IndicatorObject * io, IndicatorObjectEntry * entry,
 
 	GtkWidget * mi = GTK_WIDGET(array[1]);
 	g_object_ref(G_OBJECT(mi));
-	gtk_container_remove(GTK_CONTAINER(user_data), mi);
+	gtk_container_remove(GTK_CONTAINER(menubar), mi);
 
 	incoming_position_t position;
 	position.objposition = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(io), IO_DATA_ORDER_NUMBER));
@@ -286,16 +302,16 @@ entry_moved (IndicatorObject * io, IndicatorObjectEntry * entry,
 	position.menupos = 0;
 	position.found = FALSE;
 
-	gtk_container_foreach(GTK_CONTAINER(menu), place_in_menu, &position);
+	gtk_container_foreach(GTK_CONTAINER(menubar), place_in_menu, &position);
 
-	gtk_menu_shell_insert(GTK_MENU_SHELL(menu), mi, position.menupos);
+	gtk_menu_shell_insert(GTK_MENU_SHELL(menubar), mi, position.menupos);
 	g_object_unref(G_OBJECT(mi));
 
 	return;
 }
 
 static gboolean
-load_module (const gchar * name, GtkWidget * menu)
+load_module (const gchar * name, GtkWidget * menubar)
 {
 	g_debug("Looking at Module: %s", name);
 	g_return_val_if_fail(name != NULL, FALSE);
@@ -314,10 +330,10 @@ load_module (const gchar * name, GtkWidget * menu)
 	/* Attach the 'name' to the object */
 	g_object_set_data(G_OBJECT(io), IO_DATA_ORDER_NUMBER, GINT_TO_POINTER(name2order(name)));
 
-	/* Connect to it's signals */
-	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_ADDED,   G_CALLBACK(entry_added),    menu);
-	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_REMOVED, G_CALLBACK(entry_removed),  menu);
-	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_MOVED,   G_CALLBACK(entry_moved),    menu);
+	/* Connect to its signals */
+	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_ADDED,   G_CALLBACK(entry_added),    menubar);
+	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_REMOVED, G_CALLBACK(entry_removed),  menubar);
+	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_MOVED,   G_CALLBACK(entry_moved),    menubar);
 
 	/* Work on the entries */
 	GList * entries = indicator_object_get_entries(io);
@@ -325,7 +341,7 @@ load_module (const gchar * name, GtkWidget * menu)
 
 	for (entry = entries; entry != NULL; entry = g_list_next(entry)) {
 		IndicatorObjectEntry * entrydata = (IndicatorObjectEntry *)entry->data;
-		entry_added(io, entrydata, menu);
+		entry_added(io, entrydata, menubar);
 	}
 
 	g_list_free(entries);
@@ -445,6 +461,72 @@ about_cb (BonoboUIComponent *ui_container G_GNUC_UNUSED,
 	return;
 }
 
+static gboolean
+swap_orient_cb (GtkWidget *item, gpointer data)
+{
+	GtkWidget *from = (GtkWidget *) data;
+	GtkWidget *to = (GtkWidget *) g_object_get_data(G_OBJECT(from), "to");
+	g_object_ref(G_OBJECT(item));
+	gtk_container_remove(GTK_CONTAINER(from), item);
+	if (GTK_IS_LABEL(item)) {
+			switch(packdirection) {
+			case GTK_PACK_DIRECTION_LTR:
+				gtk_label_set_angle(GTK_LABEL(item), 0.0);
+				break;
+			case GTK_PACK_DIRECTION_TTB:
+				gtk_label_set_angle(GTK_LABEL(item),
+						(orient == PANEL_APPLET_ORIENT_LEFT) ? 
+						270.0 : 90.0);
+				break;
+			default:
+				break;
+		}		
+	}
+	gtk_box_pack_start(GTK_BOX(to), item, FALSE, FALSE, 0);
+	return TRUE;
+}
+
+static gboolean
+reorient_box_cb (GtkWidget *menuitem, gpointer data)
+{
+	GtkWidget *from = g_object_get_data(G_OBJECT(menuitem), "box");
+	GtkWidget *to = (packdirection == GTK_PACK_DIRECTION_LTR) ?
+			gtk_hbox_new(FALSE, 0) : gtk_vbox_new(FALSE, 0);
+	g_object_set_data(G_OBJECT(from), "to", to);
+	gtk_container_foreach(GTK_CONTAINER(from), (GtkCallback)swap_orient_cb,
+			from);
+	gtk_container_remove(GTK_CONTAINER(menuitem), from);
+	gtk_container_add(GTK_CONTAINER(menuitem), to);
+	g_object_set_data(G_OBJECT(menuitem), "box", to);
+	gtk_widget_show_all(menuitem);
+	return TRUE;
+}
+
+static gboolean
+panelapplet_reorient_cb (GtkWidget *applet, PanelAppletOrient neworient,
+		gpointer data)
+{
+	GtkWidget *menubar = (GtkWidget *)data;
+	if ((((neworient == PANEL_APPLET_ORIENT_UP) || 
+			(neworient == PANEL_APPLET_ORIENT_DOWN)) && 
+			((orient == PANEL_APPLET_ORIENT_LEFT) || 
+			(orient == PANEL_APPLET_ORIENT_RIGHT))) || 
+			(((neworient == PANEL_APPLET_ORIENT_LEFT) || 
+			(neworient == PANEL_APPLET_ORIENT_RIGHT)) && 
+			((orient == PANEL_APPLET_ORIENT_UP) ||
+			(orient == PANEL_APPLET_ORIENT_DOWN)))) {
+		packdirection = (packdirection == GTK_PACK_DIRECTION_LTR) ?
+				GTK_PACK_DIRECTION_TTB : GTK_PACK_DIRECTION_LTR;
+		gtk_menu_bar_set_pack_direction(GTK_MENU_BAR(menubar),
+				packdirection);
+		orient = neworient;
+		gtk_container_foreach(GTK_CONTAINER(menubar),
+				(GtkCallback)reorient_box_cb, NULL);
+	}
+	orient = neworient;
+	return FALSE;
+}
+
 #ifdef N_
 #undef N_
 #endif
@@ -519,9 +601,9 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
 			"<menuitem name=\"About Item\" verb=\"IndicatorAppletAbout\" _label=\"" N_("_About") "\" pixtype=\"stock\" pixname=\"gtk-about\"/>"
 		"</popup>";
 
+	static gboolean first_time = FALSE;
 	GtkWidget *menubar;
 	gint indicators_loaded = 0;
-	static gboolean first_time = FALSE;
 
 #ifdef INDICATOR_APPLET_SESSION
 	/* check if we are running stracciatella session */
@@ -552,7 +634,8 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
 	/* Set panel options */
 	gtk_container_set_border_width(GTK_CONTAINER (applet), 0);
 	panel_applet_set_flags(applet, PANEL_APPLET_EXPAND_MINOR);
-	panel_applet_setup_menu(applet, menu_xml, menu_verbs, NULL);
+	menubar = gtk_menu_bar_new();
+	panel_applet_setup_menu(applet, menu_xml, menu_verbs, menubar);
 #ifdef INDICATOR_APPLET
 	atk_object_set_name (gtk_widget_get_accessible (GTK_WIDGET (applet)),
 	                     "indicator-applet");
@@ -599,12 +682,19 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
 	gtk_widget_set_name(GTK_WIDGET (applet), "fast-user-switch-applet");
 
 	/* Build menubar */
-	menubar = gtk_menu_bar_new();
+	orient = (panel_applet_get_orient(applet));
+	packdirection = ((orient == PANEL_APPLET_ORIENT_UP) ||
+			(orient == PANEL_APPLET_ORIENT_DOWN)) ? 
+			GTK_PACK_DIRECTION_LTR : GTK_PACK_DIRECTION_TTB;
+	gtk_menu_bar_set_pack_direction(GTK_MENU_BAR(menubar),
+			packdirection);
 	GTK_WIDGET_SET_FLAGS (menubar, GTK_WIDGET_FLAGS(menubar) | GTK_CAN_FOCUS);
 	gtk_widget_set_name(GTK_WIDGET (menubar), "fast-user-switch-menubar");
 	g_signal_connect(menubar, "button-press-event", G_CALLBACK(menubar_press), NULL);
         g_signal_connect(menubar, "scroll-event", G_CALLBACK (menubar_scroll), NULL);
 	g_signal_connect_after(menubar, "expose-event", G_CALLBACK(menubar_on_expose), menubar);
+	g_signal_connect(applet, "change-orient", 
+			G_CALLBACK(panelapplet_reorient_cb), menubar);
 	gtk_container_set_border_width(GTK_CONTAINER(menubar), 0);
 
 	/* Add in filter func */
@@ -654,6 +744,7 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
 	gtk_widget_show(GTK_WIDGET(applet));
 
 	return TRUE;
+
 }
 
 static void
