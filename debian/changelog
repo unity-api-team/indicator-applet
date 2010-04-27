@@ -1,9 +1,9 @@
-indicator-applet (0.3.6-0ubuntu3~ppa2~appmenu4) UNRELEASED; urgency=low
+indicator-applet (0.3.6-0ubuntu3~ppa2~appmenu4) lucid; urgency=low
 
   * Upstream merge
     * Only indicator-applet-appmenu will have libappmenu.so
 
- -- Ted Gould <ted@ubuntu.com>  Tue, 27 Apr 2010 15:57:35 -0500
+ -- Ted Gould <ted@ubuntu.com>  Tue, 27 Apr 2010 15:59:39 -0500
 
 indicator-applet (0.3.6-0ubuntu3~ppa2~appmenu3) lucid; urgency=low
 
