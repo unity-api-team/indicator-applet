@@ -1,9 +1,9 @@
-indicator-applet (0.3.6-0ubuntu3~ppa2~appmenu3) UNRELEASED; urgency=low
+indicator-applet (0.3.6-0ubuntu3~ppa2~appmenu3) lucid; urgency=low
 
   * Upstream Merge
     * Removing libappmenu.so from indicator-applet-complete
 
- -- Ted Gould <ted@ubuntu.com>  Tue, 27 Apr 2010 15:20:46 -0500
+ -- Ted Gould <ted@ubuntu.com>  Tue, 27 Apr 2010 15:22:51 -0500
 
 indicator-applet (0.3.6-0ubuntu3~ppa2~appmenu2) lucid; urgency=low
 
