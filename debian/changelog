@@ -4,6 +4,7 @@ indicator-applet (0.3.6-0ubuntu2~ppa2~appmenu1) UNRELEASED; urgency=low
     * Creating a new binary target indicator-applet-appmenu
   * debian/control, debian/indicator-applet-appmenu.install: Adding
     a new binary package for indicator-applet-appmenu
+  * Autogen rerun.
 
  -- Ted Gould <ted@ubuntu.com>  Tue, 27 Apr 2010 11:21:30 -0500
 
