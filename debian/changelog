@@ -1,3 +1,9 @@
+indicator-applet (0.3.6-0ubuntu3~ppa2~appmenu2) UNRELEASED; urgency=low
+
+  * Merging to mainstream packaging branch.
+
+ -- Ted Gould <ted@ubuntu.com>  Tue, 27 Apr 2010 15:14:48 -0500
+
 indicator-applet (0.3.6-0ubuntu2~ppa2~appmenu1) lucid; urgency=low
 
   * Upstream Merge
@@ -7,6 +13,20 @@ indicator-applet (0.3.6-0ubuntu2~ppa2~appmenu1) lucid; urgency=low
   * Autogen rerun.
 
  -- Ted Gould <ted@ubuntu.com>  Tue, 27 Apr 2010 11:31:24 -0500
+
+indicator-applet (0.3.6-0ubuntu3~ppa1) lucid; urgency=low
+
+  * Upstream Merge
+    * Compiler cleanups
+    * Support for vertical panels
+
+ -- Ted Gould <ted@ubuntu.com>  Tue, 27 Apr 2010 11:57:38 -0500
+
+indicator-applet (0.3.6-0ubuntu2) lucid; urgency=low
+
+  * Backport change to fix keyboard grabbing issues (lp: #553918)
+
+ -- Sebastien Bacher <seb128@ubuntu.com>  Fri, 02 Apr 2010 19:35:18 +0200
 
 indicator-applet (0.3.6-0ubuntu2~ppa1) lucid; urgency=low
 
