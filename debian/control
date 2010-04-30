@@ -68,3 +68,16 @@ Description: Clone of the GNOME panel indicator applet
  This instance will load all indicators in a single panel
  applet.
 
+Package: indicator-applet-appmenu
+Architecture: any
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+         gnome-panel,
+         indicator-applet (= ${binary:Version})
+Recommends: indicator-appmenu
+Description: Clone of the GNOME panel indicator applet
+ Indicator-applet is an applet to display information from
+ various applications consistently in the GNOME panel.
+ .
+ This instance will load the appmenu indicator.
+

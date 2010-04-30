@@ -35,12 +35,16 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 libexec_PROGRAMS = indicator-applet$(EXEEXT) \
+	indicator-applet-appmenu$(EXEEXT) \
 	indicator-applet-session$(EXEEXT) \
 	indicator-applet-complete$(EXEEXT)
 subdir = src
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/m4/intltool.m4 \
+	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
+	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
+	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -62,6 +66,17 @@ indicator_applet_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
 	$(indicator_applet_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) \
 	-o $@
+am_indicator_applet_appmenu_OBJECTS =  \
+	indicator_applet_appmenu-applet-main.$(OBJEXT) \
+	indicator_applet_appmenu-eggaccelerators.$(OBJEXT) \
+	indicator_applet_appmenu-tomboykeybinder.$(OBJEXT)
+indicator_applet_appmenu_OBJECTS =  \
+	$(am_indicator_applet_appmenu_OBJECTS)
+indicator_applet_appmenu_DEPENDENCIES = $(am__DEPENDENCIES_1)
+indicator_applet_appmenu_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
+	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
+	$(indicator_applet_appmenu_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
+	$(LDFLAGS) -o $@
 am_indicator_applet_complete_OBJECTS =  \
 	indicator_applet_complete-applet-main.$(OBJEXT) \
 	indicator_applet_complete-eggaccelerators.$(OBJEXT) \
@@ -111,9 +126,11 @@ AM_V_GEN = $(am__v_GEN_$(V))
 am__v_GEN_ = $(am__v_GEN_$(AM_DEFAULT_VERBOSITY))
 am__v_GEN_0 = @echo "  GEN   " $@;
 SOURCES = $(indicator_applet_SOURCES) \
+	$(indicator_applet_appmenu_SOURCES) \
 	$(indicator_applet_complete_SOURCES) \
 	$(indicator_applet_session_SOURCES)
 DIST_SOURCES = $(indicator_applet_SOURCES) \
+	$(indicator_applet_appmenu_SOURCES) \
 	$(indicator_applet_complete_SOURCES) \
 	$(indicator_applet_session_SOURCES)
 ETAGS = etags
@@ -287,6 +304,25 @@ indicator_applet_SOURCES = \
 indicator_applet_LDADD = \
 	$(APPLET_LIBS)
 
+indicator_applet_appmenu_CFLAGS = \
+	-DG_LOG_DOMAIN=\""Indicator-Applet-Appmenu"\" \
+	-DDATADIR=\""$(datadir)"\" \
+	-DINDICATOR_DIR=\""$(INDICATORDIR)"\" \
+	-DINDICATOR_ICONS_DIR=\""$(INDICATORICONSDIR)"\" \
+	-DINDICATOR_APPLET_APPMENU \
+	-I$(srcdir)/.. \
+	$(APPLET_CFLAGS)
+
+indicator_applet_appmenu_SOURCES = \
+	applet-main.c \
+	eggaccelerators.c \
+	eggaccelerators.h \
+	tomboykeybinder.c \
+	tomboykeybinder.h
+
+indicator_applet_appmenu_LDADD = \
+	$(APPLET_LIBS)
+
 indicator_applet_session_CFLAGS = \
 	-DG_LOG_DOMAIN=\""Indicator-Applet-Session"\" \
 	-DDATADIR=\""$(datadir)"\" \
@@ -405,6 +441,9 @@ clean-libexecPROGRAMS:
 indicator-applet$(EXEEXT): $(indicator_applet_OBJECTS) $(indicator_applet_DEPENDENCIES) 
 	@rm -f indicator-applet$(EXEEXT)
 	$(AM_V_CCLD)$(indicator_applet_LINK) $(indicator_applet_OBJECTS) $(indicator_applet_LDADD) $(LIBS)
+indicator-applet-appmenu$(EXEEXT): $(indicator_applet_appmenu_OBJECTS) $(indicator_applet_appmenu_DEPENDENCIES) 
+	@rm -f indicator-applet-appmenu$(EXEEXT)
+	$(AM_V_CCLD)$(indicator_applet_appmenu_LINK) $(indicator_applet_appmenu_OBJECTS) $(indicator_applet_appmenu_LDADD) $(LIBS)
 indicator-applet-complete$(EXEEXT): $(indicator_applet_complete_OBJECTS) $(indicator_applet_complete_DEPENDENCIES) 
 	@rm -f indicator-applet-complete$(EXEEXT)
 	$(AM_V_CCLD)$(indicator_applet_complete_LINK) $(indicator_applet_complete_OBJECTS) $(indicator_applet_complete_LDADD) $(LIBS)
@@ -421,6 +460,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/indicator_applet-applet-main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/indicator_applet-eggaccelerators.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/indicator_applet-tomboykeybinder.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/indicator_applet_appmenu-applet-main.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/indicator_applet_appmenu-eggaccelerators.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/indicator_applet_appmenu-tomboykeybinder.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/indicator_applet_complete-applet-main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/indicator_applet_complete-eggaccelerators.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/indicator_applet_complete-tomboykeybinder.Po@am__quote@
@@ -499,6 +541,54 @@ indicator_applet-tomboykeybinder.obj: tomboykeybinder.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tomboykeybinder.c' object='indicator_applet-tomboykeybinder.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(indicator_applet_CFLAGS) $(CFLAGS) -c -o indicator_applet-tomboykeybinder.obj `if test -f 'tomboykeybinder.c'; then $(CYGPATH_W) 'tomboykeybinder.c'; else $(CYGPATH_W) '$(srcdir)/tomboykeybinder.c'; fi`
+
+indicator_applet_appmenu-applet-main.o: applet-main.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(indicator_applet_appmenu_CFLAGS) $(CFLAGS) -MT indicator_applet_appmenu-applet-main.o -MD -MP -MF $(DEPDIR)/indicator_applet_appmenu-applet-main.Tpo -c -o indicator_applet_appmenu-applet-main.o `test -f 'applet-main.c' || echo '$(srcdir)/'`applet-main.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/indicator_applet_appmenu-applet-main.Tpo $(DEPDIR)/indicator_applet_appmenu-applet-main.Po
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='applet-main.c' object='indicator_applet_appmenu-applet-main.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(indicator_applet_appmenu_CFLAGS) $(CFLAGS) -c -o indicator_applet_appmenu-applet-main.o `test -f 'applet-main.c' || echo '$(srcdir)/'`applet-main.c
+
+indicator_applet_appmenu-applet-main.obj: applet-main.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(indicator_applet_appmenu_CFLAGS) $(CFLAGS) -MT indicator_applet_appmenu-applet-main.obj -MD -MP -MF $(DEPDIR)/indicator_applet_appmenu-applet-main.Tpo -c -o indicator_applet_appmenu-applet-main.obj `if test -f 'applet-main.c'; then $(CYGPATH_W) 'applet-main.c'; else $(CYGPATH_W) '$(srcdir)/applet-main.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/indicator_applet_appmenu-applet-main.Tpo $(DEPDIR)/indicator_applet_appmenu-applet-main.Po
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='applet-main.c' object='indicator_applet_appmenu-applet-main.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(indicator_applet_appmenu_CFLAGS) $(CFLAGS) -c -o indicator_applet_appmenu-applet-main.obj `if test -f 'applet-main.c'; then $(CYGPATH_W) 'applet-main.c'; else $(CYGPATH_W) '$(srcdir)/applet-main.c'; fi`
+
+indicator_applet_appmenu-eggaccelerators.o: eggaccelerators.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(indicator_applet_appmenu_CFLAGS) $(CFLAGS) -MT indicator_applet_appmenu-eggaccelerators.o -MD -MP -MF $(DEPDIR)/indicator_applet_appmenu-eggaccelerators.Tpo -c -o indicator_applet_appmenu-eggaccelerators.o `test -f 'eggaccelerators.c' || echo '$(srcdir)/'`eggaccelerators.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/indicator_applet_appmenu-eggaccelerators.Tpo $(DEPDIR)/indicator_applet_appmenu-eggaccelerators.Po
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='eggaccelerators.c' object='indicator_applet_appmenu-eggaccelerators.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(indicator_applet_appmenu_CFLAGS) $(CFLAGS) -c -o indicator_applet_appmenu-eggaccelerators.o `test -f 'eggaccelerators.c' || echo '$(srcdir)/'`eggaccelerators.c
+
+indicator_applet_appmenu-eggaccelerators.obj: eggaccelerators.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(indicator_applet_appmenu_CFLAGS) $(CFLAGS) -MT indicator_applet_appmenu-eggaccelerators.obj -MD -MP -MF $(DEPDIR)/indicator_applet_appmenu-eggaccelerators.Tpo -c -o indicator_applet_appmenu-eggaccelerators.obj `if test -f 'eggaccelerators.c'; then $(CYGPATH_W) 'eggaccelerators.c'; else $(CYGPATH_W) '$(srcdir)/eggaccelerators.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/indicator_applet_appmenu-eggaccelerators.Tpo $(DEPDIR)/indicator_applet_appmenu-eggaccelerators.Po
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='eggaccelerators.c' object='indicator_applet_appmenu-eggaccelerators.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(indicator_applet_appmenu_CFLAGS) $(CFLAGS) -c -o indicator_applet_appmenu-eggaccelerators.obj `if test -f 'eggaccelerators.c'; then $(CYGPATH_W) 'eggaccelerators.c'; else $(CYGPATH_W) '$(srcdir)/eggaccelerators.c'; fi`
+
+indicator_applet_appmenu-tomboykeybinder.o: tomboykeybinder.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(indicator_applet_appmenu_CFLAGS) $(CFLAGS) -MT indicator_applet_appmenu-tomboykeybinder.o -MD -MP -MF $(DEPDIR)/indicator_applet_appmenu-tomboykeybinder.Tpo -c -o indicator_applet_appmenu-tomboykeybinder.o `test -f 'tomboykeybinder.c' || echo '$(srcdir)/'`tomboykeybinder.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/indicator_applet_appmenu-tomboykeybinder.Tpo $(DEPDIR)/indicator_applet_appmenu-tomboykeybinder.Po
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tomboykeybinder.c' object='indicator_applet_appmenu-tomboykeybinder.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(indicator_applet_appmenu_CFLAGS) $(CFLAGS) -c -o indicator_applet_appmenu-tomboykeybinder.o `test -f 'tomboykeybinder.c' || echo '$(srcdir)/'`tomboykeybinder.c
+
+indicator_applet_appmenu-tomboykeybinder.obj: tomboykeybinder.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(indicator_applet_appmenu_CFLAGS) $(CFLAGS) -MT indicator_applet_appmenu-tomboykeybinder.obj -MD -MP -MF $(DEPDIR)/indicator_applet_appmenu-tomboykeybinder.Tpo -c -o indicator_applet_appmenu-tomboykeybinder.obj `if test -f 'tomboykeybinder.c'; then $(CYGPATH_W) 'tomboykeybinder.c'; else $(CYGPATH_W) '$(srcdir)/tomboykeybinder.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/indicator_applet_appmenu-tomboykeybinder.Tpo $(DEPDIR)/indicator_applet_appmenu-tomboykeybinder.Po
+@am__fastdepCC_FALSE@	$(AM_V_CC) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tomboykeybinder.c' object='indicator_applet_appmenu-tomboykeybinder.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(indicator_applet_appmenu_CFLAGS) $(CFLAGS) -c -o indicator_applet_appmenu-tomboykeybinder.obj `if test -f 'tomboykeybinder.c'; then $(CYGPATH_W) 'tomboykeybinder.c'; else $(CYGPATH_W) '$(srcdir)/tomboykeybinder.c'; fi`
 
 indicator_applet_complete-applet-main.o: applet-main.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(indicator_applet_complete_CFLAGS) $(CFLAGS) -MT indicator_applet_complete-applet-main.o -MD -MP -MF $(DEPDIR)/indicator_applet_complete-applet-main.Tpo -c -o indicator_applet_complete-applet-main.o `test -f 'applet-main.c' || echo '$(srcdir)/'`applet-main.c
