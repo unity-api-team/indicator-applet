@@ -1,8 +1,8 @@
-indicator-applet (0.4.0~dev-0ubuntu1~ppa1) UNRELEASED; urgency=low
+indicator-applet (0.4.0~dev-0ubuntu1~ppa1) lucid; urgency=low
 
   * Bumping version for the new branch.
 
- -- Ted Gould <ted@ubuntu.com>  Fri, 30 Apr 2010 09:46:15 -0500
+ -- Ted Gould <ted@ubuntu.com>  Fri, 30 Apr 2010 09:53:08 -0500
 
 indicator-applet (0.3.6-0ubuntu3~ppa1) lucid; urgency=low
 
