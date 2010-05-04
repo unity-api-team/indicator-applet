@@ -1,17 +1,11 @@
-indicator-applet (0.3.6-0ubuntu3~ppa2) lucid; urgency=low
+indicator-applet (0.3.7-0ubuntu1) UNRELEASED; urgency=low
 
-  * Upstream Merge
+  * New upstream release.
     * Fix shortcuts over remote connections (LP: #568401)
-
- -- Ted Gould <ted@ubuntu.com>  Tue, 04 May 2010 19:13:10 +0200
-
-indicator-applet (0.3.6-0ubuntu3~ppa1) lucid; urgency=low
-
-  * Upstream Merge
     * Compiler cleanups
-    * Support for vertical panels
+    * Support for vertical panels (LP: #553918)
 
- -- Ted Gould <ted@ubuntu.com>  Tue, 27 Apr 2010 11:57:38 -0500
+ -- Ted Gould <ted@ubuntu.com>  Tue, 04 May 2010 19:40:24 +0200
 
 indicator-applet (0.3.6-0ubuntu2) lucid; urgency=low
 
