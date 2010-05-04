@@ -79,7 +79,7 @@ grab_ungrab_with_ignorable_modifiers (GdkWindow *rootwin,
 		caps_lock_mask | scroll_lock_mask,
 		num_lock_mask  | caps_lock_mask | scroll_lock_mask,
 	};
-	int i;
+	guint i;
 
 	for (i = 0; i < G_N_ELEMENTS (mod_masks); i++) {
 		if (grab) {
@@ -128,6 +128,8 @@ do_grab_key (Binding *binding)
 	egg_keymap_resolve_virtual_modifiers (keymap,
 					      virtual_mods,
 					      &binding->modifiers);
+	if (binding->modifiers == 0)
+		return FALSE;
 
 	TRACE (g_print ("Got modmask %d\n", binding->modifiers));
 
@@ -162,7 +164,8 @@ do_ungrab_key (Binding *binding)
 }
 
 static GdkFilterReturn
-filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
+filter_func (GdkXEvent *gdk_xevent, GdkEvent *event G_GNUC_UNUSED,
+             gpointer data G_GNUC_UNUSED)
 {
 	GdkFilterReturn return_val = GDK_FILTER_CONTINUE;
 	XEvent *xevent = (XEvent *) gdk_xevent;
@@ -213,7 +216,7 @@ filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 }
 
 static void 
-keymap_changed (GdkKeymap *map)
+keymap_changed (GdkKeymap *map G_GNUC_UNUSED)
 {
 	GdkKeymap *keymap = gdk_keymap_get_default ();
 	GSList *iter;
