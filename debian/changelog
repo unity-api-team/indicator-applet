@@ -1,3 +1,10 @@
+indicator-applet (0.3.6-0ubuntu3~ppa2) UNRELEASED; urgency=low
+
+  * Upstream Merge
+    * Fix shortcuts over remote connections (LP: #568401)
+
+ -- Ted Gould <ted@ubuntu.com>  Tue, 04 May 2010 18:56:11 +0200
+
 indicator-applet (0.3.6-0ubuntu3~ppa1) lucid; urgency=low
 
   * Upstream Merge
