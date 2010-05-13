@@ -2,7 +2,7 @@
 A small wrapper utility to load indicators and put them as menu items
 into the gnome-panel using it's applet interface.
 
-Copyright 2009 Canonical Ltd.
+Copyright 2009-2010 Canonical Ltd.
 
 Authors:
     Ted Gould <ted@canonical.com>
@@ -451,7 +451,7 @@ about_cb (BonoboUIComponent *ui_container G_GNUC_UNUSED,
 
 	gtk_show_about_dialog(NULL,
 		"version", VERSION,
-		"copyright", "Copyright \xc2\xa9 2009 Canonical, Ltd.",
+		"copyright", "Copyright \xc2\xa9 2009-2010 Canonical, Ltd.",
 #ifdef INDICATOR_APPLET_SESSION
 		"comments", _("A place to adjust your status, change users or exit your session."),
 #else
