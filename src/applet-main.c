@@ -183,6 +183,7 @@ static void
 entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * menubar)
 {
 	g_debug("Signal: Entry Added");
+	gboolean something_visible = FALSE;
 
 	GtkWidget * menuitem = gtk_menu_item_new();
 	GtkWidget * box = (packdirection == GTK_PACK_DIRECTION_LTR) ?
@@ -193,6 +194,9 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 
 	if (entry->image != NULL) {
 		gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry->image), FALSE, FALSE, 0);
+		if (gtk_widget_get_visible(GTK_WIDGET(entry->image))) {
+			something_visible = TRUE;
+		}
 	}
 	if (entry->label != NULL) {
 		switch(packdirection) {
@@ -208,6 +212,9 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 				break;
 		}		
 		gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry->label), FALSE, FALSE, 0);
+		if (gtk_widget_get_visible(GTK_WIDGET(entry->label))) {
+			something_visible = TRUE;
+		}
 	}
 	gtk_container_add(GTK_CONTAINER(menuitem), box);
 	gtk_widget_show(box);
@@ -225,7 +232,10 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 	gtk_container_foreach(GTK_CONTAINER(menubar), place_in_menu, &position);
 
 	gtk_menu_shell_insert(GTK_MENU_SHELL(menubar), menuitem, position.menupos);
-	gtk_widget_show(menuitem);
+
+	if (something_visible) {
+		gtk_widget_show(menuitem);
+	}
 
 	g_object_set_data(G_OBJECT(menuitem), MENU_DATA_INDICATOR_ENTRY,  entry);
 	g_object_set_data(G_OBJECT(menuitem), MENU_DATA_INDICATOR_OBJECT, io);
