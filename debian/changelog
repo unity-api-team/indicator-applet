@@ -1,9 +1,9 @@
-indicator-applet (0.4.1-0ubuntu1) UNRELEASED; urgency=low
+indicator-applet (0.4.1-0ubuntu1~ppa1) lucid; urgency=low
 
   * New upstream release.
     * Fix build of Bonobo server files
 
- -- Ted Gould <ted@ubuntu.com>  Thu, 27 May 2010 15:08:41 -0500
+ -- Ted Gould <ted@ubuntu.com>  Thu, 27 May 2010 15:09:57 -0500
 
 indicator-applet (0.4.0-0ubuntu1~ppa1) lucid; urgency=low
 
