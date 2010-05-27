@@ -1,11 +1,11 @@
-indicator-applet (0.4.0-0ubuntu1~ppa1) UNRELEASED; urgency=low
+indicator-applet (0.4.0-0ubuntu1~ppa1) lucid; urgency=low
 
   * New upstream release.
     * Creating a new binary target indicator-applet-appmenu
   * debian/control, debian/indicator-applet-appmenu.install: Adding
     a new binary package for indicator-applet-appmenu
 
- -- Ted Gould <ted@ubuntu.com>  Thu, 27 May 2010 12:29:41 -0500
+ -- Ted Gould <ted@ubuntu.com>  Thu, 27 May 2010 12:32:26 -0500
 
 indicator-applet (0.3.6-0ubuntu3~ppa1) lucid; urgency=low
 
