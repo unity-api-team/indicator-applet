@@ -17,6 +17,9 @@ server_DATA =					\
 %.server.in: %.server.in.in
 	sed -e "s|\@LIBEXECDIR\@|$(libexecdir)|" -e "s|\@VERSION\@|$(VERSION)|" $< > $@
 
+server_in_in_files = \
+	$(server_in_files:.server.in=.server.in.in)
+
 @INTLTOOL_SERVER_RULE@
 
 
@@ -69,7 +72,7 @@ CLEANFILES =					\
 
 EXTRA_DIST =					\
 	$(icons_DATA) \
-	$(server_in_files) \
+	$(server_in_in_files) \
 	$(schema_in_files)
 
 MAINTAINERCLEANFILES =				\
