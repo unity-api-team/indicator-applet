@@ -2,7 +2,7 @@
 A small wrapper utility to load indicators and put them as menu items
 into the gnome-panel using it's applet interface.
 
-Copyright 2009 Canonical Ltd.
+Copyright 2009-2010 Canonical Ltd.
 
 Authors:
     Ted Gould <ted@canonical.com>
@@ -76,6 +76,12 @@ PANEL_APPLET_BONOBO_FACTORY ("OAFIID:GNOME_IndicatorAppletComplete_Factory",
                "indicator-applet-complete", "0",
                applet_fill_cb, NULL);
 #endif
+#ifdef INDICATOR_APPLET_APPMENU
+PANEL_APPLET_BONOBO_FACTORY ("OAFIID:GNOME_IndicatorAppletAppmenu_Factory",
+               PANEL_TYPE_APPLET,
+               "indicator-applet-appmenu", "0",
+               applet_fill_cb, NULL);
+#endif
 
 /*************
  * log files
@@ -88,6 +94,9 @@ PANEL_APPLET_BONOBO_FACTORY ("OAFIID:GNOME_IndicatorAppletComplete_Factory",
 #endif
 #ifdef INDICATOR_APPLET_COMPLETE
 #define LOG_FILE_NAME  "indicator-applet-complete.log"
+#endif
+#ifdef INDICATOR_APPLET_APPMENU
+#define LOG_FILE_NAME  "indicator-applet-appmenu.log"
 #endif
 GOutputStream * log_file = NULL;
 
@@ -102,6 +111,9 @@ gchar * hotkey_keycode = "<Super>S";
 #endif
 #ifdef INDICATOR_APPLET_COMPLETE
 gchar * hotkey_keycode = "<Super>S";
+#endif
+#ifdef INDICATOR_APPLET_APPMENU
+gchar * hotkey_keycode = "<Super>F1";
 #endif
 
 /*************
@@ -439,10 +451,13 @@ about_cb (BonoboUIComponent *ui_container G_GNUC_UNUSED,
 
 	gtk_show_about_dialog(NULL,
 		"version", VERSION,
-		"copyright", "Copyright \xc2\xa9 2009 Canonical, Ltd.",
+		"copyright", "Copyright \xc2\xa9 2009-2010 Canonical, Ltd.",
 #ifdef INDICATOR_APPLET_SESSION
 		"comments", _("A place to adjust your status, change users or exit your session."),
 #else
+#ifdef INDICATOR_APPLET_APPMENU
+		"comments", _("An applet to hold your application menus."),
+#endif
 		"comments", _("An applet to hold all of the system indicators."),
 #endif
 		"authors", authors,
@@ -625,6 +640,9 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
 #ifdef INDICATOR_APPLET_COMPLETE
 		g_set_application_name(_("Indicator Applet Complete"));
 #endif
+#ifdef INDICATOR_APPLET_APPMENU
+		g_set_application_name(_("Indicator Applet Application Menu"));
+#endif
 		
 		g_log_set_default_handler(log_to_file, NULL);
 
@@ -647,6 +665,10 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
 #ifdef INDICATOR_APPLET_COMPLETE
 	atk_object_set_name (gtk_widget_get_accessible (GTK_WIDGET (applet)),
 	                     "indicator-applet-complete");
+#endif
+#ifdef INDICATOR_APPLET_APPMENU
+	atk_object_set_name (gtk_widget_get_accessible (GTK_WIDGET (applet)),
+	                     "indicator-applet-appmenu");
 #endif
 
 	/* Init some theme/icon stuff */
@@ -706,6 +728,15 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
 
 		const gchar * name;
 		while ((name = g_dir_read_name(dir)) != NULL) {
+#ifdef INDICATOR_APPLET_APPMENU
+			if (g_strcmp0(name, "libappmenu.so")) {
+				continue;
+			}
+#else
+			if (!g_strcmp0(name, "libappmenu.so")) {
+				continue;
+			}
+#endif
 #ifdef INDICATOR_APPLET
 			if (!g_strcmp0(name, "libsession.so")) {
 				continue;

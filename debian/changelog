@@ -1,3 +1,16 @@
+indicator-applet (0.4.0-0ubuntu1) UNRELEASED; urgency=low
+
+  * New upstream release.
+    * Creating a new binary target indicator-applet-appmenu
+  * debian/control, debian/indicator-applet-appmenu.install: Adding
+    a new binary package for indicator-applet-appmenu
+
+  [Ken VanDine]
+  * debian/control
+    - Change maintainer to ubuntu-desktop
+
+ -- Ted Gould <ted@ubuntu.com>  Thu, 27 May 2010 12:32:26 -0500
+
 indicator-applet (0.3.7-0ubuntu1) lucid-proposed; urgency=low
 
   * New upstream release.
@@ -12,6 +25,7 @@ indicator-applet (0.3.6-0ubuntu2) lucid; urgency=low
   * Backport change to fix keyboard grabbing issues (lp: #553918)
 
  -- Sebastien Bacher <seb128@ubuntu.com>  Fri, 02 Apr 2010 19:35:18 +0200
+
 
 indicator-applet (0.3.6-0ubuntu1) lucid; urgency=low
 
@@ -386,3 +400,4 @@ indicator-applet (0.1-0ubuntu1) jaunty; urgency=low
     PPA packaging branch), and autoreconf to pick up the change.
 
  -- Martin Pitt <martin.pitt@ubuntu.com>  Tue, 17 Feb 2009 10:28:14 +0100
+

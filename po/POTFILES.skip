@@ -1,1 +1,5 @@
-data/GNOME_IndicatorApplet.server.in
+data/GNOME_FastUserSwitchApplet.server.in.in
+data/GNOME_IndicatorApplet.server.in.in
+data/GNOME_IndicatorAppletAppmenu.server.in.in
+data/GNOME_IndicatorAppletComplete.server.in.in
+
