@@ -1,6 +1,6 @@
 <oaf_info>
   <oaf_server iid="OAFIID:GNOME_IndicatorApplet_Factory" type="exe"
-              location="@LIBEXECDIR@/indicator-applet">
+              location="/usr/local/libexec/indicator-applet">
 
     <oaf_attribute name="repo_ids" type="stringv">
       <item value="IDL:Bonobo/GenericFactory:1.0"/>

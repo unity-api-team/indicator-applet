@@ -1,6 +1,7 @@
 [encoding: UTF-8]
-data/GNOME_IndicatorApplet.server.in.in
-data/GNOME_IndicatorAppletComplete.server.in.in
-data/GNOME_FastUserSwitchApplet.server.in.in
+data/GNOME_IndicatorApplet.server.in
+data/GNOME_IndicatorAppletAppmenu.server.in
+data/GNOME_IndicatorAppletComplete.server.in
+data/GNOME_FastUserSwitchApplet.server.in
 data/indicator-applet.schemas.in
 src/applet-main.c
