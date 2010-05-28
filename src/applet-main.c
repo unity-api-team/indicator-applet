@@ -180,6 +180,20 @@ place_in_menu (GtkWidget * widget, gpointer user_data)
 }
 
 static void
+something_shown (GtkWidget * widget, gpointer user_data)
+{
+	GtkWidget * menuitem = GTK_WIDGET(user_data);
+	gtk_widget_show(menuitem);
+}
+
+static void
+something_hidden (GtkWidget * widget, gpointer user_data)
+{
+	GtkWidget * menuitem = GTK_WIDGET(user_data);
+	gtk_widget_hide(menuitem);
+}
+
+static void
 entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * menubar)
 {
 	g_debug("Signal: Entry Added");
@@ -197,6 +211,9 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 		if (gtk_widget_get_visible(GTK_WIDGET(entry->image))) {
 			something_visible = TRUE;
 		}
+
+		g_signal_connect(G_OBJECT(entry->image), "show", G_CALLBACK(something_shown), menuitem);
+		g_signal_connect(G_OBJECT(entry->image), "hide", G_CALLBACK(something_hidden), menuitem);
 	}
 	if (entry->label != NULL) {
 		switch(packdirection) {
@@ -215,6 +232,9 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 		if (gtk_widget_get_visible(GTK_WIDGET(entry->label))) {
 			something_visible = TRUE;
 		}
+
+		g_signal_connect(G_OBJECT(entry->label), "show", G_CALLBACK(something_shown), menuitem);
+		g_signal_connect(G_OBJECT(entry->label), "hide", G_CALLBACK(something_hidden), menuitem);
 	}
 	gtk_container_add(GTK_CONTAINER(menuitem), box);
 	gtk_widget_show(box);
@@ -250,6 +270,16 @@ entry_removed_cb (GtkWidget * widget, gpointer userdata)
 
 	if (data != userdata) {
 		return;
+	}
+
+	IndicatorObjectEntry * entry = (IndicatorObjectEntry *)data;
+	if (entry->label != NULL) {
+		g_signal_handlers_disconnect_by_func(G_OBJECT(entry->label), G_CALLBACK(something_shown), widget);
+		g_signal_handlers_disconnect_by_func(G_OBJECT(entry->label), G_CALLBACK(something_hidden), widget);
+	}
+	if (entry->image != NULL) {
+		g_signal_handlers_disconnect_by_func(G_OBJECT(entry->image), G_CALLBACK(something_shown), widget);
+		g_signal_handlers_disconnect_by_func(G_OBJECT(entry->image), G_CALLBACK(something_hidden), widget);
 	}
 
 	gtk_widget_destroy(widget);
