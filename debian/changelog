@@ -1,3 +1,10 @@
+indicator-applet (0.4.2-0ubuntu1~ppa1) UNRELEASED; urgency=low
+
+  * New upstream release.
+    * Support hiding of entries if their label and/or image hides
+
+ -- Ted Gould <ted@ubuntu.com>  Fri, 04 Jun 2010 11:17:09 -0500
+
 indicator-applet (0.4.1-0ubuntu1~ppa1) lucid; urgency=low
 
   * New upstream release.
