@@ -1,4 +1,4 @@
-indicator-applet (0.4.2-0ubuntu1) UNRELEASED; urgency=low
+indicator-applet (0.4.2-0ubuntu1) maverick; urgency=low
 
   * New upstream release.
     * Support hiding of entries if their label and/or image hides
