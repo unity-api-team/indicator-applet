@@ -1,4 +1,4 @@
-indicator-applet (0.4.2-0ubuntu2) UNRELEASED; urgency=low
+indicator-applet (0.4.2-0ubuntu2) maverick; urgency=low
 
   * debian/control
     - Bump build dep version of libpanel-applet2-dev 
