@@ -1,3 +1,13 @@
+indicator-applet (0.4.2-0ubuntu2) UNRELEASED; urgency=low
+
+  * debian/control
+    - Bump build dep version of libpanel-applet2-dev 
+      to >= 2.30.0-2ubuntu2 to pick up a patched header
+      needed to make sure gnome-panel and the applets 
+      don't pick up menu proxies
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Thu, 17 Jun 2010 15:41:33 -0400
+
 indicator-applet (0.4.2-0ubuntu1) maverick; urgency=low
 
   * New upstream release.
