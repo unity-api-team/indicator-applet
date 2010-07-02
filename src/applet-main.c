@@ -206,6 +206,13 @@ something_hidden (GtkWidget * widget, gpointer user_data)
 }
 
 static void
+sensitive_cb (GObject * obj, GParamSpec * pspec, gpointer user_data)
+{
+
+
+}
+
+static void
 entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * menubar)
 {
 	g_debug("Signal: Entry Added");
@@ -231,6 +238,8 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 
 		g_signal_connect(G_OBJECT(entry->image), "show", G_CALLBACK(something_shown), menuitem);
 		g_signal_connect(G_OBJECT(entry->image), "hide", G_CALLBACK(something_hidden), menuitem);
+
+		g_signal_connect(G_OBJECT(entry->image), "notify::sensitive", G_CALLBACK(sensitive_cb), menuitem);
 	}
 	if (entry->label != NULL) {
 		switch(packdirection) {
@@ -257,6 +266,8 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 
 		g_signal_connect(G_OBJECT(entry->label), "show", G_CALLBACK(something_shown), menuitem);
 		g_signal_connect(G_OBJECT(entry->label), "hide", G_CALLBACK(something_hidden), menuitem);
+
+		g_signal_connect(G_OBJECT(entry->label), "notify::sensitive", G_CALLBACK(sensitive_cb), menuitem);
 	}
 	gtk_container_add(GTK_CONTAINER(menuitem), box);
 	gtk_widget_show(box);
