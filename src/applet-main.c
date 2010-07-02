@@ -208,8 +208,11 @@ something_hidden (GtkWidget * widget, gpointer user_data)
 static void
 sensitive_cb (GObject * obj, GParamSpec * pspec, gpointer user_data)
 {
+	g_return_if_fail(GTK_IS_WIDGET(obj));
+	g_return_if_fail(GTK_IS_WIDGET(user_data));
 
-
+	gtk_widget_set_sensitive(GTK_WIDGET(user_data), gtk_widget_get_sensitive(GTK_WIDGET(obj)));
+	return;
 }
 
 static void
