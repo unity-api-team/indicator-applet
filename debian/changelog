@@ -1,10 +1,10 @@
-indicator-applet (0.4.2-0ubuntu4~ppa2) UNRELEASED; urgency=low
+indicator-applet (0.4.2-0ubuntu4~ppa2) lucid; urgency=low
 
   [Mitch Towner]
   * debian/source_indicator-applet.py
    - Add apport hook. (LP: #583174)
 
- -- Ted Gould <ted@ubuntu.com>  Tue, 06 Jul 2010 16:52:35 -0500
+ -- Ted Gould <ted@ubuntu.com>  Tue, 06 Jul 2010 16:55:14 -0500
 
 indicator-applet (0.4.2-0ubuntu4~ppa1) lucid; urgency=low
 
