@@ -2,3 +2,4 @@ debian/tmp/usr/lib/bonobo/servers/GNOME_IndicatorApplet.server
 debian/tmp/usr/lib/indicator-applet/indicator-applet
 debian/tmp/usr/share/icons
 debian/source_indicator-applet.py usr/share/apport/package-hooks
+debian/indicator-applet-crashdb.conf /etc/apport/crashdb.conf.d/

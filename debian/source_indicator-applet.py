@@ -8,6 +8,9 @@ COMPLETE_LOG = os.path.join(xdg_cache_home, 'indicator-applet-complete.log')
 APPMENU_LOG = os.path.join(xdg_cache_home, 'indicator-applet-appmenu.log')
 
 def add_info(report, ui):
+	if not apport.packaging.is_distro_package(report['Package'].split()[0]):
+		report['ThirdParty'] = 'True'
+		report['CrashDB'] = 'indicator_applet'
 
     response = ui.choice("How would you describe the issue?", ["None of the indicator applets are working correctly", "The sound applet is not working correctly", "The Social Networking Menu is not working correctly", "The login/logout applet is not working correctly", "The network applet is not working correctly", "The date/time applet in not working correctly", "The application testing applet in not working correctly", "The all-in-one (complete) applet is not working correctly", "Another applet is not working correctly"], False)
     try:

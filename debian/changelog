@@ -1,3 +1,11 @@
+indicator-applet (0.4.2-0ubuntu4~ppa3) UNRELEASED; urgency=low
+
+  * debian/source_indicator-applet.py, debian/indicator-applet-crashdb.conf,
+    debian/indicator-applet.install: Adding ability to report bugs
+    with non-Ubuntu packages.
+
+ -- Ted Gould <ted@ubuntu.com>  Tue, 06 Jul 2010 16:59:20 -0500
+
 indicator-applet (0.4.2-0ubuntu4~ppa2) lucid; urgency=low
 
   [Mitch Towner]
