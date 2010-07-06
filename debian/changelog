@@ -1,3 +1,12 @@
+indicator-applet (0.4.2-0ubuntu4~ppa1) UNRELEASED; urgency=low
+
+  * debian/control: Removing indicator-renderer dependencies and
+    making them provides.
+  * debian/control: Removing dependency for indicator-applet-appmenu
+    and indicator-applet-complete on indicator-applet.
+
+ -- Ted Gould <ted@ubuntu.com>  Tue, 06 Jul 2010 16:45:45 -0500
+
 indicator-applet (0.4.2-0ubuntu3) UNRELEASED; urgency=low
 
   * debian/control: Add alternative dependencies to indicator-renderer, to
