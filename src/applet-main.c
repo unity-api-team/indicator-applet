@@ -24,9 +24,9 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <config.h>
 #include <panel-applet.h>
 #include <gdk/gdkkeysyms.h>
+#include <gtkhotkey.h>
 
 #include "libindicator/indicator-object.h"
-#include "tomboykeybinder.h"
 
 static gchar * indicator_order[] = {
 	"libapplication.so",
@@ -685,8 +685,6 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
 #endif
 		
 		g_log_set_default_handler(log_to_file, NULL);
-
-		tomboy_keybinder_init();
 	}
 
 	/* Set panel options */
@@ -760,7 +758,15 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
 	gtk_container_set_border_width(GTK_CONTAINER(menubar), 0);
 
 	/* Add in filter func */
-	tomboy_keybinder_bind(hotkey_keycode, hotkey_filter, menubar);
+	GtkHotkeyInfo * hotkey = gtk_hotkey_info_new(g_get_application_name(), "Right menu activate", hotkey_keycode, NULL);
+	if (hotkey != NULL) {
+		GError * error = NULL;
+		gtk_hotkey_info_bind(hotkey, &error);
+		if (error != NULL) {
+			g_warning("Unable to set hotkey: %s", error->message);
+			g_error_free(error);
+		}
+	}
 
 	/* load 'em */
 	if (g_file_test(INDICATOR_DIR, (G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))) {
