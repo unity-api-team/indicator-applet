@@ -1,4 +1,22 @@
-indicator-applet (0.4.2-0ubuntu1~ppa1) lucid; urgency=low
+indicator-applet (0.4.2-0ubuntu3) UNRELEASED; urgency=low
+
+  * debian/control: Add alternative dependencies to indicator-renderer, to
+    avoid pulling in gnome-panel and indicator-applet when using unity.
+    (LP: #595862)
+
+ -- Martin Pitt <martin.pitt@ubuntu.com>  Wed, 23 Jun 2010 12:05:51 +0200
+
+indicator-applet (0.4.2-0ubuntu2) maverick; urgency=low
+
+  * debian/control
+    - Bump build dep version of libpanel-applet2-dev 
+      to >= 2.30.0-2ubuntu2 to pick up a patched header
+      needed to make sure gnome-panel and the applets 
+      don't pick up menu proxies
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Thu, 17 Jun 2010 15:41:33 -0400
+
+indicator-applet (0.4.2-0ubuntu1) maverick; urgency=low
 
   * New upstream release.
     * Support hiding of entries if their label and/or image hides
@@ -19,22 +37,6 @@ indicator-applet (0.4.1-0ubuntu1) maverick; urgency=low
 
  -- Ted Gould <ted@ubuntu.com>  Thu, 27 May 2010 15:09:57 -0500
 
-indicator-applet (0.4.1-0ubuntu1~ppa1) lucid; urgency=low
-
-  * New upstream release.
-    * Fix build of Bonobo server files
-
- -- Ted Gould <ted@ubuntu.com>  Thu, 27 May 2010 15:09:57 -0500
-
-indicator-applet (0.4.0-0ubuntu1~ppa1) lucid; urgency=low
-
-  * New upstream release.
-    * Creating a new binary target indicator-applet-appmenu
-  * debian/control, debian/indicator-applet-appmenu.install: Adding
-    a new binary package for indicator-applet-appmenu
-
- -- Ted Gould <ted@ubuntu.com>  Thu, 27 May 2010 12:32:26 -0500
-
 indicator-applet (0.3.7-0ubuntu1) lucid-proposed; urgency=low
 
   * New upstream release.
@@ -44,26 +46,11 @@ indicator-applet (0.3.7-0ubuntu1) lucid-proposed; urgency=low
 
  -- Ted Gould <ted@ubuntu.com>  Tue, 04 May 2010 19:44:02 +0200
 
-indicator-applet (0.3.6-0ubuntu3~ppa1) lucid; urgency=low
-
-  * Upstream Merge
-    * Compiler cleanups
-    * Support for vertical panels
-
- -- Ted Gould <ted@ubuntu.com>  Tue, 27 Apr 2010 11:57:38 -0500
-
 indicator-applet (0.3.6-0ubuntu2) lucid; urgency=low
 
   * Backport change to fix keyboard grabbing issues (lp: #553918)
 
  -- Sebastien Bacher <seb128@ubuntu.com>  Fri, 02 Apr 2010 19:35:18 +0200
-
-indicator-applet (0.3.6-0ubuntu2~ppa1) lucid; urgency=low
-
-  * Upstream Merge
-    * Fix active flags for keybinding. (LP: #553918)
-
- -- Ted Gould <ted@ubuntu.com>  Fri, 02 Apr 2010 12:36:55 -0500
 
 indicator-applet (0.3.6-0ubuntu1) lucid; urgency=low
 
