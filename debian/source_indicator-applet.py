@@ -38,6 +38,6 @@ def add_info(report, ui):
         print 'Unfortunately, that package is not installed. Please refer to https://wiki.ubuntu.com/Bugs/FindRightPackage'
 
     attach_file_if_exists(report, APPLET_LOG, 'indicator-applet.log')
-    attach_file_if_exists(report, APPLET_SESSION_LOG, 'applet-session.log')
+    attach_file_if_exists(report, APPLET_SESSION_LOG, 'indicator-applet-session.log')
     attach_file_if_exists(report, COMPLETE_LOG, 'indicator-applet-complete.log')
     attach_file_if_exists(report, APPMENU_LOG, 'indicator-applet-appmenu.log')
