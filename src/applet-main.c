@@ -206,10 +206,21 @@ something_hidden (GtkWidget * widget, gpointer user_data)
 }
 
 static void
+sensitive_cb (GObject * obj, GParamSpec * pspec, gpointer user_data)
+{
+	g_return_if_fail(GTK_IS_WIDGET(obj));
+	g_return_if_fail(GTK_IS_WIDGET(user_data));
+
+	gtk_widget_set_sensitive(GTK_WIDGET(user_data), gtk_widget_get_sensitive(GTK_WIDGET(obj)));
+	return;
+}
+
+static void
 entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * menubar)
 {
 	g_debug("Signal: Entry Added");
 	gboolean something_visible = FALSE;
+	gboolean something_sensitive = FALSE;
 
 	GtkWidget * menuitem = gtk_menu_item_new();
 	GtkWidget * box = (packdirection == GTK_PACK_DIRECTION_LTR) ?
@@ -224,8 +235,14 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 			something_visible = TRUE;
 		}
 
+		if (gtk_widget_get_sensitive(GTK_WIDGET(entry->image))) {
+			something_sensitive = TRUE;
+		}
+
 		g_signal_connect(G_OBJECT(entry->image), "show", G_CALLBACK(something_shown), menuitem);
 		g_signal_connect(G_OBJECT(entry->image), "hide", G_CALLBACK(something_hidden), menuitem);
+
+		g_signal_connect(G_OBJECT(entry->image), "notify::sensitive", G_CALLBACK(sensitive_cb), menuitem);
 	}
 	if (entry->label != NULL) {
 		switch(packdirection) {
@@ -241,12 +258,19 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 				break;
 		}		
 		gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry->label), FALSE, FALSE, 0);
+
 		if (gtk_widget_get_visible(GTK_WIDGET(entry->label))) {
 			something_visible = TRUE;
 		}
 
+		if (gtk_widget_get_sensitive(GTK_WIDGET(entry->label))) {
+			something_sensitive = TRUE;
+		}
+
 		g_signal_connect(G_OBJECT(entry->label), "show", G_CALLBACK(something_shown), menuitem);
 		g_signal_connect(G_OBJECT(entry->label), "hide", G_CALLBACK(something_hidden), menuitem);
+
+		g_signal_connect(G_OBJECT(entry->label), "notify::sensitive", G_CALLBACK(sensitive_cb), menuitem);
 	}
 	gtk_container_add(GTK_CONTAINER(menuitem), box);
 	gtk_widget_show(box);
@@ -268,6 +292,7 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 	if (something_visible) {
 		gtk_widget_show(menuitem);
 	}
+	gtk_widget_set_sensitive(menuitem, something_sensitive);
 
 	g_object_set_data(G_OBJECT(menuitem), MENU_DATA_INDICATOR_ENTRY,  entry);
 	g_object_set_data(G_OBJECT(menuitem), MENU_DATA_INDICATOR_OBJECT, io);
@@ -288,10 +313,12 @@ entry_removed_cb (GtkWidget * widget, gpointer userdata)
 	if (entry->label != NULL) {
 		g_signal_handlers_disconnect_by_func(G_OBJECT(entry->label), G_CALLBACK(something_shown), widget);
 		g_signal_handlers_disconnect_by_func(G_OBJECT(entry->label), G_CALLBACK(something_hidden), widget);
+		g_signal_handlers_disconnect_by_func(G_OBJECT(entry->label), G_CALLBACK(sensitive_cb), widget);
 	}
 	if (entry->image != NULL) {
 		g_signal_handlers_disconnect_by_func(G_OBJECT(entry->image), G_CALLBACK(something_shown), widget);
 		g_signal_handlers_disconnect_by_func(G_OBJECT(entry->image), G_CALLBACK(something_hidden), widget);
+		g_signal_handlers_disconnect_by_func(G_OBJECT(entry->image), G_CALLBACK(sensitive_cb), widget);
 	}
 
 	gtk_widget_destroy(widget);
