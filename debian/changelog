@@ -1,3 +1,22 @@
+indicator-applet (0.4.3-0ubuntu1) maverick; urgency=low
+
+  * New upstream release.
+    ∘ Fix sensitivity handling (LP: #598524)
+  * debian/source_indicator-applet.py, debian/indicator-applet-crashdb.conf,
+    debian/indicator-applet.install: Adding ability to report bugs
+    with non-Ubuntu packages.
+  * debian/source_indicator-applet.py: Typo in filename 
+  * debian/control: Removing indicator-renderer dependencies and
+    making them provides.
+  * debian/control: Removing dependency for indicator-applet-appmenu
+    and indicator-applet-complete on indicator-applet.
+
+  [Mitch Towner]
+  * debian/source_indicator-applet.py
+   - Add apport hook. (LP: #583174)
+
+ -- Ted Gould <ted@ubuntu.com>  Thu, 08 Jul 2010 11:29:37 -0500
+
 indicator-applet (0.4.2-0ubuntu3) UNRELEASED; urgency=low
 
   * debian/control: Add alternative dependencies to indicator-renderer, to
