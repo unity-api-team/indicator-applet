@@ -1,4 +1,4 @@
-indicator-applet (0.4.3-0ubuntu1~ppa1) lucid; urgency=low
+indicator-applet (0.4.3-0ubuntu1) maverick; urgency=low
 
   * New upstream release.
     ∘ Fix sensitivity handling (LP: #598524)
