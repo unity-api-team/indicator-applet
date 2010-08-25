@@ -811,6 +811,9 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
 			if (!g_strcmp0(name, "libme.so")) {
 				continue;
 			}
+			if (!g_strcmp0(name, "libdatetime.so")) {
+				continue;
+			}
 #endif
 #ifdef INDICATOR_APPLET_SESSION
 			if (g_strcmp0(name, "libsession.so") && g_strcmp0(name, "libme.so")) {
