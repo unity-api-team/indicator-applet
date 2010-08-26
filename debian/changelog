@@ -1,3 +1,10 @@
+indicator-applet (0.4.4-0ubuntu1) UNRELEASED; urgency=low
+
+  * New upstream release.
+    * Removing indicator-datetime from the indicator-applet
+
+ -- Ted Gould <ted@ubuntu.com>  Thu, 26 Aug 2010 14:28:39 -0500
+
 indicator-applet (0.4.3-0ubuntu1) maverick; urgency=low
 
   * New upstream release.
