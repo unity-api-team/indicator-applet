@@ -1,9 +1,9 @@
-indicator-applet (0.4.5-0ubuntu1~ppa1) UNRELEASED; urgency=low
+indicator-applet (0.4.5-0ubuntu1~ppa1) maverick; urgency=low
 
   * New upstream release.
     * Shifting text over by one pixel (LP: #625351)
 
- -- Ted Gould <ted@ubuntu.com>  Thu, 09 Sep 2010 12:20:32 -0500
+ -- Ted Gould <ted@ubuntu.com>  Thu, 09 Sep 2010 12:26:04 -0500
 
 indicator-applet (0.4.4-0ubuntu1~ppa1) maverick; urgency=low
 
