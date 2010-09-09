@@ -5,7 +5,7 @@ indicator-applet (0.4.5-0ubuntu1~ppa1) maverick; urgency=low
 
  -- Ted Gould <ted@ubuntu.com>  Thu, 09 Sep 2010 12:26:04 -0500
 
-indicator-applet (0.4.4-0ubuntu1~ppa1) maverick; urgency=low
+indicator-applet (0.4.4-0ubuntu1) maverick; urgency=low
 
   * New upstream release.
     * Removing indicator-datetime from the indicator-applet
