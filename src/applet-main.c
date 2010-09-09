@@ -230,7 +230,7 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 	g_object_set_data (G_OBJECT (menuitem), "box", box);
 
 	if (entry->image != NULL) {
-		gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry->image), FALSE, FALSE, 0);
+		gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry->image), FALSE, FALSE, 1);
 		if (gtk_widget_get_visible(GTK_WIDGET(entry->image))) {
 			something_visible = TRUE;
 		}
@@ -257,7 +257,7 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 			default:
 				break;
 		}		
-		gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry->label), FALSE, FALSE, 0);
+		gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry->label), FALSE, FALSE, 1);
 
 		if (gtk_widget_get_visible(GTK_WIDGET(entry->label))) {
 			something_visible = TRUE;
