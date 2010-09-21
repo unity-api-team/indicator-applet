@@ -1,3 +1,11 @@
+indicator-applet (0.4.5-0ubuntu1~ppa2) UNRELEASED; urgency=low
+
+  * Upstream Merge
+    * Send the activate signal down to libindicator (LP: #637692)
+    * Generate AUTHORS and ChangeLog from Bazaar
+
+ -- Ted Gould <ted@ubuntu.com>  Tue, 21 Sep 2010 16:30:20 -0500
+
 indicator-applet (0.4.5-0ubuntu1~ppa1) maverick; urgency=low
 
   * New upstream release.
