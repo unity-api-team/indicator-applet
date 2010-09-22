@@ -1,6 +1,8 @@
-indicator-applet (0.4.5-0ubuntu2) UNRELEASED; urgency=low
+indicator-applet (0.4.6-0ubuntu1) maverick; urgency=low
 
-  * Rebuild for libindicator ABI change (LP: #637692)
+  * New upstream release.
+    * Send the activate signal down to libindicator (LP: #637692)
+    * Generate AUTHORS and ChangeLog from Bazaar
   * debian/control: depends on latest libindicator-dev 
 
  -- Didier Roche <didrocks@ubuntu.com>  Wed, 22 Sep 2010 11:29:13 +0200
