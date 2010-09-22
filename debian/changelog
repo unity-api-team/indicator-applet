@@ -5,7 +5,7 @@ indicator-applet (0.4.6-0ubuntu1) maverick; urgency=low
     * Generate AUTHORS and ChangeLog from Bazaar
   * debian/control: depends on latest libindicator-dev 
 
- -- Didier Roche <didrocks@ubuntu.com>  Wed, 22 Sep 2010 11:29:13 +0200
+ -- Didier Roche <didrocks@ubuntu.com>  Wed, 22 Sep 2010 18:08:32 +0200
 
 indicator-applet (0.4.5-0ubuntu1) maverick; urgency=low
 
