@@ -216,6 +216,17 @@ sensitive_cb (GObject * obj, GParamSpec * pspec, gpointer user_data)
 }
 
 static void
+entry_activated (GtkWidget * widget, gpointer user_data)
+{
+	g_return_if_fail(GTK_IS_WIDGET(widget));
+	gpointer pio = g_object_get_data(G_OBJECT(widget), "indicator");
+	g_return_if_fail(INDICATOR_IS_OBJECT(pio));
+	IndicatorObject * io = INDICATOR_OBJECT(pio);
+
+	return indicator_object_entry_activate(io, (IndicatorObjectEntry *)user_data, gtk_get_current_event_time());
+}
+
+static void
 entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * menubar)
 {
 	g_debug("Signal: Entry Added");
@@ -228,6 +239,8 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 
 	g_object_set_data (G_OBJECT (menuitem), "indicator", io);
 	g_object_set_data (G_OBJECT (menuitem), "box", box);
+
+	g_signal_connect(G_OBJECT(menuitem), "activate", G_CALLBACK(entry_activated), entry);
 
 	if (entry->image != NULL) {
 		gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry->image), FALSE, FALSE, 1);
