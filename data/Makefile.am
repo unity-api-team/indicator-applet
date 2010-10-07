@@ -24,21 +24,6 @@ server_in_in_files = \
 
 
 ##############################
-# GConf Schema
-##############################
-
-schemadir =					\
-	$(GCONF_SCHEMA_FILE_DIR)
-
-schema_in_files =				\
-	indicator-applet.schemas.in
-
-schema_DATA =					\
-	$(schema_in_files:.schemas.in=.schemas)
-
-@INTLTOOL_SCHEMAS_RULE@
-
-##############################
 # Icons
 ##############################
 
@@ -77,14 +62,5 @@ EXTRA_DIST =					\
 
 MAINTAINERCLEANFILES =				\
 	Makefile.in
-
-if GCONF_SCHEMAS_INSTALL
-install-data-local:
-	GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) \
-		gconftool-2 --makefile-install-rule $(schema_DATA)
-else
-install-data-local:
-endif
-
 
 
