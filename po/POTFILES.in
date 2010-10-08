@@ -3,5 +3,4 @@ data/GNOME_IndicatorApplet.server.in.in
 data/GNOME_IndicatorAppletAppmenu.server.in.in
 data/GNOME_IndicatorAppletComplete.server.in.in
 data/GNOME_FastUserSwitchApplet.server.in.in
-data/indicator-applet.schemas.in
 src/applet-main.c
