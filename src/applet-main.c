@@ -21,7 +21,9 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <stdlib.h>
+#include <string.h>
 #include <config.h>
+#include <glib/gi18n.h>
 #include <panel-applet.h>
 #include <gdk/gdkkeysyms.h>
 
@@ -59,27 +61,27 @@ static void cw_panel_background_changed (PanelApplet               *applet,
  * ***********/
 
 #ifdef INDICATOR_APPLET
-PANEL_APPLET_BONOBO_FACTORY ("OAFIID:GNOME_IndicatorApplet_Factory",
+PANEL_APPLET_OUT_PROCESS_FACTORY ("IndicatorAppletFactory",
                PANEL_TYPE_APPLET,
-               "indicator-applet", "0",
+               "indicator-applet",
                applet_fill_cb, NULL);
 #endif
 #ifdef INDICATOR_APPLET_SESSION
-PANEL_APPLET_BONOBO_FACTORY ("OAFIID:GNOME_FastUserSwitchApplet_Factory",
+PANEL_APPLET_OUT_PROCESS_FACTORY ("FastUserSwitchAppletFactory",
                PANEL_TYPE_APPLET,
-               "indicator-applet-session", "0",
+               "indicator-applet-session",
                applet_fill_cb, NULL);
 #endif
 #ifdef INDICATOR_APPLET_COMPLETE
-PANEL_APPLET_BONOBO_FACTORY ("OAFIID:GNOME_IndicatorAppletComplete_Factory",
+PANEL_APPLET_OUT_PROCESS_FACTORY ("IndicatorAppletCompleteFactory",
                PANEL_TYPE_APPLET,
-               "indicator-applet-complete", "0",
+               "indicator-applet-complete",
                applet_fill_cb, NULL);
 #endif
 #ifdef INDICATOR_APPLET_APPMENU
-PANEL_APPLET_BONOBO_FACTORY ("OAFIID:GNOME_IndicatorAppletAppmenu_Factory",
+PANEL_APPLET_OUT_PROCESS_FACTORY ("IndicatorAppletAppmenuFactory",
                PANEL_TYPE_APPLET,
-               "indicator-applet-appmenu", "0",
+               "indicator-applet-appmenu",
                applet_fill_cb, NULL);
 #endif
 
@@ -504,9 +506,8 @@ menubar_on_expose (GtkWidget * widget,
 }
 
 static void
-about_cb (BonoboUIComponent *ui_container G_GNUC_UNUSED,
-	  gpointer           data G_GNUC_UNUSED,
-	  const gchar       *cname G_GNUC_UNUSED)
+about_cb (GtkAction *action G_GNUC_UNUSED,
+          gpointer   data G_GNUC_UNUSED)
 {
 	static const gchar *authors[] = {
 		"Ted Gould <ted@canonical.com>",
@@ -687,18 +688,15 @@ static gboolean
 applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
                 gpointer data G_GNUC_UNUSED)
 {
-	static const BonoboUIVerb menu_verbs[] = {
-		BONOBO_UI_VERB ("IndicatorAppletAbout", about_cb),
-		BONOBO_UI_VERB_END
+	static const GtkActionEntry menu_actions[] = {
+		{"About", GTK_STOCK_ABOUT, N_("_About"), NULL, NULL, G_CALLBACK(about_cb)}
 	};
-	static const gchar * menu_xml =
-		"<popup name=\"button3\">"
-			"<menuitem name=\"About Item\" verb=\"IndicatorAppletAbout\" _label=\"" N_("_About") "\" pixtype=\"stock\" pixname=\"gtk-about\"/>"
-		"</popup>";
+	static const gchar *menu_xml = "<menuitem name=\"About\" action=\"About\"/>";
 
 	static gboolean first_time = FALSE;
 	GtkWidget *menubar;
 	gint indicators_loaded = 0;
+	GtkActionGroup *action_group;
 
 #ifdef INDICATOR_APPLET_SESSION
 	/* check if we are running stracciatella session */
@@ -733,7 +731,13 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
 	gtk_container_set_border_width(GTK_CONTAINER (applet), 0);
 	panel_applet_set_flags(applet, PANEL_APPLET_EXPAND_MINOR);
 	menubar = gtk_menu_bar_new();
-	panel_applet_setup_menu(applet, menu_xml, menu_verbs, menubar);
+	action_group = gtk_action_group_new ("Indicator Applet Actions");
+	gtk_action_group_set_translation_domain (action_group, GETTEXT_PACKAGE);
+	gtk_action_group_add_actions (action_group, menu_actions,
+	                              G_N_ELEMENTS (menu_actions),
+	                              menubar);
+	panel_applet_setup_menu(applet, menu_xml, action_group);
+	g_object_unref(action_group);
 #ifdef INDICATOR_APPLET
 	atk_object_set_name (gtk_widget_get_accessible (GTK_WIDGET (applet)),
 	                     "indicator-applet");
