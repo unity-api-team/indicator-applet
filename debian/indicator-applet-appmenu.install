@@ -1,2 +1,3 @@
-debian/tmp/usr/lib/bonobo/servers/GNOME_IndicatorAppletAppmenu.server
 debian/tmp/usr/lib/indicator-applet/indicator-applet-appmenu
+debian/tmp/usr/share/dbus-1/services/org.gnome.panel.applet.IndicatorAppletAppmenuFactory.service
+debian/tmp/usr/share/gnome-panel/applets/org.ayatana.panel.IndicatorAppletAppmenu.panel-applet

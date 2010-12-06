@@ -26,18 +26,14 @@ m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 ###########################
 
 GTK_REQUIRED_VERSION=2.12
-PANEL_REQUIRED_VERSION=2.0.0
-DBUS_REQUIRED_VERSION=0.76
 INDICATOR_REQUIRED_VERSION=0.3.14
 
 PKG_CHECK_MODULES(APPLET, gtk+-2.0 >= $GTK_REQUIRED_VERSION
-                          libpanelapplet-2.0 >= $PANEL_REQUIRED_VERSION
-						  indicator >= $INDICATOR_REQUIRED_VERSION)
+                          x11
+                          libpanelapplet-3.0
+                          indicator >= $INDICATOR_REQUIRED_VERSION)
 AC_SUBST(APPLET_CFLAGS)
 AC_SUBST(APPLET_LIBS)
-
-AC_PATH_PROG(GCONFTOOL, gconftool-2)
-AM_GCONF_SOURCE_2
 
 ###########################
 # Check to see if we're local

@@ -1,3 +1,14 @@
+indicator-applet (0.4.6-0ubuntu2) UNRELEASED; urgency=low
+
+  * Use the port to dbus done by Michael Terry (lp: #671477)
+  * Updated the .install for the new version.
+  * debian/control:
+    - updated the build-depends
+  * debian/rules:
+    - use dh-autoreconf
+
+ -- Sebastien Bacher <seb128@ubuntu.com>  Mon, 06 Dec 2010 18:23:10 +0100
+
 indicator-applet (0.4.6-0ubuntu1) maverick; urgency=low
 
   * New upstream release.

@@ -1,2 +1,3 @@
-debian/tmp/usr/lib/bonobo/servers/GNOME_FastUserSwitchApplet.server
 debian/tmp/usr/lib/indicator-applet/indicator-applet-session
+debian/tmp/usr/share/dbus-1/services/org.gnome.panel.applet.FastUserSwitchAppletFactory.service
+debian/tmp/usr/share/gnome-panel/applets/org.ayatana.panel.FastUserSwitchApplet.panel-applet

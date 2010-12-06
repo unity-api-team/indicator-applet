@@ -1,5 +1,4 @@
-data/GNOME_FastUserSwitchApplet.server.in.in
-data/GNOME_IndicatorApplet.server.in.in
-data/GNOME_IndicatorAppletAppmenu.server.in.in
-data/GNOME_IndicatorAppletComplete.server.in.in
-
+data/org.ayatana.panel.IndicatorApplet.panel-applet.in
+data/org.ayatana.panel.IndicatorAppletComplete.panel-applet.in
+data/org.ayatana.panel.IndicatorAppletAppmenu.panel-applet.in
+data/org.ayatana.panel.FastUserSwitchApplet.panel-applet.in
