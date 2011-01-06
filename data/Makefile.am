@@ -1,26 +1,41 @@
 # This file will be processed with automake to create Makefile.in
 
 ##############################
-# Bonobo .server
+# Applets
 ##############################
 
-serverdir =					\
-	$(libdir)/bonobo/servers
-server_in_files =				\
-	GNOME_IndicatorApplet.server.in \
-	GNOME_IndicatorAppletComplete.server.in \
-	GNOME_IndicatorAppletAppmenu.server.in \
-	GNOME_FastUserSwitchApplet.server.in
-server_DATA =					\
-	$(server_in_files:.server.in=.server)
+appletdir       = $(datadir)/gnome-panel/applets
+applet_in_files = \
+	org.ayatana.panel.IndicatorApplet.panel-applet.in \
+	org.ayatana.panel.IndicatorAppletComplete.panel-applet.in \
+	org.ayatana.panel.IndicatorAppletAppmenu.panel-applet.in \
+	org.ayatana.panel.FastUserSwitchApplet.panel-applet.in
+applet_DATA     = $(applet_in_files:.panel-applet.in=.panel-applet)
 
-%.server.in: %.server.in.in
-	sed -e "s|\@LIBEXECDIR\@|$(libexecdir)|" -e "s|\@VERSION\@|$(VERSION)|" $< > $@
+%.panel-applet.in: %.panel-applet.in.in Makefile
+	$(AM_V_GEN)sed \
+	    -e "s|\@LIBEXECDIR\@|$(libexecdir)|" \
+	    $< > $@
 
-server_in_in_files = \
-	$(server_in_files:.server.in=.server.in.in)
+%.panel-applet: %.panel-applet.in $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*po) ; $(AM_V_GEN) LC_ALL=C $(INTLTOOL_MERGE) $(top_srcdir)/po $< $@ -d -u -c $(top_builddir)/po/.intltool-merge-cache
 
-@INTLTOOL_SERVER_RULE@
+
+##############################
+# DBus Services
+##############################
+
+servicedir       = $(datadir)/dbus-1/services
+service_in_files = \
+	org.gnome.panel.applet.IndicatorAppletFactory.service.in \
+	org.gnome.panel.applet.IndicatorAppletCompleteFactory.service.in \
+	org.gnome.panel.applet.IndicatorAppletAppmenuFactory.service.in \
+	org.gnome.panel.applet.FastUserSwitchAppletFactory.service.in
+service_DATA     = $(service_in_files:.service.in=.service)
+
+%.service: %.service.in Makefile
+	$(AM_V_GEN)sed \
+	    -e "s|\@LIBEXECDIR\@|$(libexecdir)|" \
+	    $< > $@
 
 
 ##############################
@@ -50,15 +65,15 @@ update-icon-cache:
 ##############################
 
 CLEANFILES =					\
-	$(server_in_files)			\
-	$(server_DATA)				\
-	$(schema_DATA)				\
+	$(applet_in_files)			\
+	$(applet_DATA)				\
+	$(service_DATA)				\
 	*.bak
 
 EXTRA_DIST =					\
-	$(icons_DATA) \
-	$(server_in_in_files) \
-	$(schema_in_files)
+	$(icons_DATA)				\
+	$(applet_in_files:.in=.in.in)		\
+	$(service_in_files)
 
 MAINTAINERCLEANFILES =				\
 	Makefile.in
