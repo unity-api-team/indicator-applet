@@ -1,3 +1,9 @@
+indicator-applet (0.4.6-0ubuntu3) natty; urgency=low
+
+  * Force a rebuild for libindicator change
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Fri, 14 Jan 2011 16:53:01 -0600
+
 indicator-applet (0.4.6-0ubuntu2) natty; urgency=low
 
   * Use the port to dbus done by Michael Terry (lp: #671477)
