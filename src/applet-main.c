@@ -228,6 +228,20 @@ entry_activated (GtkWidget * widget, gpointer user_data)
 	return indicator_object_entry_activate(io, (IndicatorObjectEntry *)user_data, gtk_get_current_event_time());
 }
 
+static gboolean
+entry_scrolled (GtkWidget *menuitem, GdkEventScroll *event, gpointer data)
+{
+	IndicatorObject *io = g_object_get_data (G_OBJECT (menuitem), MENU_DATA_INDICATOR_OBJECT);
+	IndicatorObjectEntry *entry = g_object_get_data (G_OBJECT (menuitem), MENU_DATA_INDICATOR_ENTRY);
+
+	g_return_val_if_fail(INDICATOR_IS_OBJECT(io), FALSE);
+
+	g_signal_emit_by_name (io, "scroll", 1, event->direction);
+	g_signal_emit_by_name (io, "scroll-entry", entry, 1, event->direction);
+
+	return FALSE;
+}
+
 static void
 entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * menubar)
 {
@@ -243,6 +257,7 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 	g_object_set_data (G_OBJECT (menuitem), "box", box);
 
 	g_signal_connect(G_OBJECT(menuitem), "activate", G_CALLBACK(entry_activated), entry);
+	g_signal_connect(G_OBJECT(menuitem), "scroll-event", G_CALLBACK(entry_scrolled), entry);
 
 	if (entry->image != NULL) {
 		gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry->image), FALSE, FALSE, 1);
@@ -476,21 +491,6 @@ menubar_press (GtkWidget * widget,
 	}
 
 	return FALSE;
-}
-
-static gboolean
-menubar_scroll (GtkWidget      *widget G_GNUC_UNUSED,
-                GdkEventScroll *event,
-                gpointer        data G_GNUC_UNUSED)
-{
-  GtkWidget *menuitem;
-
-  menuitem = gtk_get_event_widget ((GdkEvent *)event);
-
-  IndicatorObject *io = g_object_get_data (G_OBJECT (menuitem), "indicator");
-  g_signal_emit_by_name (io, "scroll", 1, event->direction);
-
-  return FALSE;
 }
 
 static gboolean
@@ -797,7 +797,6 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
 	GTK_WIDGET_SET_FLAGS (menubar, GTK_WIDGET_FLAGS(menubar) | GTK_CAN_FOCUS);
 	gtk_widget_set_name(GTK_WIDGET (menubar), "fast-user-switch-menubar");
 	g_signal_connect(menubar, "button-press-event", G_CALLBACK(menubar_press), NULL);
-        g_signal_connect(menubar, "scroll-event", G_CALLBACK (menubar_scroll), NULL);
 	g_signal_connect_after(menubar, "expose-event", G_CALLBACK(menubar_on_expose), menubar);
 	g_signal_connect(applet, "change-orient", 
 			G_CALLBACK(panelapplet_reorient_cb), menubar);
