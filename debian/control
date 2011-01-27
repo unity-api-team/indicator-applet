@@ -12,7 +12,7 @@ Build-Depends: debhelper (>= 5.0),
                intltool,
                libxml2-dev,
                gtk-doc-tools,
-               libindicator-dev (>= 0.3.14),
+               libindicator-dev (>= 0.3.18),
                dh-autoreconf,
                libx11-dev
 Standards-Version: 3.9.1

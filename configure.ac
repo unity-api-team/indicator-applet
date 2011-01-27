@@ -4,7 +4,7 @@ AC_INIT(src/applet-main.c)
 AC_PREREQ(2.53)
 
 AM_CONFIG_HEADER(config.h)
-AM_INIT_AUTOMAKE(indicator-applet, 0.4.6)
+AM_INIT_AUTOMAKE(indicator-applet, 0.4.7)
 
 AM_MAINTAINER_MODE
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES])
@@ -26,7 +26,7 @@ m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 ###########################
 
 GTK_REQUIRED_VERSION=2.12
-INDICATOR_REQUIRED_VERSION=0.3.14
+INDICATOR_REQUIRED_VERSION=0.3.18
 
 PKG_CHECK_MODULES(APPLET, gtk+-2.0 >= $GTK_REQUIRED_VERSION
                           x11

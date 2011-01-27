@@ -1,3 +1,11 @@
+indicator-applet (0.4.7-0ubuntu1) natty; urgency=low
+
+  * New upstream release.
+    * Use the new scroll-entry signal
+  * debian/control: requiring the new libindicator
+
+ -- Ted Gould <ted@ubuntu.com>  Thu, 27 Jan 2011 15:52:05 -0600
+
 indicator-applet (0.4.6-0ubuntu3) natty; urgency=low
 
   * Force a rebuild for libindicator change
@@ -23,6 +31,15 @@ indicator-applet (0.4.6-0ubuntu1) maverick; urgency=low
   * debian/control: depends on latest libindicator-dev 
 
  -- Didier Roche <didrocks@ubuntu.com>  Wed, 22 Sep 2010 18:08:32 +0200
+
+indicator-applet (0.4.6-0ubuntu1~ppa1) maverick; urgency=low
+
+  * New upstream release.
+    * Send the activate signal down to libindicator (LP: #637692)
+    * Generate AUTHORS and ChangeLog from Bazaar
+  * debian/control: Upping the libindicator-dev dependency
+
+ -- Ted Gould <ted@ubuntu.com>  Wed, 22 Sep 2010 10:50:22 -0500
 
 indicator-applet (0.4.5-0ubuntu1) maverick; urgency=low
 
