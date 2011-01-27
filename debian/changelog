@@ -1,10 +1,10 @@
-indicator-applet (0.4.7-0ubuntu1~ppa1) UNRELEASED; urgency=low
+indicator-applet (0.4.7-0ubuntu1~ppa1) natty; urgency=low
 
   * New upstream release.
     * Use the new scroll-entry signal
   * debian/control: requiring the new libindicator
 
- -- Ted Gould <ted@ubuntu.com>  Thu, 27 Jan 2011 15:47:49 -0600
+ -- Ted Gould <ted@ubuntu.com>  Thu, 27 Jan 2011 15:52:05 -0600
 
 indicator-applet (0.4.6-0ubuntu3) natty; urgency=low
 
