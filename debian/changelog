@@ -1,3 +1,10 @@
+indicator-applet (0.4.7-0ubuntu1~ppa1) UNRELEASED; urgency=low
+
+  * New upstream release.
+    * Use the new scroll-entry signal
+
+ -- Ted Gould <ted@ubuntu.com>  Thu, 27 Jan 2011 15:47:03 -0600
+
 indicator-applet (0.4.6-0ubuntu1~ppa1) maverick; urgency=low
 
   * New upstream release.
