@@ -1,2 +1,3 @@
-debian/tmp/usr/lib/bonobo/servers/GNOME_IndicatorAppletComplete.server
 debian/tmp/usr/lib/indicator-applet/indicator-applet-complete
+debian/tmp/usr/share/dbus-1/services/org.gnome.panel.applet.IndicatorAppletCompleteFactory.service
+debian/tmp/usr/share/gnome-panel/applets/org.ayatana.panel.IndicatorAppletComplete.panel-applet
