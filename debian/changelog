@@ -1,4 +1,4 @@
-indicator-applet (0.4.7-0ubuntu1~ppa1) natty; urgency=low
+indicator-applet (0.4.7-0ubuntu1) natty; urgency=low
 
   * New upstream release.
     * Use the new scroll-entry signal
