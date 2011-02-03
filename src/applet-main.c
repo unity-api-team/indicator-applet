@@ -419,6 +419,30 @@ entry_moved (IndicatorObject * io, IndicatorObjectEntry * entry,
 	return;
 }
 
+static void
+menu_show (IndicatorObject * io, IndicatorObjectEntry * entry,
+           guint32 timestamp, gpointer user_data)
+{
+	GtkWidget * menubar = GTK_WIDGET(user_data);
+
+	if (entry == NULL) {
+		/* Close any open menus instead of opening one */
+		GList * entries = indicator_object_get_entries(io);
+		GList * entry = NULL;
+		for (entry = entries; entry != NULL; entry = g_list_next(entry)) {
+			IndicatorObjectEntry * entrydata = (IndicatorObjectEntry *)entry->data;
+			gtk_menu_popdown(entrydata->menu);
+		}
+		g_list_free(entries);
+
+		/* And tell the menubar to exit activation mode too */
+		gtk_menu_shell_cancel(GTK_MENU_SHELL(menubar));
+		return;
+	}
+
+	// TODO: do something sensible here
+}
+
 static gboolean
 load_module (const gchar * name, GtkWidget * menubar)
 {
@@ -443,6 +467,7 @@ load_module (const gchar * name, GtkWidget * menubar)
 	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_ADDED,   G_CALLBACK(entry_added),    menubar);
 	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_REMOVED, G_CALLBACK(entry_removed),  menubar);
 	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_MOVED,   G_CALLBACK(entry_moved),    menubar);
+	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_MENU_SHOW,     G_CALLBACK(menu_show),      menubar);
 
 	/* Work on the entries */
 	GList * entries = indicator_object_get_entries(io);

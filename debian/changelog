@@ -1,3 +1,10 @@
+indicator-applet (0.4.8-0ubuntu1~ppa1) UNRELEASED; urgency=low
+
+  * New upstream release.
+    * Close menus when asked nicely.
+
+ -- Ted Gould <ted@ubuntu.com>  Thu, 03 Feb 2011 14:32:27 -0600
+
 indicator-applet (0.4.7-0ubuntu1) natty; urgency=low
 
   * New upstream release.
