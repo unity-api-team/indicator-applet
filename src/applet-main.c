@@ -55,6 +55,7 @@ static void cw_panel_background_changed (PanelApplet               *applet,
                         				         GdkColor                  *colour,
                         				         GdkPixmap                 *pixmap,
                                          GtkWidget                 *menubar);
+static void update_accessible_desc (IndicatorObjectEntry * entry, GtkWidget * menuitem);
 
 /*************
  * main
@@ -243,6 +244,24 @@ entry_scrolled (GtkWidget *menuitem, GdkEventScroll *event, gpointer data)
 }
 
 static void
+accessible_desc_update (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * menuitem)
+{
+	g_return_if_fail(GTK_IS_WIDGET(menuitem));
+
+	IndicatorObjectClass * class = INDICATOR_OBJECT_GET_CLASS(io);
+
+	/* Not all indicator entries have a get_accessible_desc method, such as
+	   indicator-application entries */
+	if (class->get_accessible_desc != NULL) {
+		entry->accessible_desc = class->get_accessible_desc(io);
+	}
+
+	update_accessible_desc(entry, GTK_WIDGET(menuitem));
+
+	return;
+}
+
+static void
 entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * menubar)
 {
 	g_debug("Signal: Entry Added");
@@ -319,7 +338,12 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 
 	gtk_menu_shell_insert(GTK_MENU_SHELL(menubar), menuitem, position.menupos);
 
+	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ACCESSIBLE_DESC_UPDATE, G_CALLBACK(accessible_desc_update), menuitem);
+
 	if (something_visible) {
+		if (entry->accessible_desc != NULL) {
+			update_accessible_desc(entry, menuitem);
+		}
 		gtk_widget_show(menuitem);
 	}
 	gtk_widget_set_sensitive(menuitem, something_sensitive);
@@ -442,6 +466,23 @@ menu_show (IndicatorObject * io, IndicatorObjectEntry * entry,
 
 	// TODO: do something sensible here
 }
+
+static void
+update_accessible_desc(IndicatorObjectEntry * entry, GtkWidget * menuitem)
+{
+	/* FIXME: We need to deal with the use case where the contents of the
+	   label overrides what is found in the atk object's name, or at least
+	   orca speaks the label instead of the atk object name.
+	 */
+	AtkObject * menuitem_obj = gtk_widget_get_accessible(menuitem);
+	if (entry->accessible_desc != NULL) {
+		atk_object_set_name(menuitem_obj, entry->accessible_desc);
+	} else {
+		atk_object_set_name(menuitem_obj, "");
+	}
+	return;
+}
+
 
 static gboolean
 load_module (const gchar * name, GtkWidget * menubar)
