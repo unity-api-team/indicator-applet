@@ -256,7 +256,7 @@ accessible_desc_update (IndicatorObject * io, IndicatorObjectEntry * entry, GtkW
 		entry->accessible_desc = class->get_accessible_desc(io);
 	}
 
-	update_accessible_desc(entry, GTK_WIDGET(menuitem));
+	update_accessible_desc(entry, menuitem);
 
 	return;
 }
