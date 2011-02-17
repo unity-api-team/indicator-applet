@@ -1,3 +1,11 @@
+indicator-applet (0.4.9-0ubuntu1) natty; urgency=low
+
+  * New upstream release.
+    * Support for accessible descriptions
+  * debian/control: libindicator dep bump to 0.3.19
+
+ -- Ted Gould <ted@ubuntu.com>  Thu, 17 Feb 2011 14:56:51 -0600
+
 indicator-applet (0.4.8-0ubuntu1) natty; urgency=low
 
   * New upstream release.
