@@ -1,3 +1,10 @@
+indicator-applet (0.4.9-0ubuntu1~ppa1) UNRELEASED; urgency=low
+
+  * New upstream release.
+    * Support for accessible descriptions
+
+ -- Ted Gould <ted@ubuntu.com>  Thu, 17 Feb 2011 14:55:11 -0600
+
 indicator-applet (0.4.8-0ubuntu1~ppa1) natty; urgency=low
 
   * New upstream release.
