@@ -465,6 +465,11 @@ update_accessible_desc(IndicatorObjectEntry * entry, GtkWidget * menuitem)
 	   orca speaks the label instead of the atk object name.
 	 */
 	AtkObject * menuitem_obj = gtk_widget_get_accessible(menuitem);
+	if (menuitem_obj == NULL) {
+		/* Should there be an error printed here? */
+		return;
+	}
+
 	if (entry->accessible_desc != NULL) {
 		atk_object_set_name(menuitem_obj, entry->accessible_desc);
 	} else {
