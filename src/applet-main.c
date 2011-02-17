@@ -247,17 +247,7 @@ static void
 accessible_desc_update (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * menuitem)
 {
 	g_return_if_fail(GTK_IS_WIDGET(menuitem));
-
-	IndicatorObjectClass * class = INDICATOR_OBJECT_GET_CLASS(io);
-
-	/* Not all indicator entries have a get_accessible_desc method, such as
-	   indicator-application entries */
-	if (class->get_accessible_desc != NULL) {
-		entry->accessible_desc = class->get_accessible_desc(io);
-	}
-
 	update_accessible_desc(entry, menuitem);
-
 	return;
 }
 
