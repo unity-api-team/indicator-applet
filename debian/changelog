@@ -1,4 +1,4 @@
-indicator-applet (0.4.9-0ubuntu2~ppa1) UNRELEASED; urgency=low
+indicator-applet (0.4.9-0ubuntu2~ppa1) natty; urgency=low
 
   [Jeff Lane]
   * debian/source_indicator-applet.py:
@@ -8,7 +8,7 @@ indicator-applet (0.4.9-0ubuntu2~ppa1) UNRELEASED; urgency=low
   * debian/source_indicator-applet.py:
     * Changing to be 'menus' where appropriate in the text
 
- -- Ted Gould <ted@ubuntu.com>  Wed, 16 Mar 2011 09:25:11 -0500
+ -- Ted Gould <ted@ubuntu.com>  Wed, 16 Mar 2011 09:52:58 -0500
 
 indicator-applet (0.4.9-0ubuntu1) natty; urgency=low
 
