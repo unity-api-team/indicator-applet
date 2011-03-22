@@ -119,6 +119,28 @@ gchar * hotkey_keycode = "<Super>S";
 gchar * hotkey_keycode = "<Super>F1";
 #endif
 
+/********************
+ * Environment Names
+ * *******************/
+#ifdef INDICATOR_APPLET
+#define INDICATOR_SPECIFIC_ENV  "indicator-applet-original"
+#endif
+#ifdef INDICATOR_APPLET_SESSION
+#define INDICATOR_SPECIFIC_ENV  "indicator-applet-session"
+#endif
+#ifdef INDICATOR_APPLET_COMPLETE
+#define INDICATOR_SPECIFIC_ENV  "indicator-applet-complete"
+#endif
+#ifdef INDICATOR_APPLET_APPMENU
+#define INDICATOR_SPECIFIC_ENV  "indicator-applet-appmenu"
+#endif
+
+static const gchar * indicator_env[] = {
+	"indicator-applet",
+	INDICATOR_SPECIFIC_ENV,
+	NULL
+};
+
 /*************
  * init function
  * ***********/
@@ -495,6 +517,9 @@ load_module (const gchar * name, GtkWidget * menubar)
 	gchar * fullpath = g_build_filename(INDICATOR_DIR, name, NULL);
 	IndicatorObject * io = indicator_object_new_from_file(fullpath);
 	g_free(fullpath);
+
+	/* Set the environment it's in */
+	indicator_object_set_environment(io, (const GStrv)indicator_env);
 
 	/* Attach the 'name' to the object */
 	g_object_set_data(G_OBJECT(io), IO_DATA_ORDER_NUMBER, GINT_TO_POINTER(name2order(name)));
