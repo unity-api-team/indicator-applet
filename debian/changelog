@@ -1,3 +1,10 @@
+indicator-applet (0.4.9-0ubuntu3~ppa1) UNRELEASED; urgency=low
+
+  * Upstream Merge
+    * Set the environment for the indicator object
+
+ -- Ted Gould <ted@ubuntu.com>  Tue, 22 Mar 2011 15:40:19 -0500
+
 indicator-applet (0.4.9-0ubuntu2) natty; urgency=low
 
   [Jeff Lane]
