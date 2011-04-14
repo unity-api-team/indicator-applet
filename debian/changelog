@@ -1,10 +1,10 @@
-indicator-applet (0.4.11-0ubuntu1~ppa1) UNRELEASED; urgency=low
+indicator-applet (0.4.11-0ubuntu1~ppa1) natty; urgency=low
 
   * New upstream release.
     ∘ Handle updating accessible descriptions globally rather than
       once per entry (LP: #745115)
 
- -- Ted Gould <ted@ubuntu.com>  Thu, 14 Apr 2011 16:11:15 -0500
+ -- Ted Gould <ted@ubuntu.com>  Thu, 14 Apr 2011 16:17:26 -0500
 
 indicator-applet (0.4.10-0ubuntu1) natty; urgency=low
 
