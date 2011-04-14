@@ -266,10 +266,22 @@ entry_scrolled (GtkWidget *menuitem, GdkEventScroll *event, gpointer data)
 }
 
 static void
-accessible_desc_update (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * menuitem)
+accessible_desc_update_cb (GtkWidget * widget, gpointer userdata)
 {
-	g_return_if_fail(GTK_IS_WIDGET(menuitem));
-	update_accessible_desc(entry, menuitem);
+	gpointer data = g_object_get_data(G_OBJECT(widget), MENU_DATA_INDICATOR_ENTRY);
+
+	if (data != userdata) {
+		return;
+	}
+
+	IndicatorObjectEntry * entry = (IndicatorObjectEntry *)data;
+	update_accessible_desc(entry, widget);
+}
+
+static void
+accessible_desc_update (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * menubar)
+{
+	gtk_container_foreach(GTK_CONTAINER(menubar), accessible_desc_update_cb, entry);
 	return;
 }
 
@@ -349,8 +361,6 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 	gtk_container_foreach(GTK_CONTAINER(menubar), place_in_menu, &position);
 
 	gtk_menu_shell_insert(GTK_MENU_SHELL(menubar), menuitem, position.menupos);
-
-	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ACCESSIBLE_DESC_UPDATE, G_CALLBACK(accessible_desc_update), menuitem);
 
 	if (something_visible) {
 		if (entry->accessible_desc != NULL) {
@@ -529,6 +539,7 @@ load_module (const gchar * name, GtkWidget * menubar)
 	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_REMOVED, G_CALLBACK(entry_removed),  menubar);
 	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_MOVED,   G_CALLBACK(entry_moved),    menubar);
 	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_MENU_SHOW,     G_CALLBACK(menu_show),      menubar);
+	g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ACCESSIBLE_DESC_UPDATE, G_CALLBACK(accessible_desc_update), menubar);
 
 	/* Work on the entries */
 	GList * entries = indicator_object_get_entries(io);
