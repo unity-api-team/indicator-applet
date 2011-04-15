@@ -1,3 +1,10 @@
+indicator-applet (0.4.12-0ubuntu1~ppa1) UNRELEASED; urgency=low
+
+  * New upstream release.
+    * Adding in translations from Launchpad (LP: #760680)
+
+ -- Ted Gould <ted@ubuntu.com>  Thu, 14 Apr 2011 21:43:43 -0500
+
 indicator-applet (0.4.11-0ubuntu1~ppa1) natty; urgency=low
 
   * New upstream release.
