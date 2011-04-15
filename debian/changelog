@@ -1,3 +1,12 @@
+indicator-applet (0.4.12-0ubuntu1) natty; urgency=low
+
+  * New upstream release.
+    * Adding in translations from Launchpad (LP: #760680)
+    ∘ Handle updating accessible descriptions globally rather than
+      once per entry (LP: #745115)
+
+ -- Ted Gould <ted@ubuntu.com>  Thu, 14 Apr 2011 21:49:24 -0500
+
 indicator-applet (0.4.10-0ubuntu1) natty; urgency=low
 
   * New upstream release.

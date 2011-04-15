@@ -2846,7 +2846,7 @@ fi
 
 # Define the identity of the package.
  PACKAGE=indicator-applet
- VERSION=0.4.10
+ VERSION=0.4.12
 
 
 cat >>confdefs.h <<_ACEOF
@@ -12252,6 +12252,8 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 
+
+ALL_LINGUAS="af am an ar ast az be bg bn br bs ca ca@valencia crh csb cs cv cy da de dv el en_AU en_CA en_GB eo es et eu fa fi fr fur fy gl gv he hi hr hu hy id is it ja ka kk km kn ko ku la lb lt lv mk ml mr ms nb ne nl nn oc pa pl pt_BR pt ro ru sc sd si sk sl sq sr sv ta te th tr ug uk ur vec vi zh_CN zh_HK zh_TW"
 
 
    for ac_header in locale.h
