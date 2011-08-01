@@ -25,13 +25,13 @@ m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 # Dependencies 
 ###########################
 
-GTK_REQUIRED_VERSION=2.12
-INDICATOR_REQUIRED_VERSION=0.3.22
+GTK_REQUIRED_VERSION=3.1
+INDICATOR_REQUIRED_VERSION=0.3.92
 
-PKG_CHECK_MODULES(APPLET, gtk+-2.0 >= $GTK_REQUIRED_VERSION
+PKG_CHECK_MODULES(APPLET, gtk+-3.0 >= $GTK_REQUIRED_VERSION
                           x11
-                          libpanelapplet-3.0
-                          indicator >= $INDICATOR_REQUIRED_VERSION)
+                          libpanelapplet-4.0
+                          indicator3-0.4 >= $INDICATOR_REQUIRED_VERSION)
 AC_SUBST(APPLET_CFLAGS)
 AC_SUBST(APPLET_LIBS)
 
