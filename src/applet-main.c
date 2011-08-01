@@ -95,7 +95,7 @@ PANEL_APPLET_OUT_PROCESS_FACTORY ("IndicatorAppletAppmenuFactory",
 #ifdef INDICATOR_APPLET_APPMENU
 #define LOG_FILE_NAME  "indicator-applet-appmenu.log"
 #endif
-GOutputStream * log_file = NULL;
+static FILE *log_file = NULL;
 
 /*****************
  * Hotkey support 
@@ -728,49 +728,54 @@ log_to_file_cb (GObject * source_obj G_GNUC_UNUSED,
 }
 
 static void
-log_to_file (const gchar * domain G_GNUC_UNUSED,
-             GLogLevelFlags level G_GNUC_UNUSED,
+log_to_file (const gchar * domain,
+             GLogLevelFlags level,
              const gchar * message,
-             gpointer data G_GNUC_UNUSED)
+             gpointer data)
 {
   if (log_file == NULL) {
-    GError * error = NULL;
-    gchar * filename = g_build_filename(g_get_user_cache_dir(), LOG_FILE_NAME, NULL);
-    GFile * file = g_file_new_for_path(filename);
-    g_free(filename);
+    gchar *path;
 
-    if (!g_file_test(g_get_user_cache_dir(), G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR)) {
-      GFile * cachedir = g_file_new_for_path(g_get_user_cache_dir());
-      g_file_make_directory_with_parents(cachedir, NULL, &error);
+    g_mkdir_with_parents(g_get_user_cache_dir(), 0755);
+    path = g_build_filename(g_get_user_cache_dir(), LOG_FILE_NAME, NULL);
 
-      if (error != NULL) {
-        g_error("Unable to make directory '%s' for log file: %s", g_get_user_cache_dir(), error->message);
-        return;
-      }
-    }
+    log_file = fopen(path, "w");
 
-    g_file_delete(file, NULL, NULL);
-
-    GFileIOStream * io = g_file_create_readwrite(file,
-                              G_FILE_CREATE_REPLACE_DESTINATION, /* flags */
-                              NULL, /* cancelable */
-                              &error); /* error */
-    if (error != NULL) {
-      g_error("Unable to replace file: %s", error->message);
-      return;
-    }
-
-    log_file = g_io_stream_get_output_stream(G_IO_STREAM(io));
+    g_free(path);
   }
 
-  gchar * outputstring = g_strdup_printf("%s\n", message);
-  g_output_stream_write_async(log_file,
-                              outputstring, /* data */
-                              strlen(outputstring), /* length */
-                              G_PRIORITY_LOW, /* priority */
-                              NULL, /* cancelable */
-                              log_to_file_cb, /* callback */
-                              outputstring); /* data */
+  if(log_file) {
+    const gchar *prefix;
+
+    switch(level & G_LOG_LEVEL_MASK) {
+      case G_LOG_LEVEL_ERROR:
+        prefix = "ERROR:";
+        break;
+      case G_LOG_LEVEL_CRITICAL:
+        prefix = "CRITICAL:";
+        break;
+      case G_LOG_LEVEL_WARNING:
+        prefix = "WARNING:";
+        break;
+      case G_LOG_LEVEL_MESSAGE:
+        prefix = "MESSAGE:";
+        break;
+      case G_LOG_LEVEL_INFO:
+        prefix = "INFO:";
+        break;
+      case G_LOG_LEVEL_DEBUG:
+        prefix = "DEBUG:";
+        break;
+      default:
+        prefix = "LOG:";
+        break;
+    }
+
+    fprintf(log_file, "%s %s\n", prefix, message);
+    fflush(log_file);
+  }
+
+  g_log_default_handler(domain, level, message, data);
 
   return;
 }
