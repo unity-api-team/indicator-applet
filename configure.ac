@@ -27,11 +27,12 @@ m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 
 GTK_REQUIRED_VERSION=3.1
 INDICATOR_REQUIRED_VERSION=0.3.92
+INDICATOR_PKG=indicator3-0.4
 
 PKG_CHECK_MODULES(APPLET, gtk+-3.0 >= $GTK_REQUIRED_VERSION
                           x11
                           libpanelapplet-4.0
-                          indicator3-0.4 >= $INDICATOR_REQUIRED_VERSION)
+                          $INDICATOR_PKG >= $INDICATOR_REQUIRED_VERSION)
 AC_SUBST(APPLET_CFLAGS)
 AC_SUBST(APPLET_LIBS)
 
@@ -50,8 +51,8 @@ if test "x$with_localinstall" = "xyes"; then
 	INDICATORDIR="${libdir}/indicators/2/"
 	INDICATORICONSDIR="${datadir}/indicator-applet/icons/"
 else
-	INDICATORDIR=`$PKG_CONFIG --variable=indicatordir indicator`
-	INDICATORICONSDIR=`$PKG_CONFIG --variable=iconsdir indicator`
+	INDICATORDIR=`$PKG_CONFIG --variable=indicatordir $INDICATOR_PKG`
+	INDICATORICONSDIR=`$PKG_CONFIG --variable=iconsdir $INDICATOR_PKG`
 fi
 
 AC_SUBST(INDICATORDIR)
