@@ -548,28 +548,24 @@ load_module (const gchar * name, GtkWidget * menubar)
   return TRUE;
 }
 
-//static void
-//hotkey_filter (char * keystring G_GNUC_UNUSED, gpointer data)
-//{
-//  g_return_if_fail(GTK_IS_MENU_SHELL(data));
-//
-//  /* Oh, wow, it's us! */
-//  GList * children = gtk_container_get_children(GTK_CONTAINER(data));
-//  if (children == NULL) {
-//    g_debug("Menubar has no children");
-//    return;
-//  }
-//
-//  if (!GTK_MENU_SHELL(data)->active) {
-//    gtk_grab_add (GTK_WIDGET(data));
-//    GTK_MENU_SHELL(data)->have_grab = TRUE;
-//    GTK_MENU_SHELL(data)->active = TRUE;
-//  }
-//
-//  gtk_menu_shell_select_item(GTK_MENU_SHELL(data), GTK_WIDGET(g_list_last(children)->data));
-//  g_list_free(children);
-//  return;
-//}
+static void
+hotkey_filter (char * keystring, gpointer data)
+{
+  g_return_if_fail(GTK_IS_MENU_SHELL(data));
+
+  g_debug ("Hotkey: %s", keystring);
+
+  /* Oh, wow, it's us! */
+  GList * children = gtk_container_get_children(GTK_CONTAINER(data));
+  if (children == NULL) {
+    g_debug("Menubar has no children");
+    return;
+  }
+
+  gtk_menu_shell_select_item(GTK_MENU_SHELL(data), GTK_WIDGET(g_list_last(children)->data));
+  g_list_free(children);
+  return;
+}
 
 static gboolean
 menubar_press (GtkWidget * widget,
@@ -901,7 +897,7 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
   gtk_container_set_border_width(GTK_CONTAINER(menubar), 0);
 
   /* Add in filter func */
-  //tomboy_keybinder_bind(hotkey_keycode, hotkey_filter, menubar);
+  tomboy_keybinder_bind(hotkey_keycode, hotkey_filter, menubar);
 
   /* load 'em */
   g_debug ("applet_fill_cb: loading from %s", INDICATOR_DIR);
