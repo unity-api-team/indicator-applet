@@ -31,11 +31,14 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "tomboykeybinder.h"
 
 static gchar * indicator_order[] = {
+  "libappmenu.so",
   "libapplication.so",
-  "libsoundmenu.so",
   "libmessaging.so",
+  "libpower.so",
+  "libnetwork.so",
+  "libnetworkmenu.so",
+  "libsoundmenu.so",
   "libdatetime.so",
-  "libme.so",
   "libsession.so",
   NULL
 };
