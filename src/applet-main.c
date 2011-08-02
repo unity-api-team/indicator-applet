@@ -167,7 +167,6 @@ struct _incoming_position_t {
 static void
 place_in_menu (GtkWidget * widget, gpointer user_data)
 {
-  g_debug ("place_in_menu");
   incoming_position_t * position = (incoming_position_t *)user_data;
   if (position->found) {
     /* We've already been placed, just finish the foreach */
@@ -254,8 +253,7 @@ entry_scrolled (GtkWidget *menuitem, GdkEventScroll *event, gpointer data)
 
   g_return_val_if_fail(INDICATOR_IS_OBJECT(io), FALSE);
 
-  g_signal_emit_by_name (io, "scroll", 1, event->direction);
-  g_signal_emit_by_name (io, "scroll-entry", entry, 1, event->direction);
+  g_signal_emit_by_name (io, INDICATOR_OBJECT_SIGNAL_ENTRY_SCROLLED, entry, 1, event->direction);
 
   return FALSE;
 }
