@@ -715,14 +715,6 @@ panelapplet_reorient_cb (GtkWidget *applet, PanelAppletOrient neworient,
 #define N_(x) x
 
 static void
-log_to_file_cb (GObject * source_obj G_GNUC_UNUSED,
-                GAsyncResult * result G_GNUC_UNUSED, gpointer user_data)
-{
-  g_free(user_data);
-  return;
-}
-
-static void
 log_to_file (const gchar * domain,
              GLogLevelFlags level,
              const gchar * message,
@@ -788,6 +780,7 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
   GtkWidget *menubar;
   gint indicators_loaded = 0;
   GtkActionGroup *action_group;
+  GError *error = NULL;
 
 #ifdef INDICATOR_APPLET_SESSION
   /* check if we are running stracciatella session */
@@ -799,7 +792,6 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
 
   if (!first_time)
   {
-    g_debug ("applet_fill_cb: first time");
     first_time = TRUE;
 #ifdef INDICATOR_APPLET
     g_set_application_name(_("Indicator Applet"));
@@ -830,7 +822,6 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
                                 menubar);
   panel_applet_setup_menu(applet, menu_xml, action_group);
   g_object_unref(action_group);
-  g_debug ("applet_fill_cb: setting panel options");
 #ifdef INDICATOR_APPLET
   atk_object_set_name (gtk_widget_get_accessible (GTK_WIDGET (applet)),
                        "indicator-applet");
@@ -852,36 +843,34 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
   gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(),
                                     INDICATOR_ICONS_DIR);
   g_debug("Icons directory: %s", INDICATOR_ICONS_DIR);
-//  gtk_rc_parse_string (
-//      "style \"indicator-applet-style\"\n"
-//        "{\n"
-//        "    GtkMenuBar::shadow-type = none\n"
-//        "    GtkMenuBar::internal-padding = 0\n"
-//        "    GtkWidget::focus-line-width = 0\n"
-//        "    GtkWidget::focus-padding = 0\n"
-//        "}\n"
-//      "style \"indicator-applet-menubar-style\"\n"
-//        "{\n"
-//        "    GtkMenuBar::shadow-type = none\n"
-//        "    GtkMenuBar::internal-padding = 0\n"
-//        "    GtkWidget::focus-line-width = 0\n"
-//        "    GtkWidget::focus-padding = 0\n"
-//        "    GtkMenuItem::horizontal-padding = 0\n"
-//        "}\n"
-//      "style \"indicator-applet-menuitem-style\"\n"
-//        "{\n"
-//        "    GtkWidget::focus-line-width = 0\n"
-//        "    GtkWidget::focus-padding = 0\n"
-//        "    GtkMenuItem::horizontal-padding = 0\n"
-//        "}\n"
-//        "widget \"*.fast-user-switch-applet\" style \"indicator-applet-style\""
-//        "widget \"*.fast-user-switch-menuitem\" style \"indicator-applet-menuitem-style\""
-//        "widget \"*.fast-user-switch-menubar\" style \"indicator-applet-menubar-style\"");
-  //gtk_widget_set_name(GTK_WIDGET (applet), "indicator-applet-menubar");
+  
+  gtk_css_provider_load_from_data (gtk_css_provider_get_default (),
+      ".fast-user-switch {\n"
+        " -GtkMenuBar-shadow-type: none;\n"
+        " -GtkMenuBar-internal-padding: 0;\n"
+        " -GtkWidget-focus-line-width: 0;\n"
+        " -GtkWidget-focus-padding: 0;\n"
+        "}\n"
+      ".fast-user-switch-menubar {\n"
+        " -GtkMenuBar-shadow-type: none;\n"
+        " -GtkMenuBar-internal-padding: 0;\n"
+        " -GtkWidget-focus-line-width: 0;\n"
+        " -GtkWidget-focus-padding: 0;\n"
+        " -GtkMenuItem-horizontal-padding: 0;\n"
+        "}\n"
+      ".fast-user-switch-menuitem {\n"
+        " -GtkWidget-focus-line-width: 0;\n"
+        " -GtkWidget-focus-padding: 0;\n"
+        " -GtkMenuItem-horizontal-padding: 0;\n"
+        "}\n", -1, &error);
+  if (error != NULL) {
+    g_warning ("Failed to parse css: %s", error->message);
+    g_error_free (error);
+  }
+
   gtk_widget_set_name(GTK_WIDGET (applet), "fast-user-switch-applet");
 
   /* Build menubar */
-  g_debug ("applet_fill_cb: building menubar");
   orient = (panel_applet_get_orient(applet));
   packdirection = ((orient == PANEL_APPLET_ORIENT_UP) ||
       (orient == PANEL_APPLET_ORIENT_DOWN)) ? 
@@ -900,14 +889,11 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
   tomboy_keybinder_bind(hotkey_keycode, hotkey_filter, menubar);
 
   /* load 'em */
-  g_debug ("applet_fill_cb: loading from %s", INDICATOR_DIR);
   if (g_file_test(INDICATOR_DIR, (G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))) {
-    g_debug ("applet_fill_cb: loading indicators");
     GDir * dir = g_dir_open(INDICATOR_DIR, 0, NULL);
 
     const gchar * name;
     while ((name = g_dir_read_name(dir)) != NULL) {
-      g_debug ("applet_fill_cb: loading %s", name);
 #ifdef INDICATOR_APPLET_APPMENU
       if (g_strcmp0(name, "libappmenu.so")) {
         continue;
@@ -958,7 +944,6 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
   gtk_widget_show(GTK_WIDGET(applet));
 
   return TRUE;
-
 }
 
 static void
