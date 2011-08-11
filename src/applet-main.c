@@ -831,30 +831,6 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
   gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(),
                                     INDICATOR_ICONS_DIR);
   g_debug("Icons directory: %s", INDICATOR_ICONS_DIR);
-  
-  gtk_css_provider_load_from_data (gtk_css_provider_get_default (),
-      ".fast-user-switch {\n"
-        " -GtkMenuBar-shadow-type: none;\n"
-        " -GtkMenuBar-internal-padding: 0;\n"
-        " -GtkWidget-focus-line-width: 0;\n"
-        " -GtkWidget-focus-padding: 0;\n"
-        "}\n"
-      ".fast-user-switch-menubar {\n"
-        " -GtkMenuBar-shadow-type: none;\n"
-        " -GtkMenuBar-internal-padding: 0;\n"
-        " -GtkWidget-focus-line-width: 0;\n"
-        " -GtkWidget-focus-padding: 0;\n"
-        " -GtkMenuItem-horizontal-padding: 0;\n"
-        "}\n"
-      ".fast-user-switch-menuitem {\n"
-        " -GtkWidget-focus-line-width: 0;\n"
-        " -GtkWidget-focus-padding: 0;\n"
-        " -GtkMenuItem-horizontal-padding: 0;\n"
-        "}\n", -1, &error);
-  if (error != NULL) {
-    g_warning ("Failed to parse css: %s", error->message);
-    g_error_free (error);
-  }
 
   gtk_widget_set_name(GTK_WIDGET (applet), "fast-user-switch-applet");
 
