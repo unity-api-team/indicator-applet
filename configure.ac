@@ -31,7 +31,7 @@ INDICATOR_REQUIRED_VERSION=0.3.22
 PKG_CHECK_MODULES(APPLET, gtk+-3.0 >= $GTK_REQUIRED_VERSION
                           x11
                           libpanelapplet-4.0
-                          indicator-0.4 >= $INDICATOR_REQUIRED_VERSION)
+                          indicator3-0.4 >= $INDICATOR_REQUIRED_VERSION)
 AC_SUBST(APPLET_CFLAGS)
 AC_SUBST(APPLET_LIBS)
 
