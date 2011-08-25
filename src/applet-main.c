@@ -51,10 +51,7 @@ static PanelAppletOrient orient;
 static gboolean     applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data);
 
 static void cw_panel_background_changed (PanelApplet               *applet,
-                                         PanelAppletBackgroundType  type,
-                        				         GdkColor                  *colour,
-                        				         GdkPixmap                 *pixmap,
-                                         GtkWidget                 *menubar);
+                                         cairo_pattern_t            *menubar);
 static void update_accessible_desc (IndicatorObjectEntry * entry, GtkWidget * menuitem);
 
 /*************
@@ -963,40 +960,10 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
 
 static void
 cw_panel_background_changed (PanelApplet               *applet,
-                             PanelAppletBackgroundType  type,
-                             GdkColor                  *colour,
-                             GdkPixmap                 *pixmap,
-                             GtkWidget                 *menubar)
+                             cairo_pattern_t           *patern)
 {
-	GtkRcStyle *rc_style;
-	GtkStyle *style;
-
-	/* reset style */
-	gtk_widget_set_style(GTK_WIDGET (applet), NULL);
- 	gtk_widget_set_style(menubar, NULL);
-	rc_style = gtk_rc_style_new ();
-	gtk_widget_modify_style(GTK_WIDGET (applet), rc_style);
-	gtk_widget_modify_style(menubar, rc_style);
-	gtk_rc_style_unref(rc_style);
-
-	switch (type)
-	{
-		case PANEL_NO_BACKGROUND:
-			break;
-		case PANEL_COLOR_BACKGROUND:
-			gtk_widget_modify_bg(GTK_WIDGET (applet), GTK_STATE_NORMAL, colour);
-			gtk_widget_modify_bg(menubar, GTK_STATE_NORMAL, colour);
-			break;
-
-		case PANEL_PIXMAP_BACKGROUND:
-			style = gtk_style_copy(GTK_WIDGET (applet)->style);
-			if (style->bg_pixmap[GTK_STATE_NORMAL])
-				g_object_unref(style->bg_pixmap[GTK_STATE_NORMAL]);
-			style->bg_pixmap[GTK_STATE_NORMAL] = g_object_ref (pixmap);
-			gtk_widget_set_style(GTK_WIDGET (applet), style);
-			gtk_widget_set_style(GTK_WIDGET (menubar), style);
-			g_object_unref(style);
-			break;
-  }
+	GdkWindow * window = gtk_widget_get_window(GTK_WIDGET(applet));
+	gdk_window_set_background_pattern(window, patern);
+	return;
 }
 
