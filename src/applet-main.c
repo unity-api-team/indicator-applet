@@ -588,13 +588,13 @@ menubar_press (GtkWidget * widget,
 }
 
 static gboolean
-menubar_on_expose (GtkWidget * widget,
-                    GdkEventExpose *event G_GNUC_UNUSED,
+menubar_on_draw (GtkWidget * widget,
+                    cairo_t * cr,
                     GtkWidget * menubar)
 {
 	if (GTK_WIDGET_HAS_FOCUS(menubar))
-		gtk_paint_focus(widget->style, widget->window, GTK_WIDGET_STATE(menubar),
-		                NULL, widget, "menubar-applet", 0, 0, -1, -1);
+		gtk_render_focus(gtk_widget_get_style_context(widget), cr,
+		                0, 0, -1, -1);
 
 	return FALSE;
 }
@@ -888,10 +888,10 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
 			GTK_PACK_DIRECTION_LTR : GTK_PACK_DIRECTION_TTB;
 	gtk_menu_bar_set_pack_direction(GTK_MENU_BAR(menubar),
 			packdirection);
-	GTK_WIDGET_SET_FLAGS (menubar, GTK_WIDGET_FLAGS(menubar) | GTK_CAN_FOCUS);
+	gtk_widget_set_can_focus(GTK_WIDGET(menubar), TRUE);
 	gtk_widget_set_name(GTK_WIDGET (menubar), "fast-user-switch-menubar");
 	g_signal_connect(menubar, "button-press-event", G_CALLBACK(menubar_press), NULL);
-	g_signal_connect_after(menubar, "expose-event", G_CALLBACK(menubar_on_expose), menubar);
+	g_signal_connect_after(menubar, "draw", G_CALLBACK(menubar_on_draw), menubar);
 	g_signal_connect(applet, "change-orient", 
 			G_CALLBACK(panelapplet_reorient_cb), menubar);
 	gtk_container_set_border_width(GTK_CONTAINER(menubar), 0);
