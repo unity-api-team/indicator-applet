@@ -560,11 +560,15 @@ hotkey_filter (char * keystring G_GNUC_UNUSED, gpointer data)
 		return;
 	}
 
+/*
+ *** Can't figure out how to do this in GTK3.  Leaving it out ***
+ *** for now.  Might effect using mnemonics.                  ***
 	if (!GTK_MENU_SHELL(data)->active) {
 		gtk_grab_add (GTK_WIDGET(data));
 		GTK_MENU_SHELL(data)->have_grab = TRUE;
 		GTK_MENU_SHELL(data)->active = TRUE;
 	}
+*/
 
 	gtk_menu_shell_select_item(GTK_MENU_SHELL(data), GTK_WIDGET(g_list_last(children)->data));
 	g_list_free(children);
