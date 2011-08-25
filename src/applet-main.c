@@ -61,25 +61,21 @@ static void update_accessible_desc (IndicatorObjectEntry * entry, GtkWidget * me
 #ifdef INDICATOR_APPLET
 PANEL_APPLET_OUT_PROCESS_FACTORY ("IndicatorAppletFactory",
                PANEL_TYPE_APPLET,
-               "indicator-applet",
                applet_fill_cb, NULL);
 #endif
 #ifdef INDICATOR_APPLET_SESSION
 PANEL_APPLET_OUT_PROCESS_FACTORY ("FastUserSwitchAppletFactory",
                PANEL_TYPE_APPLET,
-               "indicator-applet-session",
                applet_fill_cb, NULL);
 #endif
 #ifdef INDICATOR_APPLET_COMPLETE
 PANEL_APPLET_OUT_PROCESS_FACTORY ("IndicatorAppletCompleteFactory",
                PANEL_TYPE_APPLET,
-               "indicator-applet-complete",
                applet_fill_cb, NULL);
 #endif
 #ifdef INDICATOR_APPLET_APPMENU
 PANEL_APPLET_OUT_PROCESS_FACTORY ("IndicatorAppletAppmenuFactory",
                PANEL_TYPE_APPLET,
-               "indicator-applet-appmenu",
                applet_fill_cb, NULL);
 #endif
 
