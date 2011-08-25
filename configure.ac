@@ -28,7 +28,7 @@ m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 GTK_REQUIRED_VERSION=2.12
 INDICATOR_REQUIRED_VERSION=0.3.22
 
-PKG_CHECK_MODULES(APPLET, gtk+-2.0 >= $GTK_REQUIRED_VERSION
+PKG_CHECK_MODULES(APPLET, gtk+-3.0 >= $GTK_REQUIRED_VERSION
                           x11
                           libpanelapplet-4.0
                           indicator-0.4 >= $INDICATOR_REQUIRED_VERSION)
