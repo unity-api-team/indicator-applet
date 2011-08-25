@@ -18,8 +18,6 @@
 #include <string.h>
 
 #include <gdk/gdk.h>
-#include <gdk/gdkwindow.h>
-#include <gdk/gdkx.h>
 #include <X11/Xlib.h>
 
 #include "eggaccelerators.h"
@@ -312,7 +310,7 @@ tomboy_keybinder_is_modifier (guint keycode)
 	XModifierKeymap *mod_keymap;
 	gboolean retval = FALSE;
 
-	mod_keymap = XGetModifierMapping (gdk_display);
+	mod_keymap = XGetModifierMapping (gdk_display_get_default());
 
 	map_size = 8 * mod_keymap->max_keypermod;
 
