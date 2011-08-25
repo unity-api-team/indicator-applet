@@ -592,7 +592,7 @@ menubar_on_draw (GtkWidget * widget,
                     cairo_t * cr,
                     GtkWidget * menubar)
 {
-	if (GTK_WIDGET_HAS_FOCUS(menubar))
+	if (gtk_widget_has_focus(menubar))
 		gtk_render_focus(gtk_widget_get_style_context(widget), cr,
 		                0, 0, -1, -1);
 
