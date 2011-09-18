@@ -49,7 +49,7 @@ AC_ARG_ENABLE(localinstall, AS_HELP_STRING([--enable-localinstall], [install all
 ###########################
 
 if test "x$with_localinstall" = "xyes"; then
-	APPLETDIR="{datadir}/gnome-panel/applets/"
+	APPLETDIR="${datadir}/gnome-panel/applets/"
 	INDICATORDIR="${libdir}/indicators/2/"
 	INDICATORICONSDIR="${datadir}/indicator-applet/icons/"
 else
