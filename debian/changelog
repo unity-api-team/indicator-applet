@@ -1,3 +1,10 @@
+indicator-applet (0.4.13-2~ppa~oneiric) oneiric; urgency=low
+
+  * debian/control:
+    - Update maintainer and vcs-bzr fields.
+
+ -- Jason Conti <jason.conti@gmail.com>  Tue, 25 Oct 2011 17:56:22 -0400
+
 indicator-applet (0.4.13-1~ppa~oneiric) oneiric; urgency=low
 
   * debian/control, debian/indicator-applet.install:
