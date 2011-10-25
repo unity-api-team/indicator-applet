@@ -1,3 +1,12 @@
+indicator-applet (0.4.13-1~ppa~oneiric) oneiric; urgency=low
+
+  * debian/control, debian/indicator-applet.install:
+    - Install the translations with indicator-applet, since they are no longer
+    included in the language packs.
+    - Make session, appmenu, complete depend on indicator-applet.
+
+ -- Jason Conti <jason.conti@gmail.com>  Tue, 25 Oct 2011 15:48:55 -0400
+
 indicator-applet (0.4.13-0~ppa~oneiric) oneiric; urgency=low
 
   * Packaging for branch: ~jconti/indicator-applet/gnome3 (commit 402)
