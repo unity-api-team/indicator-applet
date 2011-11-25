@@ -30,24 +30,30 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "libindicator/indicator-object.h"
 #include "tomboykeybinder.h"
 
-static gchar * indicator_order[] = {
-  "libappmenu.so",
-  "libapplication.so",
-  "libmessaging.so",
-  "libpower.so",
-  "libnetwork.so",
-  "libnetworkmenu.so",
-  "libsoundmenu.so",
-  "libdatetime.so",
-  "libsession.so",
-  NULL
+static gchar * indicator_order[][2] = {
+  {"libappmenu.so", NULL},
+  {"libapplication.so", NULL},
+  {"libapplication.so", "gst-keyboard-xkb"},
+  {"libmessaging.so", NULL},
+  {"libpower.so", NULL},
+  {"libapplication.so", "bluetooth-manager"},
+  {"libnetwork.so", NULL},
+  {"libnetworkmenu.so", NULL},
+  {"libapplication.so", "nm-applet"},
+  {"libsoundmenu.so", NULL},
+  {"libdatetime.so", NULL},
+  {"libsession.so", NULL},
+  {NULL, NULL}
 };
 
 static GtkPackDirection packdirection;
 static PanelAppletOrient orient;
 
+#define  MENU_DATA_BOX               "box"
 #define  MENU_DATA_INDICATOR_OBJECT  "indicator-object"
 #define  MENU_DATA_INDICATOR_ENTRY   "indicator-entry"
+#define  MENU_DATA_IN_MENUITEM       "in-menuitem"
+#define  MENU_DATA_MENUITEM_PRESSED  "menuitem-pressed"
 
 #define  IO_DATA_ORDER_NUMBER        "indicator-order-number"
 
@@ -143,8 +149,8 @@ static gint
 name2order (const gchar * name) {
   int i;
 
-  for (i = 0; indicator_order[i] != NULL; i++) {
-    if (g_strcmp0(name, indicator_order[i]) == 0) {
+  for (i = 0; indicator_order[i][0] != NULL; i++) {
+    if (g_strcmp0(name, indicator_order[i][0]) == 0) {
       return i;
     }
   }
@@ -238,39 +244,43 @@ static void
 entry_activated (GtkWidget * widget, gpointer user_data)
 {
   g_return_if_fail(GTK_IS_WIDGET(widget));
-  gpointer pio = g_object_get_data(G_OBJECT(widget), "indicator");
-  g_return_if_fail(INDICATOR_IS_OBJECT(pio));
-  IndicatorObject * io = INDICATOR_OBJECT(pio);
 
-  return indicator_object_entry_activate(io, (IndicatorObjectEntry *)user_data, gtk_get_current_event_time());
+  IndicatorObject *io = g_object_get_data (G_OBJECT (widget), MENU_DATA_INDICATOR_OBJECT);
+  IndicatorObjectEntry *entry = g_object_get_data (G_OBJECT (widget), MENU_DATA_INDICATOR_ENTRY);
+
+  g_return_if_fail(INDICATOR_IS_OBJECT(io));
+
+  return indicator_object_entry_activate(io, entry, gtk_get_current_event_time());
 }
 
 static gboolean
 entry_secondary_activated (GtkWidget * widget, GdkEvent * event, gpointer user_data)
 {
+  g_return_val_if_fail(GTK_IS_WIDGET(widget), FALSE);
+
   switch (event->type) {
     case GDK_ENTER_NOTIFY:
-      g_object_set_data(G_OBJECT(widget), "in-menuitem", GINT_TO_POINTER(TRUE));
+      g_object_set_data(G_OBJECT(widget), MENU_DATA_IN_MENUITEM, GINT_TO_POINTER(TRUE));
       break;
 
     case GDK_LEAVE_NOTIFY:
-      g_object_set_data(G_OBJECT(widget), "in-menuitem", GINT_TO_POINTER(FALSE));
-      g_object_set_data(G_OBJECT(widget), "menuitem-pressed", GINT_TO_POINTER(FALSE));
+      g_object_set_data(G_OBJECT(widget), MENU_DATA_IN_MENUITEM, GINT_TO_POINTER(FALSE));
+      g_object_set_data(G_OBJECT(widget), MENU_DATA_MENUITEM_PRESSED, GINT_TO_POINTER(FALSE));
       break;
 
     case GDK_BUTTON_PRESS:
       if (event->button.button == 2) {
-        g_object_set_data(G_OBJECT(widget), "menuitem-pressed", GINT_TO_POINTER(TRUE));
+        g_object_set_data(G_OBJECT(widget), MENU_DATA_MENUITEM_PRESSED, GINT_TO_POINTER(TRUE));
       }
       break;
 
     case GDK_BUTTON_RELEASE:
       if (event->button.button == 2) {
-        gboolean in_menuitem = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(widget), "in-menuitem"));
-        gboolean menuitem_pressed = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(widget), "menuitem-pressed"));
+        gboolean in_menuitem = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(widget), MENU_DATA_IN_MENUITEM));
+        gboolean menuitem_pressed = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(widget), MENU_DATA_MENUITEM_PRESSED));
 
         if (in_menuitem && menuitem_pressed) {
-          g_object_set_data(G_OBJECT(widget), "menuitem-pressed", GINT_TO_POINTER(FALSE));
+          g_object_set_data(G_OBJECT(widget), MENU_DATA_MENUITEM_PRESSED, GINT_TO_POINTER(FALSE));
 
           IndicatorObject *io = g_object_get_data(G_OBJECT(widget), MENU_DATA_INDICATOR_OBJECT);
           IndicatorObjectEntry *entry = g_object_get_data(G_OBJECT(widget), MENU_DATA_INDICATOR_ENTRY);
@@ -290,6 +300,8 @@ entry_secondary_activated (GtkWidget * widget, GdkEvent * event, gpointer user_d
 static gboolean
 entry_scrolled (GtkWidget *menuitem, GdkEventScroll *event, gpointer data)
 {
+  g_return_val_if_fail(GTK_IS_WIDGET(menuitem), FALSE);
+
   IndicatorObject *io = g_object_get_data (G_OBJECT (menuitem), MENU_DATA_INDICATOR_OBJECT);
   IndicatorObjectEntry *entry = g_object_get_data (G_OBJECT (menuitem), MENU_DATA_INDICATOR_ENTRY);
 
@@ -331,15 +343,16 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
   GtkWidget * box = (packdirection == GTK_PACK_DIRECTION_LTR) ?
       gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 3) : gtk_box_new(GTK_ORIENTATION_VERTICAL, 3);
 
-  g_object_set_data (G_OBJECT (menuitem), "indicator", io);
-  g_object_set_data (G_OBJECT (menuitem), "box", box);
+  g_object_set_data (G_OBJECT (menuitem), MENU_DATA_BOX, box);
+  g_object_set_data(G_OBJECT(menuitem), MENU_DATA_INDICATOR_ENTRY,  entry);
+  g_object_set_data(G_OBJECT(menuitem), MENU_DATA_INDICATOR_OBJECT, io);
 
-  g_signal_connect(G_OBJECT(menuitem), "activate", G_CALLBACK(entry_activated), entry);
-  g_signal_connect(G_OBJECT(menuitem), "button-press-event", G_CALLBACK(entry_secondary_activated), entry);
-  g_signal_connect(G_OBJECT(menuitem), "button-release-event", G_CALLBACK(entry_secondary_activated), entry);
-  g_signal_connect(G_OBJECT(menuitem), "enter-notify-event", G_CALLBACK(entry_secondary_activated), entry);
-  g_signal_connect(G_OBJECT(menuitem), "leave-notify-event", G_CALLBACK(entry_secondary_activated), entry);
-  g_signal_connect(G_OBJECT(menuitem), "scroll-event", G_CALLBACK(entry_scrolled), entry);
+  g_signal_connect(G_OBJECT(menuitem), "activate", G_CALLBACK(entry_activated), NULL);
+  g_signal_connect(G_OBJECT(menuitem), "button-press-event", G_CALLBACK(entry_secondary_activated), NULL);
+  g_signal_connect(G_OBJECT(menuitem), "button-release-event", G_CALLBACK(entry_secondary_activated), NULL);
+  g_signal_connect(G_OBJECT(menuitem), "enter-notify-event", G_CALLBACK(entry_secondary_activated), NULL);
+  g_signal_connect(G_OBJECT(menuitem), "leave-notify-event", G_CALLBACK(entry_secondary_activated), NULL);
+  g_signal_connect(G_OBJECT(menuitem), "scroll-event", G_CALLBACK(entry_scrolled), NULL);
 
   if (entry->image != NULL) {
     gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry->image), FALSE, FALSE, 1);
@@ -408,9 +421,6 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
     gtk_widget_show(menuitem);
   }
   gtk_widget_set_sensitive(menuitem, something_sensitive);
-
-  g_object_set_data(G_OBJECT(menuitem), MENU_DATA_INDICATOR_ENTRY,  entry);
-  g_object_set_data(G_OBJECT(menuitem), MENU_DATA_INDICATOR_OBJECT, io);
 
   return;
 }
@@ -705,7 +715,7 @@ swap_orient_cb (GtkWidget *item, gpointer data)
 static gboolean
 reorient_box_cb (GtkWidget *menuitem, gpointer data)
 {
-  GtkWidget *from = g_object_get_data(G_OBJECT(menuitem), "box");
+  GtkWidget *from = g_object_get_data(G_OBJECT(menuitem), MENU_DATA_BOX);
   GtkWidget *to = (packdirection == GTK_PACK_DIRECTION_LTR) ?
       gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0) : gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
   g_object_set_data(G_OBJECT(from), "to", to);
@@ -713,7 +723,7 @@ reorient_box_cb (GtkWidget *menuitem, gpointer data)
       from);
   gtk_container_remove(GTK_CONTAINER(menuitem), from);
   gtk_container_add(GTK_CONTAINER(menuitem), to);
-  g_object_set_data(G_OBJECT(menuitem), "box", to);
+  g_object_set_data(G_OBJECT(menuitem), MENU_DATA_BOX, to);
   gtk_widget_show_all(menuitem);
   return TRUE;
 }
@@ -792,7 +802,7 @@ log_to_file (const gchar * domain,
         break;
     }
 
-    fprintf(log_file, "%s %s\n", prefix, message);
+    fprintf(log_file, "%s %s - %s\n", prefix, domain, message);
     fflush(log_file);
   }
 
