@@ -246,6 +246,48 @@ entry_activated (GtkWidget * widget, gpointer user_data)
 }
 
 static gboolean
+entry_secondary_activated (GtkWidget * widget, GdkEvent * event, gpointer user_data)
+{
+  switch (event->type) {
+    case GDK_ENTER_NOTIFY:
+      g_object_set_data(G_OBJECT(widget), "in-menuitem", GINT_TO_POINTER(TRUE));
+      break;
+
+    case GDK_LEAVE_NOTIFY:
+      g_object_set_data(G_OBJECT(widget), "in-menuitem", GINT_TO_POINTER(FALSE));
+      g_object_set_data(G_OBJECT(widget), "menuitem-pressed", GINT_TO_POINTER(FALSE));
+      break;
+
+    case GDK_BUTTON_PRESS:
+      if (event->button.button == 2) {
+        g_object_set_data(G_OBJECT(widget), "menuitem-pressed", GINT_TO_POINTER(TRUE));
+      }
+      break;
+
+    case GDK_BUTTON_RELEASE:
+      if (event->button.button == 2) {
+        gboolean in_menuitem = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(widget), "in-menuitem"));
+        gboolean menuitem_pressed = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(widget), "menuitem-pressed"));
+
+        if (in_menuitem && menuitem_pressed) {
+          g_object_set_data(G_OBJECT(widget), "menuitem-pressed", GINT_TO_POINTER(FALSE));
+
+          IndicatorObject *io = g_object_get_data(G_OBJECT(widget), MENU_DATA_INDICATOR_OBJECT);
+          IndicatorObjectEntry *entry = g_object_get_data(G_OBJECT(widget), MENU_DATA_INDICATOR_ENTRY);
+
+          g_return_val_if_fail(INDICATOR_IS_OBJECT(io), FALSE);
+
+          g_signal_emit_by_name(io, INDICATOR_OBJECT_SIGNAL_SECONDARY_ACTIVATE, 
+              entry, event->button.time);
+        }
+      }
+      break;
+  }
+
+  return FALSE;
+}
+
+static gboolean
 entry_scrolled (GtkWidget *menuitem, GdkEventScroll *event, gpointer data)
 {
   IndicatorObject *io = g_object_get_data (G_OBJECT (menuitem), MENU_DATA_INDICATOR_OBJECT);
@@ -293,6 +335,10 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
   g_object_set_data (G_OBJECT (menuitem), "box", box);
 
   g_signal_connect(G_OBJECT(menuitem), "activate", G_CALLBACK(entry_activated), entry);
+  g_signal_connect(G_OBJECT(menuitem), "button-press-event", G_CALLBACK(entry_secondary_activated), entry);
+  g_signal_connect(G_OBJECT(menuitem), "button-release-event", G_CALLBACK(entry_secondary_activated), entry);
+  g_signal_connect(G_OBJECT(menuitem), "enter-notify-event", G_CALLBACK(entry_secondary_activated), entry);
+  g_signal_connect(G_OBJECT(menuitem), "leave-notify-event", G_CALLBACK(entry_secondary_activated), entry);
   g_signal_connect(G_OBJECT(menuitem), "scroll-event", G_CALLBACK(entry_scrolled), entry);
 
   if (entry->image != NULL) {
