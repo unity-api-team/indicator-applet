@@ -55,6 +55,7 @@ static PanelAppletOrient orient;
 #define  MENU_DATA_IN_MENUITEM       "in-menuitem"
 #define  MENU_DATA_MENUITEM_PRESSED  "menuitem-pressed"
 
+#define  IO_DATA_NAME                "indicator-name"
 #define  IO_DATA_ORDER_NUMBER        "indicator-order-number"
 
 static gboolean applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data);
@@ -141,16 +142,13 @@ static const gchar * indicator_env[] = {
   NULL
 };
 
-/*************
- * init function
- * ***********/
-
 static gint
-name2order (const gchar * name) {
+name2order (const gchar * name, const gchar * hint) {
   int i;
 
   for (i = 0; indicator_order[i][0] != NULL; i++) {
-    if (g_strcmp0(name, indicator_order[i][0]) == 0) {
+    if (g_strcmp0(name, indicator_order[i][0]) == 0 &&
+        g_strcmp0(hint, indicator_order[i][1]) == 0) {
       return i;
     }
   }
@@ -171,7 +169,7 @@ struct _incoming_position_t {
    that they're on, and then the individual entries.  Each
    is progressively more expensive. */
 static void
-place_in_menu (GtkWidget * widget, gpointer user_data)
+place_in_menu_cb (GtkWidget * widget, gpointer user_data)
 {
   incoming_position_t * position = (incoming_position_t *)user_data;
   if (position->found) {
@@ -180,7 +178,7 @@ place_in_menu (GtkWidget * widget, gpointer user_data)
   }
 
   IndicatorObject * io = INDICATOR_OBJECT(g_object_get_data(G_OBJECT(widget), MENU_DATA_INDICATOR_OBJECT));
-  g_assert(io != NULL);
+  g_return_if_fail(INDICATOR_IS_OBJECT(io));
 
   gint objposition = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(io), IO_DATA_ORDER_NUMBER));
   /* We've already passed it, well, then this is where
@@ -214,6 +212,38 @@ place_in_menu (GtkWidget * widget, gpointer user_data)
      let's just put it right here then. */
   position->found = TRUE;
   return;
+}
+
+/* Position the entry */
+static void
+place_in_menu (GtkWidget *menubar, 
+               GtkWidget *menuitem, 
+               IndicatorObject *io, 
+               IndicatorObjectEntry *entry)
+{
+  incoming_position_t position;
+
+  /* Start with the default position for this indicator object */
+  gint io_position = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(io), IO_DATA_ORDER_NUMBER));
+
+  /* If name-hint is set, try to find the entry's position */
+  if (entry->name_hint != NULL) {
+    const gchar *name = (const gchar *)g_object_get_data(G_OBJECT(io), IO_DATA_NAME);
+    gint entry_position = name2order(name, entry->name_hint);
+
+    /* If we don't find the entry, fall back to the indicator object's position */
+    if (entry_position > -1)
+      io_position = entry_position;
+  }
+
+  position.objposition = io_position;
+  position.entryposition = indicator_object_get_location(io, entry);
+  position.menupos = 0;
+  position.found = FALSE;
+
+  gtk_container_foreach(GTK_CONTAINER(menubar), place_in_menu_cb, &position);
+
+  gtk_menu_shell_insert(GTK_MENU_SHELL(menubar), menuitem, position.menupos);
 }
 
 static void
@@ -335,7 +365,8 @@ accessible_desc_update (IndicatorObject * io, IndicatorObjectEntry * entry, GtkW
 static void
 entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * menubar)
 {
-  g_debug("Signal: Entry Added");
+  const char *indicator_name = (const gchar *)g_object_get_data(G_OBJECT(io), IO_DATA_NAME);
+  g_debug("Signal: Entry Added from %s", indicator_name);
   gboolean something_visible = FALSE;
   gboolean something_sensitive = FALSE;
 
@@ -404,15 +435,7 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
     gtk_menu_item_set_submenu(GTK_MENU_ITEM(menuitem), GTK_WIDGET(entry->menu));
   }
 
-  incoming_position_t position;
-  position.objposition = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(io), IO_DATA_ORDER_NUMBER));
-  position.entryposition = indicator_object_get_location(io, entry);
-  position.menupos = 0;
-  position.found = FALSE;
-
-  gtk_container_foreach(GTK_CONTAINER(menubar), place_in_menu, &position);
-
-  gtk_menu_shell_insert(GTK_MENU_SHELL(menubar), menuitem, position.menupos);
+  place_in_menu(menubar, menuitem, io, entry);
 
   if (something_visible) {
     if (entry->accessible_desc != NULL) {
@@ -499,16 +522,7 @@ entry_moved (IndicatorObject * io, IndicatorObjectEntry * entry,
   GtkWidget * mi = GTK_WIDGET(array[1]);
   g_object_ref(G_OBJECT(mi));
   gtk_container_remove(GTK_CONTAINER(menubar), mi);
-
-  incoming_position_t position;
-  position.objposition = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(io), IO_DATA_ORDER_NUMBER));
-  position.entryposition = indicator_object_get_location(io, entry);
-  position.menupos = 0;
-  position.found = FALSE;
-
-  gtk_container_foreach(GTK_CONTAINER(menubar), place_in_menu, &position);
-
-  gtk_menu_shell_insert(GTK_MENU_SHELL(menubar), mi, position.menupos);
+  place_in_menu(menubar, mi, io, entry);
   g_object_unref(G_OBJECT(mi));
 
   return;
@@ -581,7 +595,8 @@ load_module (const gchar * name, GtkWidget * menubar)
   indicator_object_set_environment(io, (const GStrv)indicator_env);
 
   /* Attach the 'name' to the object */
-  g_object_set_data(G_OBJECT(io), IO_DATA_ORDER_NUMBER, GINT_TO_POINTER(name2order(name)));
+  g_object_set_data_full(G_OBJECT(io), IO_DATA_NAME, g_strdup(name), g_free);
+  g_object_set_data(G_OBJECT(io), IO_DATA_ORDER_NUMBER, GINT_TO_POINTER(name2order(name, NULL)));
 
   /* Connect to its signals */
   g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_ADDED,   G_CALLBACK(entry_added),    menubar);
