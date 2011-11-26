@@ -1,3 +1,11 @@
+indicator-applet (0.4.14-0~ppa~oneiric) oneiric; urgency=low
+
+  * Packaging branch: lp:~jconti/indicator-applet/gnome3 (commit 408)
+    - Add secondary-activate signal (middle click)
+    - Add name-hint support for entry positioning
+
+ -- Jason Conti <jason.conti@gmail.com>  Sat, 26 Nov 2011 14:26:27 -0500
+
 indicator-applet (0.4.13-2~ppa~oneiric) oneiric; urgency=low
 
   * debian/control:
