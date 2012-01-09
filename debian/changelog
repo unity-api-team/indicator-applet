@@ -1,3 +1,9 @@
+indicator-applet (0.4.14-1~ppa~oneiric) oneiric; urgency=low
+
+  * Build a -dbg package.
+
+ -- Jason Conti <jason.conti@gmail.com>  Sun, 08 Jan 2012 19:21:09 -0500
+
 indicator-applet (0.4.14-0~ppa~oneiric) oneiric; urgency=low
 
   * Packaging branch: lp:~jconti/indicator-applet/gnome3 (commit 408)

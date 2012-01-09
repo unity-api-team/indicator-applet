@@ -14,7 +14,7 @@ Build-Depends: debhelper (>= 7.0.50~),
                libindicator3-dev (>= 0.3.22),
                dh-autoreconf,
                libx11-dev
-Standards-Version: 3.9.1
+Standards-Version: 3.9.2
 Homepage: https://launchpad.net/indicator-applet
 Vcs-Bzr: https://code.launchpad.net/~jconti/indicator-applet/gnome3-ppa
 
@@ -82,3 +82,14 @@ Description: Clone of the GNOME panel indicator applet
  .
  This instance will load the appmenu indicator.
 
+Package: indicator-applet-dbg
+Architecture: any
+Section: debug
+Priority: extra
+Depends: indicator-applet (= ${binary:Version}), ${misc:Depends}
+Description: Debugging symbols for indicator-applet
+ Indicator-applet is an applet to display information from
+ various applications consistently in the GNOME panel.
+ .
+ This package contains the debugging symbols for indicator-applet.
+  
