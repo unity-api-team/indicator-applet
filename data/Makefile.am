@@ -4,7 +4,7 @@
 # Applets
 ##############################
 
-appletdir       = $(datadir)/gnome-panel/applets
+appletdir       = $(APPLETDIR)
 applet_in_files = \
 	org.ayatana.panel.IndicatorApplet.panel-applet.in \
 	org.ayatana.panel.IndicatorAppletComplete.panel-applet.in \

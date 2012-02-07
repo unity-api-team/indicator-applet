@@ -1,3 +1,10 @@
+indicator-applet (0.4.90-0ubuntu1~ppa1) UNRELEASED; urgency=low
+
+  * New upstream release.
+    * Switch to work with GNOME3 Panel (LP: #829491)
+
+ -- Ted Gould <ted@ubuntu.com>  Tue, 07 Feb 2012 16:05:09 -0600
+
 indicator-applet (0.4.12-0ubuntu1) natty; urgency=low
 
   * New upstream release.
