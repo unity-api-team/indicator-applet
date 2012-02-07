@@ -4,7 +4,7 @@ AC_INIT(src/applet-main.c)
 AC_PREREQ(2.53)
 
 AM_CONFIG_HEADER(config.h)
-AM_INIT_AUTOMAKE(indicator-applet, 0.4.12)
+AM_INIT_AUTOMAKE(indicator-applet, 0.4.90)
 
 AM_MAINTAINER_MODE
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES])
@@ -25,13 +25,15 @@ m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 # Dependencies 
 ###########################
 
-GTK_REQUIRED_VERSION=2.12
-INDICATOR_REQUIRED_VERSION=0.3.22
+GTK_REQUIRED_VERSION=3.1
+INDICATOR_REQUIRED_VERSION=0.3.92
+INDICATOR_PKG=indicator3-0.4
+APPLET_PKG=libpanelapplet-4.0
 
-PKG_CHECK_MODULES(APPLET, gtk+-2.0 >= $GTK_REQUIRED_VERSION
+PKG_CHECK_MODULES(APPLET, gtk+-3.0 >= $GTK_REQUIRED_VERSION
                           x11
-                          libpanelapplet-3.0
-                          indicator >= $INDICATOR_REQUIRED_VERSION)
+                          $APPLET_PKG
+                          $INDICATOR_PKG >= $INDICATOR_REQUIRED_VERSION)
 AC_SUBST(APPLET_CFLAGS)
 AC_SUBST(APPLET_LIBS)
 
@@ -47,13 +49,16 @@ AC_ARG_ENABLE(localinstall, AS_HELP_STRING([--enable-localinstall], [install all
 ###########################
 
 if test "x$with_localinstall" = "xyes"; then
+	APPLETDIR="${datadir}/gnome-panel/applets/"
 	INDICATORDIR="${libdir}/indicators/2/"
 	INDICATORICONSDIR="${datadir}/indicator-applet/icons/"
 else
-	INDICATORDIR=`$PKG_CONFIG --variable=indicatordir indicator`
-	INDICATORICONSDIR=`$PKG_CONFIG --variable=iconsdir indicator`
+	APPLETDIR=`$PKG_CONFIG --variable=libpanel_applet_dir $APPLET_PKG`
+	INDICATORDIR=`$PKG_CONFIG --variable=indicatordir $INDICATOR_PKG`
+	INDICATORICONSDIR=`$PKG_CONFIG --variable=iconsdir $INDICATOR_PKG`
 fi
 
+AC_SUBST(APPLETDIR)
 AC_SUBST(INDICATORDIR)
 AC_SUBST(INDICATORICONSDIR)
 
