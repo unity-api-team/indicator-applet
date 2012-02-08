@@ -1,3 +1,12 @@
+indicator-applet (0.4.90-0ubuntu1~ppa1) precise; urgency=low
+
+  * New upstream release.
+    * Switch to work with GNOME3 Panel (LP: #829491)
+  * debian/control: Adjusting depends to match new panel reality
+  * debian/*install: Updating GNOME Panel applet install directory
+
+ -- Ted Gould <ted@ubuntu.com>  Tue, 07 Feb 2012 16:16:11 -0600
+
 indicator-applet (0.4.12-0ubuntu1) natty; urgency=low
 
   * New upstream release.
