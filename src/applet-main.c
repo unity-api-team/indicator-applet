@@ -839,7 +839,6 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
   GtkWidget *menubar;
   gint indicators_loaded = 0;
   GtkActionGroup *action_group;
-  GError *error = NULL;
 
 #ifdef INDICATOR_APPLET_SESSION
   /* check if we are running stracciatella session */
