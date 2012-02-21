@@ -592,7 +592,7 @@ load_module (const gchar * name, GtkWidget * menubar)
   g_free(fullpath);
 
   /* Set the environment it's in */
-  indicator_object_set_environment(io, (const GStrv)indicator_env);
+  indicator_object_set_environment(io, (GStrv)indicator_env);
 
   /* Attach the 'name' to the object */
   g_object_set_data_full(G_OBJECT(io), IO_DATA_NAME, g_strdup(name), g_free);
