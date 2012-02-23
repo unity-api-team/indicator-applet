@@ -1,11 +1,18 @@
-indicator-applet (0.4.90-0ubuntu1~ppa1) precise; urgency=low
+indicator-applet (0.4.90-0ubuntu1) precise; urgency=low
 
+  [ Ted Gould ]
   * New upstream release.
     * Switch to work with GNOME3 Panel (LP: #829491)
   * debian/control: Adjusting depends to match new panel reality
   * debian/*install: Updating GNOME Panel applet install directory
 
- -- Ted Gould <ted@ubuntu.com>  Tue, 07 Feb 2012 16:16:11 -0600
+  [ Ken VanDine ]
+  * debian/control
+    * dropped recommends for indicator-me
+  * debian/rules
+    * removed simple-patchsys.mk
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Wed, 08 Feb 2012 10:45:27 -0500
 
 indicator-applet (0.4.12-0ubuntu1) natty; urgency=low
 

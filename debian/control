@@ -41,8 +41,7 @@ Depends: ${shlibs:Depends},
          ${misc:Depends},
          gnome-panel,
          indicator-applet (= ${binary:Version})
-Recommends: indicator-session,
-         indicator-me
+Recommends: indicator-session
 Conflicts: indicator-applet-sus, gdm (<< 2.27.90-0ubuntu1), fast-user-switch-applet
 Replaces: indicator-applet-sus, gdm (<< 2.27.90-0ubuntu1), fast-user-switch-applet
 Description: Clone of the GNOME panel indicator applet
@@ -58,7 +57,6 @@ Depends: ${shlibs:Depends},
          ${misc:Depends},
          gnome-panel
 Recommends: indicator-session,
-         indicator-me,
          indicator-messages,
          indicator-sound,
          indicator-application
