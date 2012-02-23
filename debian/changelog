@@ -1,3 +1,11 @@
+indicator-applet (0.4.91-0ubuntu1~ppa1) precise; urgency=low
+
+  * New upstream release.
+    * Fix unenforcable type (LP: #937435)
+    * Show hidden parameter (LP: #937436)
+
+ -- Ted Gould <ted@ubuntu.com>  Wed, 22 Feb 2012 23:51:38 -0600
+
 indicator-applet (0.4.90-0ubuntu1) precise; urgency=low
 
   [ Ted Gould ]
