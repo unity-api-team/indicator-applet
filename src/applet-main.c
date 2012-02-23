@@ -536,10 +536,10 @@ menu_show (IndicatorObject * io, IndicatorObjectEntry * entry,
 
   if (entry == NULL) {
     /* Close any open menus instead of opening one */
+    GList * l;
     GList * entries = indicator_object_get_entries(io);
-    GList * entry = NULL;
-    for (entry = entries; entry != NULL; entry = g_list_next(entry)) {
-      IndicatorObjectEntry * entrydata = (IndicatorObjectEntry *)entry->data;
+    for (l = entries; l != NULL; l = g_list_next(entry)) {
+      IndicatorObjectEntry * entrydata = l->data;
       gtk_menu_popdown(entrydata->menu);
     }
     g_list_free(entries);
@@ -592,7 +592,7 @@ load_module (const gchar * name, GtkWidget * menubar)
   g_free(fullpath);
 
   /* Set the environment it's in */
-  indicator_object_set_environment(io, (const GStrv)indicator_env);
+  indicator_object_set_environment(io, (GStrv)indicator_env);
 
   /* Attach the 'name' to the object */
   g_object_set_data_full(G_OBJECT(io), IO_DATA_NAME, g_strdup(name), g_free);
@@ -839,7 +839,6 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
   GtkWidget *menubar;
   gint indicators_loaded = 0;
   GtkActionGroup *action_group;
-  GError *error = NULL;
 
 #ifdef INDICATOR_APPLET_SESSION
   /* check if we are running stracciatella session */
