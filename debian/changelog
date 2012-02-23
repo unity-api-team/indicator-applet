@@ -1,4 +1,4 @@
-indicator-applet (0.4.91-0ubuntu1~ppa1) precise; urgency=low
+indicator-applet (0.4.91-0ubuntu1) precise; urgency=low
 
   * New upstream release.
     * Fix unenforcable type (LP: #937435)
