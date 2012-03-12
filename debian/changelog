@@ -1,3 +1,10 @@
+indicator-applet (0.4.92-0ubuntu1~ppa1) precise; urgency=low
+
+  * New upstream release.
+    * Remove unused code that was marked as risky (LP: #944220)
+
+ -- Ted Gould <ted@ubuntu.com>  Fri, 09 Mar 2012 15:04:38 -0600
+
 indicator-applet (0.4.91-0ubuntu1) precise; urgency=low
 
   * New upstream release.
