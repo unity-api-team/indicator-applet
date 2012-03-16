@@ -1,3 +1,12 @@
+indicator-applet (0.4.92-0ubuntu2) precise; urgency=low
+
+  * debian/control
+    - Dropped depends for gnome-panel, anything that depends on 
+      indicator-applet should already require a panel that can 
+      use it (LP: #954939)
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Fri, 16 Mar 2012 09:59:10 -0400
+
 indicator-applet (0.4.92-0ubuntu1) precise; urgency=low
 
   * New upstream release.
