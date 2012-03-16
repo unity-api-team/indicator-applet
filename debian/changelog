@@ -1,3 +1,10 @@
+indicator-applet (0.4.92-0ubuntu3) UNRELEASED; urgency=low
+
+  * debian/indicator-applet.install:
+    - install the translations (lp: #956937)
+
+ -- Sebastien Bacher <seb128@ubuntu.com>  Fri, 16 Mar 2012 15:15:08 +0100
+
 indicator-applet (0.4.92-0ubuntu2) precise; urgency=low
 
   * debian/control
