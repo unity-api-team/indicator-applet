@@ -1,3 +1,10 @@
+indicator-applet (0.5.0-0ubuntu1~ppa1) UNRELEASED; urgency=low
+
+  * New upstream release.
+    * Fixing scroll mask (LP: #973538)
+
+ -- Ted Gould <ted@ubuntu.com>  Wed, 04 Apr 2012 14:38:45 -0500
+
 indicator-applet (0.4.92-0ubuntu1~ppa1) precise; urgency=low
 
   * New upstream release.
