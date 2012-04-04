@@ -22,8 +22,7 @@ Vcs-Browser: https://code.launchpad.net/~ubuntu-desktop/indicator-applet/ubuntu
 Package: indicator-applet
 Architecture: any
 Depends: ${shlibs:Depends},
-         ${misc:Depends},
-         gnome-panel
+         ${misc:Depends}
 Recommends: indicator-messages,
             indicator-sound,
             indicator-application
@@ -39,7 +38,6 @@ Package: indicator-applet-session
 Architecture: any
 Depends: ${shlibs:Depends},
          ${misc:Depends},
-         gnome-panel,
          indicator-applet (= ${binary:Version})
 Recommends: indicator-session
 Conflicts: indicator-applet-sus, gdm (<< 2.27.90-0ubuntu1), fast-user-switch-applet
@@ -54,8 +52,7 @@ Description: Clone of the GNOME panel indicator applet
 Package: indicator-applet-complete
 Architecture: any
 Depends: ${shlibs:Depends},
-         ${misc:Depends},
-         gnome-panel
+         ${misc:Depends}
 Recommends: indicator-session,
          indicator-messages,
          indicator-sound,
@@ -71,8 +68,7 @@ Description: Clone of the GNOME panel indicator applet
 Package: indicator-applet-appmenu
 Architecture: any
 Depends: ${shlibs:Depends},
-         ${misc:Depends},
-         gnome-panel
+         ${misc:Depends}
 Recommends: indicator-appmenu
 Provides: indicator-renderer
 Description: Clone of the GNOME panel indicator applet
