@@ -2730,7 +2730,7 @@ fi
 
 # Define the identity of the package.
  PACKAGE=indicator-applet
- VERSION=0.4.92
+ VERSION=0.5.0
 
 
 cat >>confdefs.h <<_ACEOF

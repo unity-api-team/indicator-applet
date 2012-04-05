@@ -374,6 +374,8 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
   GtkWidget * box = (packdirection == GTK_PACK_DIRECTION_LTR) ?
       gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 3) : gtk_box_new(GTK_ORIENTATION_VERTICAL, 3);
 
+  gtk_widget_add_events(GTK_WIDGET(menuitem), GDK_SCROLL_MASK);
+
   g_object_set_data (G_OBJECT (menuitem), MENU_DATA_BOX, box);
   g_object_set_data(G_OBJECT(menuitem), MENU_DATA_INDICATOR_ENTRY,  entry);
   g_object_set_data(G_OBJECT(menuitem), MENU_DATA_INDICATOR_OBJECT, io);
