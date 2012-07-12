@@ -1,3 +1,12 @@
+indicator-applet (0.5.0-0ubuntu2) quantal; urgency=low
+
+  * debian/source_indicator-applet.py:
+   - Update apport hook for python3 (LP: #1013171)
+  * debian/control:
+   - Added python3-xdg as new dependence (needed by its apport hook) 
+
+ -- Matthieu Baerts (matttbe) <matttbe@gmail.com>  Mon, 02 Jul 2012 19:22:45 +0200
+
 indicator-applet (0.5.0-0ubuntu1) precise; urgency=low
 
   * New upstream release.

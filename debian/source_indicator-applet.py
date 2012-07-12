@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os.path
 from apport.hookutils import *
 from xdg.BaseDirectory import xdg_cache_home
@@ -35,7 +36,7 @@ def add_info(report, ui):
         if response[0] == 8: # the issue is with indicator-application
             report.add_package_info("indicator-application")
     except:
-        print 'Unfortunately, that package is not installed. Please refer to https://wiki.ubuntu.com/Bugs/FindRightPackage'
+        print('Unfortunately, that package is not installed. Please refer to https://wiki.ubuntu.com/Bugs/FindRightPackage')
 
     attach_file_if_exists(report, APPLET_LOG, 'indicator-applet.log')
     attach_file_if_exists(report, APPLET_SESSION_LOG, 'indicator-applet-session.log')

@@ -22,7 +22,8 @@ Vcs-Browser: https://code.launchpad.net/~ubuntu-desktop/indicator-applet/ubuntu
 Package: indicator-applet
 Architecture: any
 Depends: ${shlibs:Depends},
-         ${misc:Depends}
+         ${misc:Depends},
+         python3-xdg
 Recommends: indicator-messages,
             indicator-sound,
             indicator-application
