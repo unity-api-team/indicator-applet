@@ -1,4 +1,4 @@
-indicator-applet (0.5.0-0ubuntu3) UNRELEASED; urgency=low
+indicator-applet (0.5.0-0ubuntu3) quantal; urgency=low
 
   * debian/source_indicator-applet.py:
     - dropped deprecated indicator-me, network indiator is nm-applet
@@ -11,7 +11,7 @@ indicator-applet (0.5.0-0ubuntu3) UNRELEASED; urgency=low
   * debian/control:
    - Bump Standards-Version
 
- -- Sebastien Bacher <seb128@ubuntu.com>  Fri, 13 Jul 2012 11:01:38 +0200
+ -- Sebastien Bacher <seb128@ubuntu.com>  Fri, 13 Jul 2012 11:02:11 +0200
 
 indicator-applet (0.5.0-0ubuntu2) quantal; urgency=low
 
