@@ -1,3 +1,18 @@
+indicator-applet (0.5.0-0ubuntu3) UNRELEASED; urgency=low
+
+  * debian/source_indicator-applet.py:
+    - dropped deprecated indicator-me, network indiator is nm-applet
+    
+  [ Matthieu Baerts (matttbe) ]
+  * debian/patches/01-fixed_compilation_error_with_glib_2.33.patch:
+   - Fixed a compilation error if GLib 2.33 is used.
+  * debian/control and debian/rules:
+   - Added Quilt needed for the new patch.
+  * debian/control:
+   - Bump Standards-Version
+
+ -- Sebastien Bacher <seb128@ubuntu.com>  Fri, 13 Jul 2012 11:01:38 +0200
+
 indicator-applet (0.5.0-0ubuntu2) quantal; urgency=low
 
   * debian/source_indicator-applet.py:

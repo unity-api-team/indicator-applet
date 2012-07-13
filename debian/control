@@ -13,8 +13,9 @@ Build-Depends: debhelper (>= 5.0),
                gtk-doc-tools,
                libindicator3-dev,
                dh-autoreconf,
-               libx11-dev
-Standards-Version: 3.9.1
+               libx11-dev,
+               quilt
+Standards-Version: 3.9.3
 Homepage: https://launchpad.net/indicator-applet
 Vcs-Bzr: http://bazaar.launchpad.net/~ubuntu-desktop/indicator-applet/ubuntu
 Vcs-Browser: https://code.launchpad.net/~ubuntu-desktop/indicator-applet/ubuntu
