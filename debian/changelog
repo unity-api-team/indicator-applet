@@ -1,3 +1,14 @@
+indicator-applet (0.5.0-0ubuntu3) quantal; urgency=low
+
+  * debian/patches/01-fixed_compilation_error_with_glib_2.33.patch:
+   - Fixed a compilation error if GLib 2.33 is used.
+  * debian/control and debian/rules:
+   - Added Quilt needed for the new patch.
+  * debian/control:
+   - Bump Standards-Version
+
+ -- Matthieu Baerts (matttbe) <matttbe@gmail.com>  Fri, 13 Jul 2012 02:08:33 +0200
+
 indicator-applet (0.5.0-0ubuntu2) quantal; urgency=low
 
   * debian/source_indicator-applet.py:
