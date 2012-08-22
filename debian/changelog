@@ -1,3 +1,10 @@
+indicator-applet (12.10.0-0ubuntu1) UNRELEASED; urgency=low
+
+  * New upstream release.
+  * Drop glib build fix included in the new version
+
+ -- Sebastien Bacher <seb128@ubuntu.com>  Wed, 22 Aug 2012 10:07:31 +0200
+
 indicator-applet (0.5.0-0ubuntu3) quantal; urgency=low
 
   * debian/source_indicator-applet.py:
