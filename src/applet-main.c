@@ -30,9 +30,10 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "libindicator/indicator-object.h"
 #include "tomboykeybinder.h"
 
-static gchar * indicator_order[][2] = {
+static const gchar * indicator_order[][2] = {
   {"libappmenu.so", NULL},                    /* indicator-appmenu" */
   {"libapplication.so", NULL},                /* indicator-application" */
+  {"libprintersmenu.so", NULL},               /* indicator-printers */
   {"libsyncindicator.so", NULL},              /* indicator-sync */
   {"libapplication.so", "gsd-keyboard-xkb"},  /* keyboard layout selector */
   {"libmessaging.so", NULL},                  /* indicator-messages */
