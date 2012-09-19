@@ -1,0 +1,7 @@
+12.10.1
+  - Sync with libindicator requirements (lp: 1045372)
+  - Add position hint for sync indicator (lp: 1049838)
+
+12.10.0
+  - Fix a FTB due to including <glib/gtypes.h> (lp: 1024462)
+

@@ -30,19 +30,21 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "libindicator/indicator-object.h"
 #include "tomboykeybinder.h"
 
-static gchar * indicator_order[][2] = {
-  {"libappmenu.so", NULL},
-  {"libapplication.so", NULL},
-  {"libapplication.so", "gst-keyboard-xkb"},
-  {"libmessaging.so", NULL},
-  {"libpower.so", NULL},
-  {"libapplication.so", "bluetooth-manager"},
-  {"libnetwork.so", NULL},
-  {"libnetworkmenu.so", NULL},
-  {"libapplication.so", "nm-applet"},
-  {"libsoundmenu.so", NULL},
-  {"libdatetime.so", NULL},
-  {"libsession.so", NULL},
+static const gchar * indicator_order[][2] = {
+  {"libappmenu.so", NULL},                    /* indicator-appmenu" */
+  {"libapplication.so", NULL},                /* indicator-application" */
+  {"libprintersmenu.so", NULL},               /* indicator-printers */
+  {"libsyncindicator.so", NULL},              /* indicator-sync */
+  {"libapplication.so", "gsd-keyboard-xkb"},  /* keyboard layout selector */
+  {"libmessaging.so", NULL},                  /* indicator-messages */
+  {"libpower.so", NULL},                      /* indicator-power */
+  {"libapplication.so", "bluetooth-manager"}, /* bluetooth manager */
+  {"libnetwork.so", NULL},                    /* indicator-network */
+  {"libnetworkmenu.so", NULL},                /* indicator-network */
+  {"libapplication.so", "nm-applet"},         /* network manager */
+  {"libsoundmenu.so", NULL},                  /* indicator-sound */
+  {"libdatetime.so", NULL},                   /* indicator-datetime */
+  {"libsession.so", NULL},                    /* indicator-session */
   {NULL, NULL}
 };
 
@@ -57,6 +59,7 @@ static PanelAppletOrient orient;
 
 #define  IO_DATA_NAME                "indicator-name"
 #define  IO_DATA_ORDER_NUMBER        "indicator-order-number"
+#define  IO_DATA_MENUITEM_LOOKUP     "indicator-menuitem-lookup"
 
 static gboolean applet_fill_cb (PanelApplet * applet, const gchar * iid, gpointer data);
 
@@ -362,17 +365,16 @@ accessible_desc_update (IndicatorObject * io, IndicatorObjectEntry * entry, GtkW
   return;
 }
 
-static void
-entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * menubar)
+static GtkWidget*
+create_menuitem (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * menubar)
 {
-  const char *indicator_name = (const gchar *)g_object_get_data(G_OBJECT(io), IO_DATA_NAME);
-  g_debug("Signal: Entry Added from %s", indicator_name);
-  gboolean something_visible = FALSE;
-  gboolean something_sensitive = FALSE;
+  GtkWidget * box;
+  GtkWidget * menuitem;
 
-  GtkWidget * menuitem = gtk_menu_item_new();
-  GtkWidget * box = (packdirection == GTK_PACK_DIRECTION_LTR) ?
-      gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 3) : gtk_box_new(GTK_ORIENTATION_VERTICAL, 3);
+  menuitem = gtk_menu_item_new();
+  box = (packdirection == GTK_PACK_DIRECTION_LTR)
+      ? gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3)
+      : gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
 
   gtk_widget_add_events(GTK_WIDGET(menuitem), GDK_SCROLL_MASK);
 
@@ -389,18 +391,6 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 
   if (entry->image != NULL) {
     gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry->image), FALSE, FALSE, 1);
-    if (gtk_widget_get_visible(GTK_WIDGET(entry->image))) {
-      something_visible = TRUE;
-    }
-
-    if (gtk_widget_get_sensitive(GTK_WIDGET(entry->image))) {
-      something_sensitive = TRUE;
-    }
-
-    g_signal_connect(G_OBJECT(entry->image), "show", G_CALLBACK(something_shown), menuitem);
-    g_signal_connect(G_OBJECT(entry->image), "hide", G_CALLBACK(something_hidden), menuitem);
-
-    g_signal_connect(G_OBJECT(entry->image), "notify::sensitive", G_CALLBACK(sensitive_cb), menuitem);
   }
   if (entry->label != NULL) {
     switch(packdirection) {
@@ -416,19 +406,6 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
         break;
     }    
     gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry->label), FALSE, FALSE, 1);
-
-    if (gtk_widget_get_visible(GTK_WIDGET(entry->label))) {
-      something_visible = TRUE;
-    }
-
-    if (gtk_widget_get_sensitive(GTK_WIDGET(entry->label))) {
-      something_sensitive = TRUE;
-    }
-
-    g_signal_connect(G_OBJECT(entry->label), "show", G_CALLBACK(something_shown), menuitem);
-    g_signal_connect(G_OBJECT(entry->label), "hide", G_CALLBACK(something_hidden), menuitem);
-
-    g_signal_connect(G_OBJECT(entry->label), "notify::sensitive", G_CALLBACK(sensitive_cb), menuitem);
   }
   gtk_container_add(GTK_CONTAINER(menuitem), box);
   gtk_widget_show(box);
@@ -439,6 +416,59 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 
   place_in_menu(menubar, menuitem, io, entry);
 
+  return menuitem;
+}
+
+static void
+entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * menubar)
+{
+  const gchar * name;
+  GtkWidget * menuitem;
+  GHashTable * menuitem_lookup;
+  gboolean something_visible;
+  gboolean something_sensitive;
+
+  name = g_object_get_data (G_OBJECT(io), IO_DATA_NAME);
+  g_debug ("Signal: Entry Added from %s", name);
+
+  /* if the menuitem doesn't already exist, create it now */
+  menuitem_lookup = g_object_get_data (G_OBJECT(io), IO_DATA_MENUITEM_LOOKUP);
+  g_return_if_fail (menuitem_lookup != NULL);
+  menuitem = g_hash_table_lookup (menuitem_lookup, entry);
+  if (menuitem == NULL) {
+    menuitem = create_menuitem (io, entry, menubar);
+    g_hash_table_insert (menuitem_lookup, entry, menuitem);
+  }
+
+  /* connect the callbacks */
+  if (G_IS_OBJECT (entry->image)) {
+    g_object_connect (entry->image,
+                      "signal::show", G_CALLBACK(something_shown), menuitem,
+                      "signal::hide", G_CALLBACK(something_hidden), menuitem,
+                      "signal::notify::sensitive", G_CALLBACK(sensitive_cb), menuitem,
+                      NULL);
+  }
+  if (G_IS_OBJECT (entry->label)) {
+    g_object_connect (entry->label,
+                      "signal::show", G_CALLBACK(something_shown), menuitem,
+                      "signal::hide", G_CALLBACK(something_hidden), menuitem,
+                      "signal::notify::sensitive", G_CALLBACK(sensitive_cb), menuitem,
+                      NULL);
+  }
+
+  /* refresh based on visibility & sensitivity */
+  something_visible = FALSE;
+  something_sensitive = FALSE;
+  if (entry->image != NULL) {
+    GtkWidget * w = GTK_WIDGET (entry->image);
+    something_visible |= gtk_widget_get_visible (w);
+    something_sensitive |= gtk_widget_get_sensitive (w);
+  }
+  if (entry->label != NULL) {
+    GtkWidget * w = GTK_WIDGET (entry->label);
+    something_visible |= gtk_widget_get_visible (w);
+    something_sensitive |= gtk_widget_get_sensitive (w);
+  }
   if (something_visible) {
     if (entry->accessible_desc != NULL) {
       update_accessible_desc(entry, menuitem);
@@ -451,37 +481,37 @@ entry_added (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * men
 }
 
 static void
-entry_removed_cb (GtkWidget * widget, gpointer userdata)
-{
-  gpointer data = g_object_get_data(G_OBJECT(widget), MENU_DATA_INDICATOR_ENTRY);
-
-  if (data != userdata) {
-    return;
-  }
-
-  IndicatorObjectEntry * entry = (IndicatorObjectEntry *)data;
-  if (entry->label != NULL) {
-    g_signal_handlers_disconnect_by_func(G_OBJECT(entry->label), G_CALLBACK(something_shown), widget);
-    g_signal_handlers_disconnect_by_func(G_OBJECT(entry->label), G_CALLBACK(something_hidden), widget);
-    g_signal_handlers_disconnect_by_func(G_OBJECT(entry->label), G_CALLBACK(sensitive_cb), widget);
-  }
-  if (entry->image != NULL) {
-    g_signal_handlers_disconnect_by_func(G_OBJECT(entry->image), G_CALLBACK(something_shown), widget);
-    g_signal_handlers_disconnect_by_func(G_OBJECT(entry->image), G_CALLBACK(something_hidden), widget);
-    g_signal_handlers_disconnect_by_func(G_OBJECT(entry->image), G_CALLBACK(sensitive_cb), widget);
-  }
-
-  gtk_widget_destroy(widget);
-  return;
-}
-
-static void
-entry_removed (IndicatorObject * io G_GNUC_UNUSED, IndicatorObjectEntry * entry,
+entry_removed (IndicatorObject * io,
+               IndicatorObjectEntry * entry,
                gpointer user_data)
 {
+  GtkWidget * menuitem;
+  GHashTable * menuitem_lookup;
+
   g_debug("Signal: Entry Removed");
 
-  gtk_container_foreach(GTK_CONTAINER(user_data), entry_removed_cb, entry);
+  menuitem_lookup = g_object_get_data (G_OBJECT(io), IO_DATA_MENUITEM_LOOKUP);
+  g_return_if_fail (menuitem_lookup != NULL);
+  menuitem = g_hash_table_lookup (menuitem_lookup, entry);
+  g_return_if_fail (menuitem != NULL);
+
+  /* disconnect the callbacks */
+  if (G_IS_OBJECT (entry->label)) {
+    g_object_disconnect (entry->label,
+                         "signal::show", G_CALLBACK(something_shown), menuitem,
+                         "signal::hide", G_CALLBACK(something_hidden), menuitem,
+                         "signal::notify::sensitive", G_CALLBACK(sensitive_cb), menuitem,
+                         NULL);
+  }
+  if (G_IS_OBJECT (entry->image)) {
+    g_object_disconnect (entry->image,
+                         "signal::show", G_CALLBACK(something_shown), menuitem,
+                         "signal::hide", G_CALLBACK(something_hidden), menuitem,
+                         "signal::notify::sensitive", G_CALLBACK(sensitive_cb), menuitem,
+                         NULL);
+  }
+
+  gtk_widget_hide (menuitem);
 
   return;
 }
@@ -579,6 +609,8 @@ update_accessible_desc(IndicatorObjectEntry * entry, GtkWidget * menuitem)
 static gboolean
 load_module (const gchar * name, GtkWidget * menubar)
 {
+  GObject * o;
+
   g_debug("Looking at Module: %s", name);
   g_return_val_if_fail(name != NULL, FALSE);
 
@@ -597,15 +629,17 @@ load_module (const gchar * name, GtkWidget * menubar)
   indicator_object_set_environment(io, (GStrv)indicator_env);
 
   /* Attach the 'name' to the object */
-  g_object_set_data_full(G_OBJECT(io), IO_DATA_NAME, g_strdup(name), g_free);
-  g_object_set_data(G_OBJECT(io), IO_DATA_ORDER_NUMBER, GINT_TO_POINTER(name2order(name, NULL)));
+  o = G_OBJECT (io);
+  g_object_set_data_full(o, IO_DATA_MENUITEM_LOOKUP, g_hash_table_new (g_direct_hash, g_direct_equal), (GDestroyNotify)g_hash_table_destroy);
+  g_object_set_data_full(o, IO_DATA_NAME, g_strdup(name), g_free);
+  g_object_set_data(o, IO_DATA_ORDER_NUMBER, GINT_TO_POINTER(name2order(name, NULL)));
 
   /* Connect to its signals */
-  g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_ADDED,   G_CALLBACK(entry_added),    menubar);
-  g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_REMOVED, G_CALLBACK(entry_removed),  menubar);
-  g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ENTRY_MOVED,   G_CALLBACK(entry_moved),    menubar);
-  g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_MENU_SHOW,     G_CALLBACK(menu_show),      menubar);
-  g_signal_connect(G_OBJECT(io), INDICATOR_OBJECT_SIGNAL_ACCESSIBLE_DESC_UPDATE, G_CALLBACK(accessible_desc_update), menubar);
+  g_signal_connect(o, INDICATOR_OBJECT_SIGNAL_ENTRY_ADDED,   G_CALLBACK(entry_added),    menubar);
+  g_signal_connect(o, INDICATOR_OBJECT_SIGNAL_ENTRY_REMOVED, G_CALLBACK(entry_removed),  menubar);
+  g_signal_connect(o, INDICATOR_OBJECT_SIGNAL_ENTRY_MOVED,   G_CALLBACK(entry_moved),    menubar);
+  g_signal_connect(o, INDICATOR_OBJECT_SIGNAL_MENU_SHOW,     G_CALLBACK(menu_show),      menubar);
+  g_signal_connect(o, INDICATOR_OBJECT_SIGNAL_ACCESSIBLE_DESC_UPDATE, G_CALLBACK(accessible_desc_update), menubar);
 
   /* Work on the entries */
   GList * entries = indicator_object_get_entries(io);
