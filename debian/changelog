@@ -1,3 +1,11 @@
+indicator-applet (12.10.1-0ubuntu1) quantal; urgency=low
+
+  * New upstream release.
+    - Sync with libindicator requirements (LP: #1045372)
+    - Add position hint for sync indicator (LP: #1049838)
+
+ -- Ken VanDine <ken.vandine@canonical.com>  Wed, 19 Sep 2012 15:52:42 -0400
+
 indicator-applet (12.10.0-0ubuntu2) quantal; urgency=low
 
   * Backport a fix so that libroffice doesn't hang on on startup (LP: #1045372)
