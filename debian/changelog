@@ -5,6 +5,7 @@ indicator-applet (12.10.2-0ubuntu1) UNRELEASED; urgency=low
     - Reorganize Build-Depends for clarity.
     - Drop Build-Depends on cdbs.
     - Bump Build-Depends on debhelper to (>= 9)
+    - Add a Build-Depends for gnome-common.
     - Update Vcs-Bzr, Vcs-Browser and add a notice to uploaders.
   * debian/compat: bump compat level to 9.
 
