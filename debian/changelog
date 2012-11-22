@@ -5,6 +5,7 @@ indicator-applet (12.10.2-0ubuntu1) UNRELEASED; urgency=low
     - Reorganize Build-Depends for clarity.
     - Drop Build-Depends on cdbs.
     - Bump Build-Depends on debhelper to (>= 9)
+  * debian/compat: bump compat level to 9.
 
  -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Thu, 22 Nov 2012 11:20:53 -0500
 
