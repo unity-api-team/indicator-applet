@@ -3,6 +3,7 @@ indicator-applet (12.10.2-0ubuntu1) UNRELEASED; urgency=low
   * debian/control:
     - Update style to match other indicator packages.
     - Reorganize Build-Depends for clarity.
+    - Drop Build-Depends on cdbs.
 
  -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Thu, 22 Nov 2012 11:20:53 -0500
 
