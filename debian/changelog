@@ -10,6 +10,7 @@ indicator-applet (12.10.2-0ubuntu1) UNRELEASED; urgency=low
   * debian/compat: bump compat level to 9.
   * debian/rules:
     - Convert to using the dh sequencer.
+    - Add and export DPKG_GENSYMBOLS_CHECK_LEVEL.
 
  -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Thu, 22 Nov 2012 11:20:53 -0500
 

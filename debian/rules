@@ -2,6 +2,8 @@
 
 LDFLAGS += -Wl,-z,defs -Wl,--as-needed
 
+export DPKG_GENSYMBOLS_CHECK_LEVEL = 4
+
 %:
 	dh $@ --with autoreconf
 
