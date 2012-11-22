@@ -3,6 +3,7 @@ Section: gnome
 Priority: optional
 Maintainer: Ubuntu Desktop Team <ubuntu-desktop@lists.ubuntu.com>
 Build-Depends: debhelper (>= 5.0),
+               quilt,
                cdbs (>= 0.4.41),
                libgtk-3-dev,
                libpanel-applet-4-dev,
@@ -14,7 +15,6 @@ Build-Depends: debhelper (>= 5.0),
                libindicator3-dev,
                dh-autoreconf,
                libx11-dev,
-               quilt
 Standards-Version: 3.9.3
 Homepage: https://launchpad.net/indicator-applet
 Vcs-Bzr: http://bazaar.launchpad.net/~ubuntu-desktop/indicator-applet/ubuntu
@@ -24,11 +24,11 @@ Package: indicator-applet
 Architecture: any
 Depends: ${shlibs:Depends},
          ${misc:Depends},
-         python3-xdg
+         python3-xdg,
 Recommends: indicator-messages,
             indicator-sound,
-            indicator-application
-Provides: indicator-renderer
+            indicator-application,
+Provides: indicator-renderer,
 Description: GNOME panel indicator applet
  indicator-applet is an applet to display information from
  various applications consistently in the GNOME panel.
@@ -40,10 +40,14 @@ Package: indicator-applet-session
 Architecture: any
 Depends: ${shlibs:Depends},
          ${misc:Depends},
-         indicator-applet (= ${binary:Version})
-Recommends: indicator-session
-Conflicts: indicator-applet-sus, gdm (<< 2.27.90-0ubuntu1), fast-user-switch-applet
-Replaces: indicator-applet-sus, gdm (<< 2.27.90-0ubuntu1), fast-user-switch-applet
+         indicator-applet (= ${binary:Version}),
+Recommends: indicator-session,
+Conflicts: indicator-applet-sus,
+           gdm (<< 2.27.90-0ubuntu1),
+           fast-user-switch-applet,
+Replaces: indicator-applet-sus,
+          gdm (<< 2.27.90-0ubuntu1),
+          fast-user-switch-applet,
 Description: Clone of the GNOME panel indicator applet
  Indicator-applet is an applet to display information from
  various applications consistently in the GNOME panel.
@@ -54,12 +58,12 @@ Description: Clone of the GNOME panel indicator applet
 Package: indicator-applet-complete
 Architecture: any
 Depends: ${shlibs:Depends},
-         ${misc:Depends}
+         ${misc:Depends},
 Recommends: indicator-session,
          indicator-messages,
          indicator-sound,
-         indicator-application
-Provides: indicator-renderer
+         indicator-application,
+Provides: indicator-renderer,
 Description: Clone of the GNOME panel indicator applet
  Indicator-applet is an applet to display information from
  various applications consistently in the GNOME panel.
@@ -70,9 +74,9 @@ Description: Clone of the GNOME panel indicator applet
 Package: indicator-applet-appmenu
 Architecture: any
 Depends: ${shlibs:Depends},
-         ${misc:Depends}
-Recommends: indicator-appmenu
-Provides: indicator-renderer
+         ${misc:Depends},
+Recommends: indicator-appmenu,
+Provides: indicator-renderer,
 Description: Clone of the GNOME panel indicator applet
  Indicator-applet is an applet to display information from
  various applications consistently in the GNOME panel.
