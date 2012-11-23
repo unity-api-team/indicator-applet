@@ -12,6 +12,7 @@ indicator-applet (12.10.2-0ubuntu1) UNRELEASED; urgency=low
     - Convert to using the dh sequencer.
     - Add and export DPKG_GENSYMBOLS_CHECK_LEVEL.
     - Override dh_autoreconf to have it call autogen.sh and not run configure.
+  * debian/*.install: update paths for multiarch.
 
  -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Thu, 22 Nov 2012 11:20:53 -0500
 
