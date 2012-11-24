@@ -7,6 +7,7 @@ indicator-applet (12.10.2-0ubuntu1) UNRELEASED; urgency=low
     - Bump Build-Depends on debhelper to (>= 9)
     - Add a Build-Depends for gnome-common.
     - Update Vcs-Bzr, Vcs-Browser and add a notice to uploaders.
+    - Drop outdated Conflicts/Replaces for old upgrade paths.
   * debian/compat: bump compat level to 9.
   * debian/rules:
     - Convert to using the dh sequencer.
