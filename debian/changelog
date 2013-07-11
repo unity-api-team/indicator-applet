@@ -1,8 +1,9 @@
-indicator-applet (12.10.2daily13.03.01-0ubuntu2) UNRELEASED; urgency=low
+indicator-applet (12.10.2daily13.03.01-0ubuntu3) UNRELEASED; urgency=low
 
   * Load indicator objects from keyfiles in /usr/share/unity/indicators. (LP: #1197957)
+  * Added ido_init() and restored datetime and power indicators position.
 
- -- Alberts Muktupavels <alberts.muktupavels@gmail.com>  Wed, 10 Jul 2013 15:04:40 +0300
+ -- Alberts Muktupavels <alberts.muktupavels@gmail.com>  Thu, 11 Jul 2013 18:22:02 +0300
 
 indicator-applet (12.10.2daily13.03.01-0ubuntu1) raring; urgency=low
 

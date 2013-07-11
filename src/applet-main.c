@@ -27,6 +27,8 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <panel-applet.h>
 #include <gdk/gdkkeysyms.h>
 
+#include <libido/libido.h>
+
 #include <libindicator/indicator-object.h>
 #include <libindicator/indicator-ng.h>
 #include "tomboykeybinder.h"
@@ -38,13 +40,15 @@ static const gchar * indicator_order[][2] = {
   {"libsyncindicator.so", NULL},              /* indicator-sync */
   {"libapplication.so", "gsd-keyboard-xkb"},  /* keyboard layout selector */
   {"libmessaging.so", NULL},                  /* indicator-messages */
-  {"libpower.so", NULL},                      /* indicator-power */
+  {"com.canonical.indicator.power", NULL},    /* indicator-power */
+  /*{"libpower.so", NULL},*/                  /* indicator-power */
   {"libapplication.so", "bluetooth-manager"}, /* bluetooth manager */
   {"libnetwork.so", NULL},                    /* indicator-network */
   {"libnetworkmenu.so", NULL},                /* indicator-network */
   {"libapplication.so", "nm-applet"},         /* network manager */
   {"libsoundmenu.so", NULL},                  /* indicator-sound */
-  {"libdatetime.so", NULL},                   /* indicator-datetime */
+  {"com.canonical.indicator.datetime", NULL}, /* indicator-datetime */
+  /*{"libdatetime.so", NULL},*/               /* indicator-datetime */
   {"libsession.so", NULL},                    /* indicator-session */
   {NULL, NULL}
 };
@@ -606,20 +610,12 @@ update_accessible_desc(IndicatorObjectEntry * entry, GtkWidget * menuitem)
   return;
 }
 
-static void load_indicator(GtkWidget * menubar, IndicatorObject *object, const gchar *_name) {
+static void load_indicator(GtkWidget * menubar, IndicatorObject *object, const gchar *name) {
 	GObject * o;
-	gchar *name;
 	GList *entries, *entry;
 
 	/* Set the environment it's in */
 	indicator_object_set_environment(object, (GStrv)indicator_env);
-
-	/* */
-	if (_name != NULL) {
-		name = g_strdup (_name);
-	}else{
-		name = g_strdup_printf ("%p", object);
-	}
 
 	/* Attach the 'name' to the object */
 	o = G_OBJECT (object);
@@ -643,7 +639,6 @@ static void load_indicator(GtkWidget * menubar, IndicatorObject *object, const g
 	}
 
 	g_list_free(entries);
-	g_free (name);
 }
 
 static gboolean
@@ -741,7 +736,7 @@ static void load_indicators_from_indicator_files(GtkWidget *menubar, gint *indic
 		indicator = indicator_ng_new_for_profile (filename, "desktop", &error);
 
 		if (indicator) {
-			load_indicator(menubar,INDICATOR_OBJECT (indicator), NULL);
+			load_indicator(menubar,INDICATOR_OBJECT (indicator), name);
 			count++;
 		}else{
 			g_warning ("unable to load '%s': %s", name, error->message);
@@ -967,6 +962,8 @@ static gboolean
 applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
                 gpointer data G_GNUC_UNUSED)
 {
+  ido_init();
+  
   static const GtkActionEntry menu_actions[] = {
     {"About", GTK_STOCK_ABOUT, N_("_About"), NULL, NULL, G_CALLBACK(about_cb)}
   };
