@@ -32,6 +32,7 @@ APPLET_PKG=libpanelapplet-4.0
 
 PKG_CHECK_MODULES(APPLET, gtk+-3.0 >= $GTK_REQUIRED_VERSION
                           x11
+                          libido3-0.1
                           $APPLET_PKG
                           $INDICATOR_PKG >= $INDICATOR_REQUIRED_VERSION)
 AC_SUBST(APPLET_CFLAGS)
