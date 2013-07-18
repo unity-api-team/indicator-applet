@@ -40,16 +40,10 @@ static const gchar * indicator_order[][2] = {
   {"libsyncindicator.so", NULL},              /* indicator-sync */
   {"libapplication.so", "gsd-keyboard-xkb"},  /* keyboard layout selector */
   {"libmessaging.so", NULL},                  /* indicator-messages */
-  {"com.canonical.indicator.power", NULL},    /* indicator-power */
-  /*{"libpower.so", NULL},*/                  /* indicator-power */
   {"libapplication.so", "bluetooth-manager"}, /* bluetooth manager */
   {"libnetwork.so", NULL},                    /* indicator-network */
   {"libnetworkmenu.so", NULL},                /* indicator-network */
   {"libapplication.so", "nm-applet"},         /* network manager */
-  {"libsoundmenu.so", NULL},                  /* indicator-sound */
-  {"com.canonical.indicator.datetime", NULL}, /* indicator-datetime */
-  /*{"libdatetime.so", NULL},*/               /* indicator-datetime */
-  {"libsession.so", NULL},                    /* indicator-session */
   {NULL, NULL}
 };
 
@@ -157,7 +151,7 @@ name2order (const gchar * name, const gchar * hint) {
   for (i = 0; indicator_order[i][0] != NULL; i++) {
     if (g_strcmp0(name, indicator_order[i][0]) == 0 &&
         g_strcmp0(hint, indicator_order[i][1]) == 0) {
-      return i;
+      return 1000 - i;
     }
   }
 
@@ -197,8 +191,8 @@ place_in_menu_cb (GtkWidget * widget, gpointer user_data)
   }
 
   /* The objects don't match yet, keep looking */
-  if (objposition < position->objposition) {
-    position->menupos++;
+  if (objposition > position->objposition) {
+    position->menupos--;
     return;
   }
 
@@ -206,13 +200,13 @@ place_in_menu_cb (GtkWidget * widget, gpointer user_data)
   IndicatorObjectEntry * entry = (IndicatorObjectEntry *)g_object_get_data(G_OBJECT(widget), MENU_DATA_INDICATOR_ENTRY);
   gint entryposition = indicator_object_get_location(io, entry);
 
-  if (entryposition > position->entryposition) {
+  if (entryposition < position->entryposition) {
     position->found = TRUE;
     return;
   }
 
-  if (entryposition < position->entryposition) {
-    position->menupos++;
+  if (entryposition > position->entryposition) {
+    position->menupos--;
     return;
   }
 
@@ -621,7 +615,13 @@ static void load_indicator(GtkWidget * menubar, IndicatorObject *object, const g
 	o = G_OBJECT (object);
 	g_object_set_data_full(o, IO_DATA_MENUITEM_LOOKUP, g_hash_table_new (g_direct_hash, g_direct_equal), (GDestroyNotify)g_hash_table_destroy);
 	g_object_set_data_full(o, IO_DATA_NAME, g_strdup(name), g_free);
-	g_object_set_data(o, IO_DATA_ORDER_NUMBER, GINT_TO_POINTER(name2order(name, NULL)));
+	
+	int pos = indicator_object_get_position(o);
+	if (pos < 0) {
+	    pos = name2order(name, NULL);
+	}
+	
+	g_object_set_data(o, IO_DATA_ORDER_NUMBER, GINT_TO_POINTER(pos));
 
 	/* Connect to its signals */
 	g_signal_connect(o, INDICATOR_OBJECT_SIGNAL_ENTRY_ADDED,   G_CALLBACK(entry_added),    menubar);
