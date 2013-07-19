@@ -1,8 +1,12 @@
-indicator-applet (12.10.2+13.10.20130716-0ubuntu2) UNRELEASED; urgency=low
+indicator-applet (12.10.2+13.10.20130719-0ubuntu1) saucy; urgency=low
 
+  [ Alberts Muktupāvels ]
   * Place old indicators first than new indicators from keyfiles.
 
- -- Alberts Muktupāvels <alberts.muktupavels@gmail.com>  Wed, 17 Jul 2013 21:28:19 +0300
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 411
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 19 Jul 2013 02:02:43 +0000
 
 indicator-applet (12.10.2+13.10.20130716-0ubuntu1) saucy; urgency=low
 
