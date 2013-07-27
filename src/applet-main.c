@@ -40,10 +40,14 @@ static const gchar * indicator_order[][2] = {
   {"libsyncindicator.so", NULL},              /* indicator-sync */
   {"libapplication.so", "gsd-keyboard-xkb"},  /* keyboard layout selector */
   {"libmessaging.so", NULL},                  /* indicator-messages */
-  {"libapplication.so", "bluetooth-manager"}, /* bluetooth manager */
+  {"libpower.so", NULL},                      /* indicator-power */
+  {"libbluetooth.so", NULL},                  /* indicator-bluetooth */
   {"libnetwork.so", NULL},                    /* indicator-network */
   {"libnetworkmenu.so", NULL},                /* indicator-network */
   {"libapplication.so", "nm-applet"},         /* network manager */
+  {"libsoundmenu.so", NULL},                  /* indicator-sound */
+  {"libdatetime.so", NULL},                   /* indicator-datetime */
+  {"libsession.so", NULL},                    /* indicator-session */
   {NULL, NULL}
 };
 
@@ -151,7 +155,7 @@ name2order (const gchar * name, const gchar * hint) {
   for (i = 0; indicator_order[i][0] != NULL; i++) {
     if (g_strcmp0(name, indicator_order[i][0]) == 0 &&
         g_strcmp0(hint, indicator_order[i][1]) == 0) {
-      return 1000 - i;
+      return i;
     }
   }
 
@@ -191,8 +195,8 @@ place_in_menu_cb (GtkWidget * widget, gpointer user_data)
   }
 
   /* The objects don't match yet, keep looking */
-  if (objposition > position->objposition) {
-    position->menupos--;
+  if (objposition < position->objposition) {
+    position->menupos++;
     return;
   }
 
@@ -200,13 +204,13 @@ place_in_menu_cb (GtkWidget * widget, gpointer user_data)
   IndicatorObjectEntry * entry = (IndicatorObjectEntry *)g_object_get_data(G_OBJECT(widget), MENU_DATA_INDICATOR_ENTRY);
   gint entryposition = indicator_object_get_location(io, entry);
 
-  if (entryposition < position->entryposition) {
+  if (entryposition > position->entryposition) {
     position->found = TRUE;
     return;
   }
 
-  if (entryposition > position->entryposition) {
-    position->menupos--;
+  if (entryposition < position->entryposition) {
+    position->menupos++;
     return;
   }
 
@@ -232,6 +236,7 @@ place_in_menu (GtkWidget *menubar,
   if (entry->name_hint != NULL) {
     const gchar *name = (const gchar *)g_object_get_data(G_OBJECT(io), IO_DATA_NAME);
     gint entry_position = name2order(name, entry->name_hint);
+    g_debug ("Placing %s (%s): %d", name, entry->name_hint, entry_position);
 
     /* If we don't find the entry, fall back to the indicator object's position */
     if (entry_position > -1)
@@ -616,8 +621,8 @@ static void load_indicator(GtkWidget * menubar, IndicatorObject *object, const g
 	g_object_set_data_full(o, IO_DATA_MENUITEM_LOOKUP, g_hash_table_new (g_direct_hash, g_direct_equal), (GDestroyNotify)g_hash_table_destroy);
 	g_object_set_data_full(o, IO_DATA_NAME, g_strdup(name), g_free);
 	
-	int pos = indicator_object_get_position(o);
-	if (pos < 0) {
+	int pos = 5000 - indicator_object_get_position(object);
+	if (pos > 5000) {
 	    pos = name2order(name, NULL);
 	}
 	
