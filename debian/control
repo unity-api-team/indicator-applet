@@ -57,10 +57,15 @@ Package: indicator-applet-complete
 Architecture: any
 Depends: ${shlibs:Depends},
          ${misc:Depends},
-Recommends: indicator-session,
+Recommends: indicator-application,
+         indicator-bluetooth,
+         indicator-datetime,
          indicator-messages,
+         indicator-power,
+         indicator-printers,
+         indicator-session,
          indicator-sound,
-         indicator-application,
+         indicator-sync
 Provides: indicator-renderer,
 Description: Clone of the GNOME panel indicator applet
  Indicator-applet is an applet to display information from
