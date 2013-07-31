@@ -1,3 +1,14 @@
+indicator-applet (12.10.2+13.10.20130731-0ubuntu1) saucy; urgency=low
+
+  [ Jeremy Bicha ]
+  * Have indicator-applet-complete also recommend the other default
+    indicators (bluetooth, datetime, power, printers, and sync).
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 413
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 31 Jul 2013 02:01:59 +0000
+
 indicator-applet (12.10.2+13.10.20130719-0ubuntu1) saucy; urgency=low
 
   [ Alberts Muktupāvels ]
