@@ -1,3 +1,13 @@
+indicator-applet (12.10.2+13.10.20130809-0ubuntu1) saucy; urgency=low
+
+  [ Iain Lane ]
+  * Only prioritise and invert new-style indicators.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 415
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 09 Aug 2013 02:02:21 +0000
+
 indicator-applet (12.10.2+13.10.20130731-0ubuntu1) saucy; urgency=low
 
   [ Jeremy Bicha ]
