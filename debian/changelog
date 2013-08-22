@@ -1,3 +1,13 @@
+indicator-applet (12.10.2+13.10.20130822.5-0ubuntu1) saucy; urgency=low
+
+  [ Jeremy Bicha ]
+  * Have indicator-applet-complete also recommend indicator-keyboard.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 417
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Thu, 22 Aug 2013 20:29:07 +0000
+
 indicator-applet (12.10.2+13.10.20130809-0ubuntu1) saucy; urgency=low
 
   [ Iain Lane ]
