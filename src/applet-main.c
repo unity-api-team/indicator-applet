@@ -706,7 +706,7 @@ static void load_modules(GtkWidget *menubar, gint *indicators_loaded) {
 			}
 		}
 
-		*indicators_loaded = count;
+		*indicators_loaded += count;
 		
 		g_dir_close (dir);
 	}
@@ -747,7 +747,7 @@ static void load_indicators_from_indicator_files(GtkWidget *menubar, gint *indic
 		g_free (filename);
 	}
 
-	*indicators_loaded = count;
+	*indicators_loaded += count;
 
 	g_dir_close (dir);
 }
