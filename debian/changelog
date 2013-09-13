@@ -1,3 +1,17 @@
+indicator-applet (12.10.2+13.10.20130913-0ubuntu1) saucy; urgency=low
+
+  [ Alistair Buxton ]
+  * Fix the loaded indicators count. The addition of support for
+    indicator-ng means that there are now two ways to load indicators,
+    but only those loaded by the second function are counted. Fix this
+    by making the worker functions add to the counter variable instead
+    of assigning to it.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 419
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 13 Sep 2013 15:15:33 +0000
+
 indicator-applet (12.10.2+13.10.20130822.5-0ubuntu1) saucy; urgency=low
 
   [ Jeremy Bicha ]
