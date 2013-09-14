@@ -735,16 +735,46 @@ static void load_indicators_from_indicator_files(GtkWidget *menubar, gint *indic
 
 		filename = g_build_filename (INDICATOR_SERVICE_DIR, name, NULL);
 		indicator = indicator_ng_new_for_profile (filename, "desktop", &error);
+		g_free (filename);
+		
+		g_debug ("looking at indicator: %s", name);
+		
+		#ifdef INDICATOR_APPLET_APPMENU
+			if (g_strcmp0(name, "com.canonical.indicator.appmenu")) {
+				continue;
+			}
+		#else
+			if (!g_strcmp0(name, "com.canonical.indicator.appmenu")) {
+				continue;
+			}
+		#endif
+		
+		#ifdef INDICATOR_APPLET
+			if (!g_strcmp0(name, "com.canonical.indicator.session")) {
+				continue;
+			}
+			if (!g_strcmp0(name, "com.canonical.indicator.me")) {
+				continue;
+			}
+			if (!g_strcmp0(name, "com.canonical.indicator.datetime")) {
+				continue;
+			}
+		#endif
+		
+		#ifdef INDICATOR_APPLET_SESSION
+			if (g_strcmp0(name, "com.canonical.indicator.session") && g_strcmp0(name, "com.canonical.indicator.me")) {
+				continue;
+			}
+		#endif
 
 		if (indicator) {
+		    g_debug ("loading indicator: %s", name);
 			load_indicator(menubar,INDICATOR_OBJECT (indicator), name);
 			count++;
 		}else{
 			g_warning ("unable to load '%s': %s", name, error->message);
 			g_clear_error (&error);
 		}
-
-		g_free (filename);
 	}
 
 	*indicators_loaded += count;
