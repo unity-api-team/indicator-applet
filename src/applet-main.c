@@ -766,7 +766,7 @@ static void load_indicators_from_indicator_files(GtkWidget *menubar, gint *indic
 		#endif
 
 		if (indicator) {
-		    g_debug ("loading indicator: %s", name);
+			g_debug ("loading indicator: %s", name);
 			load_indicator(menubar,INDICATOR_OBJECT (indicator), name);
 			count++;
 		}else{
