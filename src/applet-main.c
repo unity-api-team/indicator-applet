@@ -736,9 +736,7 @@ static void load_indicators_from_indicator_files(GtkWidget *menubar, gint *indic
 		filename = g_build_filename (INDICATOR_SERVICE_DIR, name, NULL);
 		indicator = indicator_ng_new_for_profile (filename, "desktop", &error);
 		g_free (filename);
-		
-		g_debug ("looking at indicator: %s", name);
-		
+
 		#ifdef INDICATOR_APPLET_APPMENU
 			if (g_strcmp0(name, "com.canonical.indicator.appmenu")) {
 				continue;
