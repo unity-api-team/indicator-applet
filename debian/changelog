@@ -1,3 +1,14 @@
+indicator-applet (12.10.2+13.10.20130924.2-0ubuntu1) saucy; urgency=low
+
+  [ Alberts Muktupāvels ]
+  * Don't load all indicators for indicator-applet-appmenu, indicator-
+    applet-session... LP: (#1215337). (LP: #1215337)
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 421
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Tue, 24 Sep 2013 08:58:23 +0000
+
 indicator-applet (12.10.2+13.10.20130913-0ubuntu1) saucy; urgency=low
 
   [ Alistair Buxton ]
