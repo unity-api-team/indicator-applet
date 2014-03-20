@@ -498,16 +498,16 @@ entry_removed (IndicatorObject * io,
   /* disconnect the callbacks */
   if (G_IS_OBJECT (entry->label)) {
     g_object_disconnect (entry->label,
-                         "signal::show", G_CALLBACK(something_shown), menuitem,
-                         "signal::hide", G_CALLBACK(something_hidden), menuitem,
-                         "signal::notify::sensitive", G_CALLBACK(sensitive_cb), menuitem,
+                         "any-signal", G_CALLBACK(something_shown), menuitem,
+                         "any-signal", G_CALLBACK(something_hidden), menuitem,
+                         "any-signal", G_CALLBACK(sensitive_cb), menuitem,
                          NULL);
   }
   if (G_IS_OBJECT (entry->image)) {
     g_object_disconnect (entry->image,
-                         "signal::show", G_CALLBACK(something_shown), menuitem,
-                         "signal::hide", G_CALLBACK(something_hidden), menuitem,
-                         "signal::notify::sensitive", G_CALLBACK(sensitive_cb), menuitem,
+                         "any-signal", G_CALLBACK(something_shown), menuitem,
+                         "any-signal", G_CALLBACK(something_hidden), menuitem,
+                         "any-signal", G_CALLBACK(sensitive_cb), menuitem,
                          NULL);
   }
 
