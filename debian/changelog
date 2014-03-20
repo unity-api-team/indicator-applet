@@ -1,3 +1,11 @@
+indicator-applet (12.10.2+14.04.20140320.1-0ubuntu1) trusty; urgency=low
+
+  [ Dmitry Shachnev ]
+  * Fix assertion error which prevented indicator-applet-appmenu from
+    functioning.
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Thu, 20 Mar 2014 19:07:58 +0000
+
 indicator-applet (12.10.2+14.04.20140320-0ubuntu1) trusty; urgency=low
 
   [ Charles Kerr ]
