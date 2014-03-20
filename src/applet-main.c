@@ -404,7 +404,9 @@ create_menuitem (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget *
         break;
       default:
         break;
-    }    
+    }
+    /* gtk_box_pack requires that the widget has no parent */
+    gtk_widget_unparent(GTK_WIDGET(entry->label));
     gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry->label), FALSE, FALSE, 1);
   }
   gtk_container_add(GTK_CONTAINER(menuitem), box);
