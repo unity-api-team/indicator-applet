@@ -1,3 +1,14 @@
+indicator-applet (12.10.2+14.04.20140320-0ubuntu1) trusty; urgency=low
+
+  [ Charles Kerr ]
+  * Use the correct signal_spec syntax when calling
+    g_object_disconnect(). (LP: #1284840)
+
+  [ Dmitry Shachnev ]
+  * Allow Gtk deprecations, to workaround FTBFS.
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Thu, 20 Mar 2014 09:03:53 +0000
+
 indicator-applet (12.10.2+13.10.20130924.2-0ubuntu1) saucy; urgency=low
 
   [ Alberts Muktupāvels ]
