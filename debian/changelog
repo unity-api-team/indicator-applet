@@ -1,3 +1,11 @@
+indicator-applet (12.10.2+14.04.20140403-0ubuntu1) trusty; urgency=low
+
+  [ Dimitri John Ledkov ]
+  * Drop indicator-sync recommendation and references. (LP: #1300916)
+    (LP: #1300916)
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Thu, 03 Apr 2014 01:11:06 +0000
+
 indicator-applet (12.10.2+14.04.20140320.1-0ubuntu1) trusty; urgency=low
 
   [ Dmitry Shachnev ]
