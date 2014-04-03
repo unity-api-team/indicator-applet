@@ -37,7 +37,6 @@ static const gchar * indicator_order[][2] = {
   {"libappmenu.so", NULL},                    /* indicator-appmenu" */
   {"libapplication.so", NULL},                /* indicator-application" */
   {"libprintersmenu.so", NULL},               /* indicator-printers */
-  {"libsyncindicator.so", NULL},              /* indicator-sync */
   {"libapplication.so", "gsd-keyboard-xkb"},  /* keyboard layout selector */
   {"libmessaging.so", NULL},                  /* indicator-messages */
   {"libbluetooth.so", NULL},                  /* indicator-bluetooth */
