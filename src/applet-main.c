@@ -364,6 +364,22 @@ accessible_desc_update (IndicatorObject * io, IndicatorObjectEntry * entry, GtkW
   return;
 }
 
+static void
+size_allocate (GtkWidget *widget, GtkAllocation *allocation) {
+    int height = 0;
+    if(GTK_IS_CONTAINER(widget)) {
+        GList *children = gtk_container_get_children(GTK_CONTAINER(widget));
+        GList *l;
+        for (l = children; l != NULL; l = l->next) {
+            GtkAllocation ca;
+            gtk_widget_get_allocation (l->data, &ca);
+            height += ca.height;
+        }
+    }
+    allocation->height = height;
+    gtk_widget_set_allocation(widget, allocation);
+}
+
 static GtkWidget*
 create_menuitem (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget * menubar)
 {
@@ -387,6 +403,7 @@ create_menuitem (IndicatorObject * io, IndicatorObjectEntry * entry, GtkWidget *
   g_signal_connect(G_OBJECT(menuitem), "enter-notify-event", G_CALLBACK(entry_secondary_activated), NULL);
   g_signal_connect(G_OBJECT(menuitem), "leave-notify-event", G_CALLBACK(entry_secondary_activated), NULL);
   g_signal_connect(G_OBJECT(menuitem), "scroll-event", G_CALLBACK(entry_scrolled), NULL);
+  g_signal_connect(G_OBJECT(entry->menu), "size-allocate", G_CALLBACK(size_allocate), NULL); 
 
   if (entry->image != NULL) {
     gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(entry->image), FALSE, FALSE, 1);
