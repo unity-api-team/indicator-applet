@@ -27,13 +27,14 @@ m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 
 GTK_REQUIRED_VERSION=3.1
 INDICATOR_REQUIRED_VERSION=0.3.92
+LIBPANEL_APPLET_REQUIRED_VERSION=3.10.0
 INDICATOR_PKG=indicator3-0.4
-APPLET_PKG=libpanelapplet-4.0
+APPLET_PKG=libpanel-applet
 
 PKG_CHECK_MODULES(APPLET, gtk+-3.0 >= $GTK_REQUIRED_VERSION
                           x11
                           libido3-0.1
-                          $APPLET_PKG
+                          $APPLET_PKG >= $LIBPANEL_APPLET_REQUIRED_VERSION
                           $INDICATOR_PKG >= $INDICATOR_REQUIRED_VERSION)
 AC_SUBST(APPLET_CFLAGS)
 AC_SUBST(APPLET_LIBS)
