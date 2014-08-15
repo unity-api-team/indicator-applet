@@ -1075,6 +1075,7 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
                                 G_N_ELEMENTS (menu_actions),
                                 menubar);
   panel_applet_setup_menu(applet, menu_xml, action_group);
+  g_object_unref(action_group);
 #endif
 
 #ifdef INDICATOR_APPLET
