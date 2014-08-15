@@ -813,9 +813,14 @@ menubar_press (GtkWidget * widget,
 }
 
 static void
+#ifdef HAVE_LIBPANEL_APPLET
 about_cb (GSimpleAction *action G_GNUC_UNUSED,
           GVariant      *parameter G_GNUC_UNUSED,
           gpointer       data G_GNUC_UNUSED)
+#else
+about_cb (GtkAction *action G_GNUC_UNUSED,
+          gpointer   data G_GNUC_UNUSED)
+#endif
 {
   static const gchar *authors[] = {
     "Ted Gould <ted@canonical.com>",
@@ -994,7 +999,8 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
                 gpointer data G_GNUC_UNUSED)
 {
   ido_init();
-  
+
+#ifdef HAVE_LIBPANEL_APPLET
   static const GActionEntry menu_actions[] = {
     {"about", about_cb }
   };
@@ -1005,11 +1011,21 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
     "<attribute name=\"action\">indicator-applet.about</attribute>"
     "</item>"
     "</section>";
+#else
+  static const GtkActionEntry menu_actions[] = {
+    {"About", GTK_STOCK_ABOUT, N_("_About"), NULL, NULL, G_CALLBACK(about_cb)}
+  };
+  static const gchar *menu_xml = "<menuitem name=\"About\" action=\"About\"/>";
+#endif
 
   static gboolean first_time = FALSE;
   GtkWidget *menubar;
   gint indicators_loaded = 0;
+#ifdef HAVE_LIBPANEL_APPLET
   GSimpleActionGroup *action_group;
+#else
+  GtkActionGroup *action_group;
+#endif
 
 #ifdef INDICATOR_APPLET_SESSION
   /* check if we are running stracciatella session */
@@ -1045,12 +1061,21 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
   panel_applet_set_flags(applet, PANEL_APPLET_EXPAND_MINOR);
   menubar = gtk_menu_bar_new();
 
+#ifdef HAVE_LIBPANEL_APPLET
   action_group = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (action_group), menu_actions,
                                    G_N_ELEMENTS (menu_actions), menubar);
   panel_applet_setup_menu(applet, menu_xml, action_group, GETTEXT_PACKAGE);
   gtk_widget_insert_action_group (GTK_WIDGET (applet), "indicator-applet", G_ACTION_GROUP (action_group));
   g_object_unref(action_group);
+#else
+  action_group = gtk_action_group_new ("Indicator Applet Actions");
+  gtk_action_group_set_translation_domain (action_group, GETTEXT_PACKAGE);
+  gtk_action_group_add_actions (action_group, menu_actions,
+                                G_N_ELEMENTS (menu_actions),
+                                menubar);
+  panel_applet_setup_menu(applet, menu_xml, action_group);
+#endif
 
 #ifdef INDICATOR_APPLET
   atk_object_set_name (gtk_widget_get_accessible (GTK_WIDGET (applet)),
