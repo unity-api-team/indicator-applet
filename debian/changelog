@@ -1,3 +1,10 @@
+indicator-applet (12.10.2+15.04.20141111-0ubuntu1) vivid; urgency=low
+
+  [ Alberts Muktupāvels ]
+  * Update for new libpanel-applet version.
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Tue, 11 Nov 2014 17:53:08 +0000
+
 indicator-applet (12.10.2+14.04.20140403-0ubuntu1) trusty; urgency=low
 
   [ Dimitri John Ledkov ]
