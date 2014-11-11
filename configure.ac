@@ -22,13 +22,24 @@ AC_CONFIG_MACRO_DIR([m4])
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 
 ###########################
+# libpanel-applet version
+###########################
+
+PKG_CHECK_MODULES(LIBPANEL_APPLET_TEST, [libpanel-applet >= 3.10], [have_libpanel_applet=yes], [have_libpanel_applet=no])
+if test "$have_libpanel_applet" = "yes"; then
+    APPLET_PKG=libpanel-applet
+    AC_DEFINE([HAVE_LIBPANEL_APPLET], 1, [Define to use new libpanel-applet])
+else
+    APPLET_PKG=libpanelapplet-4.0
+fi
+
+###########################
 # Dependencies 
 ###########################
 
 GTK_REQUIRED_VERSION=3.1
 INDICATOR_REQUIRED_VERSION=0.3.92
 INDICATOR_PKG=indicator3-0.4
-APPLET_PKG=libpanelapplet-4.0
 
 PKG_CHECK_MODULES(APPLET, gtk+-3.0 >= $GTK_REQUIRED_VERSION
                           x11
@@ -58,6 +69,8 @@ else
 	INDICATORDIR=`$PKG_CONFIG --variable=indicatordir $INDICATOR_PKG`
 	INDICATORICONSDIR=`$PKG_CONFIG --variable=iconsdir $INDICATOR_PKG`
 fi
+
+LIBPANEL_APPLET_API_VERSION=`$PKG_CONFIG --variable=libpanel_applet_api_version $APPLET_PKG`
 
 AC_SUBST(APPLETDIR)
 AC_SUBST(INDICATORDIR)
@@ -141,4 +154,5 @@ AC_MSG_NOTICE([
 Indicator Applet Configuration:
 
 	Prefix:                 $prefix
+	libpanel-applet API:    $LIBPANEL_APPLET_API_VERSION
 ])
