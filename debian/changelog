@@ -1,3 +1,10 @@
+indicator-applet (12.10.2+15.04.20141127.2-0ubuntu1) vivid; urgency=low
+
+  [ Dmitry Shachnev ]
+  * Build against gnome-panel 3.14.
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Thu, 27 Nov 2014 11:45:58 +0000
+
 indicator-applet (12.10.2+15.04.20141111-0ubuntu1) vivid; urgency=low
 
   [ Alberts Muktupāvels ]
