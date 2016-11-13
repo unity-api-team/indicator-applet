@@ -68,22 +68,22 @@ static void update_accessible_desc (IndicatorObjectEntry * entry, GtkWidget * me
  * ***********/
 
 #ifdef INDICATOR_APPLET
-PANEL_APPLET_OUT_PROCESS_FACTORY ("IndicatorAppletFactory",
+PANEL_APPLET_IN_PROCESS_FACTORY ("IndicatorAppletFactory",
                PANEL_TYPE_APPLET,
                applet_fill_cb, NULL);
 #endif
 #ifdef INDICATOR_APPLET_SESSION
-PANEL_APPLET_OUT_PROCESS_FACTORY ("FastUserSwitchAppletFactory",
+PANEL_APPLET_IN_PROCESS_FACTORY ("FastUserSwitchAppletFactory",
                PANEL_TYPE_APPLET,
                applet_fill_cb, NULL);
 #endif
 #ifdef INDICATOR_APPLET_COMPLETE
-PANEL_APPLET_OUT_PROCESS_FACTORY ("IndicatorAppletCompleteFactory",
+PANEL_APPLET_IN_PROCESS_FACTORY ("IndicatorAppletCompleteFactory",
                PANEL_TYPE_APPLET,
                applet_fill_cb, NULL);
 #endif
 #ifdef INDICATOR_APPLET_APPMENU
-PANEL_APPLET_OUT_PROCESS_FACTORY ("IndicatorAppletAppmenuFactory",
+PANEL_APPLET_IN_PROCESS_FACTORY ("IndicatorAppletAppmenuFactory",
                PANEL_TYPE_APPLET,
                applet_fill_cb, NULL);
 #endif
@@ -844,6 +844,18 @@ about_cb (GtkAction *action G_GNUC_UNUSED,
   license_i18n = g_strconcat (_(license[0]), "\n\n", _(license[1]), "\n\n", _(license[2]), NULL);
 
   gtk_show_about_dialog(NULL,
+#ifdef INDICATOR_APPLET
+    "program-name", _("Indicator Applet"),
+#endif
+#ifdef INDICATOR_APPLET_SESSION
+    "program-name", _("Indicator Applet Session"),
+#endif
+#ifdef INDICATOR_APPLET_COMPLETE
+    "program-name", _("Indicator Applet Complete"),
+#endif
+#ifdef INDICATOR_APPLET_APPMENU
+    "program-name", _("Indicator Applet Application Menu"),
+#endif
     "version", VERSION,
     "copyright", "Copyright \xc2\xa9 2009-2010 Canonical, Ltd.",
 #ifdef INDICATOR_APPLET_SESSION
@@ -1038,20 +1050,6 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
   if (!first_time)
   {
     first_time = TRUE;
-#ifdef INDICATOR_APPLET
-    g_set_application_name(_("Indicator Applet"));
-#endif
-#ifdef INDICATOR_APPLET_SESSION
-    g_set_application_name(_("Indicator Applet Session"));
-#endif
-#ifdef INDICATOR_APPLET_COMPLETE
-    g_set_application_name(_("Indicator Applet Complete"));
-#endif
-#ifdef INDICATOR_APPLET_APPMENU
-    g_set_application_name(_("Indicator Applet Application Menu"));
-#endif
-    
-    g_log_set_default_handler(log_to_file, NULL);
 
     tomboy_keybinder_init();
   }
@@ -1130,7 +1128,6 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
     gtk_widget_show(item);
   } else {
     gtk_container_add(GTK_CONTAINER(applet), menubar);
-    panel_applet_set_background_widget(applet, menubar);
     gtk_widget_show(menubar);
   }
 

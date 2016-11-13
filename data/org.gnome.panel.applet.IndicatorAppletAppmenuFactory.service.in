@@ -1,3 +1,0 @@
-[D-BUS Service]
-Name=org.gnome.panel.applet.IndicatorAppletAppmenuFactory
-Exec=@LIBEXECDIR@/indicator-applet-appmenu

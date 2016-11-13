@@ -14,28 +14,10 @@ applet_DATA     = $(applet_in_files:.panel-applet.in=.panel-applet)
 
 %.panel-applet.in: %.panel-applet.in.in Makefile
 	$(AM_V_GEN)sed \
-	    -e "s|\@LIBEXECDIR\@|$(libexecdir)|" \
+	    -e "s|\@PKGLIBDIR\@|$(pkglibdir)|" \
 	    $< > $@
 
 %.panel-applet: %.panel-applet.in $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*po) ; $(AM_V_GEN) LC_ALL=C $(INTLTOOL_MERGE) $(top_srcdir)/po $< $@ -d -u -c $(top_builddir)/po/.intltool-merge-cache
-
-
-##############################
-# DBus Services
-##############################
-
-servicedir       = $(datadir)/dbus-1/services
-service_in_files = \
-	org.gnome.panel.applet.IndicatorAppletFactory.service.in \
-	org.gnome.panel.applet.IndicatorAppletCompleteFactory.service.in \
-	org.gnome.panel.applet.IndicatorAppletAppmenuFactory.service.in \
-	org.gnome.panel.applet.FastUserSwitchAppletFactory.service.in
-service_DATA     = $(service_in_files:.service.in=.service)
-
-%.service: %.service.in Makefile
-	$(AM_V_GEN)sed \
-	    -e "s|\@LIBEXECDIR\@|$(libexecdir)|" \
-	    $< > $@
 
 
 ##############################
@@ -67,13 +49,11 @@ update-icon-cache:
 CLEANFILES =					\
 	$(applet_in_files)			\
 	$(applet_DATA)				\
-	$(service_DATA)				\
 	*.bak
 
 EXTRA_DIST =					\
 	$(icons_DATA)				\
-	$(applet_in_files:.in=.in.in)		\
-	$(service_in_files)
+	$(applet_in_files:.in=.in.in)
 
 MAINTAINERCLEANFILES =				\
 	Makefile.in
