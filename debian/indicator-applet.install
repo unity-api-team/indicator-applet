@@ -2,5 +2,4 @@ usr/lib/*/indicator-applet/libindicator-applet.so
 usr/share/gnome-panel/5.0/applets/org.ayatana.panel.IndicatorApplet.panel-applet
 usr/share/icons
 usr/share/locale
-debian/source_indicator-applet.py usr/share/apport/package-hooks
 debian/indicator-applet-crashdb.conf /etc/apport/crashdb.conf.d/
