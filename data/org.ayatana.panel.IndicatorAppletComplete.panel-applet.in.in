@@ -1,6 +1,7 @@
 [Applet Factory]
 Id=IndicatorAppletCompleteFactory
-Location=@LIBEXECDIR@/indicator-applet-complete
+InProcess=true
+Location=@PKGLIBDIR@/libindicator-applet-complete.so
 Name=Indicator Applet Complete Factory
 Description=Indicator Applet Complete Factory
 

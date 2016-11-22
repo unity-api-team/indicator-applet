@@ -1,6 +1,7 @@
 [Applet Factory]
 Id=FastUserSwitchAppletFactory
-Location=@LIBEXECDIR@/indicator-applet-session
+InProcess=true
+Location=@PKGLIBDIR@/libindicator-applet-session.so
 Name=Indicator Applet Factory
 Description=Indicator Applet Factory
 

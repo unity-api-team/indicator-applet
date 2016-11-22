@@ -68,22 +68,22 @@ static void update_accessible_desc (IndicatorObjectEntry * entry, GtkWidget * me
  * ***********/
 
 #ifdef INDICATOR_APPLET
-PANEL_APPLET_OUT_PROCESS_FACTORY ("IndicatorAppletFactory",
+PANEL_APPLET_IN_PROCESS_FACTORY ("IndicatorAppletFactory",
                PANEL_TYPE_APPLET,
                applet_fill_cb, NULL);
 #endif
 #ifdef INDICATOR_APPLET_SESSION
-PANEL_APPLET_OUT_PROCESS_FACTORY ("FastUserSwitchAppletFactory",
+PANEL_APPLET_IN_PROCESS_FACTORY ("FastUserSwitchAppletFactory",
                PANEL_TYPE_APPLET,
                applet_fill_cb, NULL);
 #endif
 #ifdef INDICATOR_APPLET_COMPLETE
-PANEL_APPLET_OUT_PROCESS_FACTORY ("IndicatorAppletCompleteFactory",
+PANEL_APPLET_IN_PROCESS_FACTORY ("IndicatorAppletCompleteFactory",
                PANEL_TYPE_APPLET,
                applet_fill_cb, NULL);
 #endif
 #ifdef INDICATOR_APPLET_APPMENU
-PANEL_APPLET_OUT_PROCESS_FACTORY ("IndicatorAppletAppmenuFactory",
+PANEL_APPLET_IN_PROCESS_FACTORY ("IndicatorAppletAppmenuFactory",
                PANEL_TYPE_APPLET,
                applet_fill_cb, NULL);
 #endif
@@ -844,6 +844,18 @@ about_cb (GtkAction *action G_GNUC_UNUSED,
   license_i18n = g_strconcat (_(license[0]), "\n\n", _(license[1]), "\n\n", _(license[2]), NULL);
 
   gtk_show_about_dialog(NULL,
+#ifdef INDICATOR_APPLET
+    "program-name", _("Indicator Applet"),
+#endif
+#ifdef INDICATOR_APPLET_SESSION
+    "program-name", _("Indicator Applet Session"),
+#endif
+#ifdef INDICATOR_APPLET_COMPLETE
+    "program-name", _("Indicator Applet Complete"),
+#endif
+#ifdef INDICATOR_APPLET_APPMENU
+    "program-name", _("Indicator Applet Application Menu"),
+#endif
     "version", VERSION,
     "copyright", "Copyright \xc2\xa9 2009-2010 Canonical, Ltd.",
 #ifdef INDICATOR_APPLET_SESSION
@@ -941,59 +953,6 @@ panelapplet_reorient_cb (GtkWidget *applet, PanelAppletOrient neworient,
 #endif
 #define N_(x) x
 
-static void
-log_to_file (const gchar * domain,
-             GLogLevelFlags level,
-             const gchar * message,
-             gpointer data)
-{
-  if (log_file == NULL) {
-    gchar *path;
-
-    g_mkdir_with_parents(g_get_user_cache_dir(), 0755);
-    path = g_build_filename(g_get_user_cache_dir(), LOG_FILE_NAME, NULL);
-
-    log_file = fopen(path, "w");
-
-    g_free(path);
-  }
-
-  if(log_file) {
-    const gchar *prefix;
-
-    switch(level & G_LOG_LEVEL_MASK) {
-      case G_LOG_LEVEL_ERROR:
-        prefix = "ERROR:";
-        break;
-      case G_LOG_LEVEL_CRITICAL:
-        prefix = "CRITICAL:";
-        break;
-      case G_LOG_LEVEL_WARNING:
-        prefix = "WARNING:";
-        break;
-      case G_LOG_LEVEL_MESSAGE:
-        prefix = "MESSAGE:";
-        break;
-      case G_LOG_LEVEL_INFO:
-        prefix = "INFO:";
-        break;
-      case G_LOG_LEVEL_DEBUG:
-        prefix = "DEBUG:";
-        break;
-      default:
-        prefix = "LOG:";
-        break;
-    }
-
-    fprintf(log_file, "%s %s - %s\n", prefix, domain, message);
-    fflush(log_file);
-  }
-
-  g_log_default_handler(domain, level, message, data);
-
-  return;
-}
-
 static gboolean
 applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
                 gpointer data G_GNUC_UNUSED)
@@ -1038,20 +997,6 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
   if (!first_time)
   {
     first_time = TRUE;
-#ifdef INDICATOR_APPLET
-    g_set_application_name(_("Indicator Applet"));
-#endif
-#ifdef INDICATOR_APPLET_SESSION
-    g_set_application_name(_("Indicator Applet Session"));
-#endif
-#ifdef INDICATOR_APPLET_COMPLETE
-    g_set_application_name(_("Indicator Applet Complete"));
-#endif
-#ifdef INDICATOR_APPLET_APPMENU
-    g_set_application_name(_("Indicator Applet Application Menu"));
-#endif
-    
-    g_log_set_default_handler(log_to_file, NULL);
 
     tomboy_keybinder_init();
   }
@@ -1130,7 +1075,6 @@ applet_fill_cb (PanelApplet * applet, const gchar * iid G_GNUC_UNUSED,
     gtk_widget_show(item);
   } else {
     gtk_container_add(GTK_CONTAINER(applet), menubar);
-    panel_applet_set_background_widget(applet, menubar);
     gtk_widget_show(menubar);
   }
 

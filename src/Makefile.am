@@ -1,86 +1,47 @@
+indicator_applet_libdir = ${pkglibdir}
+indicator_applet_lib_LTLIBRARIES = \
+	libindicator-applet.la \
+	libindicator-applet-appmenu.la \
+	libindicator-applet-session.la \
+	libindicator-applet-complete.la
 
-libexec_PROGRAMS = \
-	indicator-applet \
-	indicator-applet-appmenu \
-	indicator-applet-session \
-	indicator-applet-complete
+APPLET_SOURCES = \
+	applet-main.c \
+	eggaccelerators.c \
+	eggaccelerators.h \
+	tomboykeybinder.c \
+	tomboykeybinder.h
 
-indicator_applet_CFLAGS = \
+APPLET_CPPFLAGS = \
+	-DDATADIR=\""$(datadir)"\" \
+	-DINDICATOR_DIR=\""$(INDICATORDIR)"\" \
+	-DINDICATOR_ICONS_DIR=\""$(INDICATORICONSDIR)"\" \
+	-DGDK_DISABLE_DEPRECATED \
+	-I$(srcdir)/..
+
+AM_CFLAGS = $(APPLET_CFLAGS)
+AM_LDFLAGS = -module -avoid-version
+
+libindicator_applet_la_SOURCES = $(APPLET_SOURCES)
+libindicator_applet_la_CPPFLAGS = $(APPLET_CPPFLAGS) \
 	-DG_LOG_DOMAIN=\""Indicator-Applet"\" \
-	-DDATADIR=\""$(datadir)"\" \
-	-DINDICATOR_DIR=\""$(INDICATORDIR)"\" \
-	-DINDICATOR_ICONS_DIR=\""$(INDICATORICONSDIR)"\" \
-	-DINDICATOR_APPLET \
-	-DGDK_DISABLE_DEPRECATED \
-	-I$(srcdir)/.. \
-	$(APPLET_CFLAGS)
+	-DINDICATOR_APPLET
+libindicator_applet_la_LIBADD = $(APPLET_LIBS)
 
-indicator_applet_SOURCES = \
-	applet-main.c \
-	eggaccelerators.c \
-	eggaccelerators.h \
-	tomboykeybinder.c \
-	tomboykeybinder.h
-
-indicator_applet_LDADD = \
-	$(APPLET_LIBS)
-
-indicator_applet_appmenu_CFLAGS = \
+libindicator_applet_appmenu_la_SOURCES = $(APPLET_SOURCES)
+libindicator_applet_appmenu_la_CPPFLAGS = $(APPLET_CPPFLAGS) \
 	-DG_LOG_DOMAIN=\""Indicator-Applet-Appmenu"\" \
-	-DDATADIR=\""$(datadir)"\" \
-	-DINDICATOR_DIR=\""$(INDICATORDIR)"\" \
-	-DINDICATOR_ICONS_DIR=\""$(INDICATORICONSDIR)"\" \
-	-DINDICATOR_APPLET_APPMENU \
-	-DGDK_DISABLE_DEPRECATED \
-	-I$(srcdir)/.. \
-	$(APPLET_CFLAGS)
+	-DINDICATOR_APPLET_APPMENU
+libindicator_applet_appmenu_la_LIBADD = $(APPLET_LIBS)
 
-indicator_applet_appmenu_SOURCES = \
-	applet-main.c \
-	eggaccelerators.c \
-	eggaccelerators.h \
-	tomboykeybinder.c \
-	tomboykeybinder.h
-
-indicator_applet_appmenu_LDADD = \
-	$(APPLET_LIBS)
-
-indicator_applet_session_CFLAGS = \
+libindicator_applet_session_la_SOURCES = $(APPLET_SOURCES)
+libindicator_applet_session_la_CPPFLAGS = $(APPLET_CPPFLAGS) \
 	-DG_LOG_DOMAIN=\""Indicator-Applet-Session"\" \
-	-DDATADIR=\""$(datadir)"\" \
-	-DINDICATOR_DIR=\""$(INDICATORDIR)"\" \
-	-DINDICATOR_ICONS_DIR=\""$(INDICATORICONSDIR)"\" \
-	-DINDICATOR_APPLET_SESSION \
-	-DGDK_DISABLE_DEPRECATED \
-	-I$(srcdir)/.. \
-	$(APPLET_CFLAGS)
+	-DINDICATOR_APPLET_SESSION
+libindicator_applet_session_la_LIBADD = $(APPLET_LIBS)
 
-indicator_applet_session_SOURCES = \
-	applet-main.c \
-	eggaccelerators.c \
-	eggaccelerators.h \
-	tomboykeybinder.c \
-	tomboykeybinder.h
-
-indicator_applet_session_LDADD = \
-	$(APPLET_LIBS)
-
-indicator_applet_complete_CFLAGS = \
+libindicator_applet_complete_la_SOURCES = $(APPLET_SOURCES)
+libindicator_applet_complete_la_CPPFLAGS = $(APPLET_CPPFLAGS) \
 	-DG_LOG_DOMAIN=\""Indicator-Applet-Complete"\" \
-	-DDATADIR=\""$(datadir)"\" \
-	-DINDICATOR_DIR=\""$(INDICATORDIR)"\" \
-	-DINDICATOR_ICONS_DIR=\""$(INDICATORICONSDIR)"\" \
-	-DINDICATOR_APPLET_COMPLETE \
-	-DGDK_DISABLE_DEPRECATED \
-	-I$(srcdir)/.. \
-	$(APPLET_CFLAGS)
-
-indicator_applet_complete_SOURCES =	\
-	applet-main.c \
-	eggaccelerators.c \
-	eggaccelerators.h \
-	tomboykeybinder.c \
-	tomboykeybinder.h
-
-indicator_applet_complete_LDADD = \
-	$(APPLET_LIBS)
+	-DINDICATOR_APPLET_COMPLETE
+libindicator_applet_complete_la_LIBADD = $(APPLET_LIBS)
