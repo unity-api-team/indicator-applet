@@ -1,4 +1,4 @@
-indicator-applet (12.10.2+17.04.20161122.1-0ubuntu1) UNRELEASED; urgency=medium
+indicator-applet (12.10.2+17.04.20161122.2-0ubuntu1) zesty; urgency=medium
 
   * Convert from out-of-process applet to in-process applet:
     - Do not call methods that change the global state, such as
@@ -10,7 +10,7 @@ indicator-applet (12.10.2+17.04.20161122.1-0ubuntu1) UNRELEASED; urgency=medium
   * Update the install files according to in-process switch.
   * Remove the apport hook, not useful without log files.
 
- -- Dmitry Shachnev <mitya57@ubuntu.com>  Mon, 14 Nov 2016 22:08:00 +0300
+ -- Dmitry Shachnev <mitya57@ubuntu.com>  Tue, 22 Nov 2016 11:03:08 +0000
 
 indicator-applet (12.10.2+15.04.20141127.2-0ubuntu1) vivid; urgency=low
 
