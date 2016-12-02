@@ -1,2 +1,2 @@
 usr/lib/*/indicator-applet/libindicator-applet-appmenu.so
-usr/share/gnome-panel/5.0/applets/org.ayatana.panel.IndicatorAppletAppmenu.panel-applet
+usr/share/gnome-panel/applets/org.ayatana.panel.IndicatorAppletAppmenu.panel-applet

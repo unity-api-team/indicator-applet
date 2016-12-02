@@ -1,2 +1,2 @@
 usr/lib/*/indicator-applet/libindicator-applet-session.so
-usr/share/gnome-panel/5.0/applets/org.ayatana.panel.FastUserSwitchApplet.panel-applet
+usr/share/gnome-panel/applets/org.ayatana.panel.FastUserSwitchApplet.panel-applet
