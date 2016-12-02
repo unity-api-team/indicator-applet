@@ -1,3 +1,9 @@
+indicator-applet (12.10.2+17.04.20161202-0ubuntu1) zesty; urgency=medium
+
+  * Update panel-applet files locations for gnome-panel 3.22.
+
+ -- Dmitry Shachnev <mitya57@ubuntu.com>  Fri, 02 Dec 2016 13:26:45 +0000
+
 indicator-applet (12.10.2+17.04.20161122.2-0ubuntu1) zesty; urgency=medium
 
   * Convert from out-of-process applet to in-process applet:
