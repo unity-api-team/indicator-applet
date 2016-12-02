@@ -1,2 +1,2 @@
 usr/lib/*/indicator-applet/libindicator-applet-complete.so
-usr/share/gnome-panel/5.0/applets/org.ayatana.panel.IndicatorAppletComplete.panel-applet
+usr/share/gnome-panel/applets/org.ayatana.panel.IndicatorAppletComplete.panel-applet

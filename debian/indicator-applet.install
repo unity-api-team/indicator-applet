@@ -1,5 +1,5 @@
 usr/lib/*/indicator-applet/libindicator-applet.so
-usr/share/gnome-panel/5.0/applets/org.ayatana.panel.IndicatorApplet.panel-applet
+usr/share/gnome-panel/applets/org.ayatana.panel.IndicatorApplet.panel-applet
 usr/share/icons
 usr/share/locale
 debian/indicator-applet-crashdb.conf /etc/apport/crashdb.conf.d/
