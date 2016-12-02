@@ -488,6 +488,7 @@ entry_removed (IndicatorObject * io,
 {
   GtkWidget * menuitem;
   GHashTable * menuitem_lookup;
+  GtkWidget * menubar = GTK_WIDGET(user_data);
 
   g_debug("Signal: Entry Removed");
 
@@ -512,7 +513,7 @@ entry_removed (IndicatorObject * io,
                          NULL);
   }
 
-  gtk_widget_hide (menuitem);
+  gtk_container_remove(GTK_CONTAINER(menubar), menuitem);
 
   return;
 }
